@@ -1,0 +1,80 @@
+Functional requirements
+
+1. GUI
+	- The application should include a user-friendly GUI with at least 5 distinct screens
+		1. Main menu
+		2. Gameplay
+		3. Tutorial
+		4. New/load game
+		5. Parental controls
+	- Must also support mouse-based interaction with keyboard shortcuts
+
+2. Main Menu
+	- Should display the game title and offer options such as:
+		- Start new game
+		- Load game
+		- Tutorial
+		- Parental controls
+		- Exit
+	- Each selection should navigate to its own respective screen
+
+3. Tutorial Screen
+	- Must offer comprehensive instructions on gameplay and controls
+	- Language should be simple to read for anyone
+
+4. New Game & Pet Selection
+	- When starting a new game, the player should be able to select from at least 3 pet types
+		- Each pet should have unique characteristics affecting gameplay
+	- Player must name their pet
+
+5. Save & Load Game State
+	- Should support saving and loading game progress (pet state, player inventory)
+	- Should have 3 save slots minimum
+
+6. Vital Statistics
+	- Should track pet statistics (health, sleep, fullness, happiness)
+	- Each value should affect gameplay in some way
+		- No health ➝ death
+		- No sleep ➝ health penalty, fall asleep (cannot interact with)
+		- No fullness ➝ health and happiness penalty
+		- No happiness ➝ refuse all commands, except ones that increase happiness
+
+7. Player Commands
+	- Can issue various commands to the pet
+		- Feed
+		- Play
+		- Give gift
+		- Take to vet
+		- Exercise
+	- Some commands should be disabled in certain pet states
+
+8. Player Inventory
+	- Player should maintain an inventory of items (food, gifts)
+	- Items are used to feed or increase happiness
+	- Should track the count of each item
+
+9. Score Keeping
+	- Should reward positive actions and penalize certain actions
+	- Should be saved in the game state and displayed on screen
+
+10. Pet Sprite
+	- Represent pet by using a sprite
+	- Should change based on current pet state, providing visual feedback
+		- Different images for happy, angry, asleep, dead, hungry
+
+11. Parental Controls
+	- Protected screen accessible from the main menu
+	- Allows parents to:
+		- Set time limits
+		- View statistics (including total playtime)
+		- Reset statistics
+		- Revive pet
+
+12. Miscellaneous
+	- Should effectively handle errors
+	- Should allow for clean exits
+	- Should validate user inputs to avoid crashes
+	- UI should be easily navigable and accessible
+
+13. Extra Feature
+	- TBD
