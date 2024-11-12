@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.controller.MainMenuController"
+           styleClass="main-menu-background">
+    <VBox alignment="CENTER" spacing="20">
+        <Button text="New Game" onAction="#startNewGame" styleClass="menu-button"/>
+        <Button text="Load Game" onAction="#loadGame" styleClass="menu-button"/>
+        <Button text="Settings" onAction="#openSettings" styleClass="menu-button"/>
+        <Button text="Exit" onAction="#exitGame" styleClass="menu-button"/>
+    </VBox>
+</StackPane>

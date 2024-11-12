@@ -1,31 +1,30 @@
 package com.example;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        VBox root = new VBox(10); // 10 is spacing between elements
-        root.getStyleClass().add("root");
-        
-        Button button = new Button("Click Me!");
-        button.getStyleClass().add("custom-button");
-        
-        root.getChildren().add(button);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main_menu.fxml"));
+            Scene scene = new Scene(loader.load(), 800, 600);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/menu.css")).toExternalForm());
 
-        Scene scene = new Scene(root, 400, 300);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/main.css")).toExternalForm());
-        
-        stage.setTitle("JavaFX Application");
-        stage.setScene(scene);
-        stage.show();
+            stage.setTitle("NEOPETS 2.0");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
