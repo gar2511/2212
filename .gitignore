@@ -1,23 +1,24 @@
 # Maven
 target/
+target\
 
 # IntelliJ IDEA
 .idea/
+.idea\
 *.iml
 *.iws
 *.ipr
 
 # VS Code
 .vscode/
+.vscode\
 .settings/
+.settings\
 .classpath
 .project
 
 # Compiled files
 *.class
-
-# Maven
-target/maven-status/
 
 # Package files
 *.jar
