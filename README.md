@@ -1,18 +1,15 @@
-**IMPORTANT**
-To run the program, you must enter terminal command. Run button will result in error.
+<h3>IMPORTANT</h3>
+To run the program, you must execute `mvn clean javafx:run` in terminal.
 
-mvn clean javafx:run@default
-
----- Windows -----
-
-Install Java 23
+<h2>Setup Instructions</h2>
+<h3>Windows</h3>
 
 Installing JavaFX
 https://www.tutorialspoint.com/javafx/javafx_environment.htm
 
 Download:
 https://gluonhq.com/products/javafx/
-Windows     23.0.1      x64     SDK
+(Windows 23.0.1 x64 SDK)
 
 1. Create a folder in your C drive and name it "JavaFX"
     - C:\Program Files\JavaFX
@@ -46,18 +43,9 @@ Binary zip archive apache-maven-3.9.9-bin.zip
    - C:\Program Files\Maven\apache-maven-3.9.9\bin
 9. Click "OK" on every window to exit
 
+<h3>macOS (in terminal)</h3>
 
-
----- macOS (in terminal) ----
-
-1. Install Homebrew
-   - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-2. Install Java 23
-   - brew install openjdk@23
-3. Add Java to PATH
-   - export PATH="/opt/homebrew/opt/openjdk@23/bin:$PATH"
-4. Install Maven
-   - brew install maven
-5. Run application
-   - mvn clean javafx:run
-   
+1. Install Homebrew: `sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+2. Install Java 23: `brew install openjdk@23`
+3. Add Java to PATH: `export PATH="/opt/homebrew/opt/openjdk@23/bin:$PATH"`
+4. Install Maven: `brew install maven`
