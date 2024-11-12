@@ -16,6 +16,9 @@ target/
 # Compiled files
 *.class
 
+# Maven
+target/maven-status/
+
 # Package files
 *.jar
 *.war
