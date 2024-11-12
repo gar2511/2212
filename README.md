@@ -46,7 +46,9 @@ Binary zip archive apache-maven-3.9.9-bin.zip
    - C:\Program Files\Maven\apache-maven-3.9.9\bin
 9. Click "OK" on every window to exit
 
----- macOS terminal ----
+
+
+---- macOS (in terminal) ----
 
 1. Install Homebrew
    - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
