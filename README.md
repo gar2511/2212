@@ -49,13 +49,13 @@ Binary zip archive apache-maven-3.9.9-bin.zip
 ---- macOS terminal ----
 
 1. Install Homebrew
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 2. Install Java 23
-   brew install openjdk@23
+   - brew install openjdk@23
 3. Add Java to PATH
-   export PATH="/opt/homebrew/opt/openjdk@23/bin:$PATH"
+   - export PATH="/opt/homebrew/opt/openjdk@23/bin:$PATH"
 4. Install Maven
-   brew install maven
+   - brew install maven
 5. Run application
-   mvn clean javafx:run
+   - mvn clean javafx:run
    
