@@ -1,7 +1,7 @@
 # Maven
-**/target/
-**/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
-**/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/**
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
 
 # IntelliJ IDEA
 .idea/
