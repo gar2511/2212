@@ -1,5 +1,7 @@
 <h3>IMPORTANT</h3>
-To run the program, you must execute `mvn clean javafx:run` in terminal.
+The program can only be run using the terminal command:
+
+`mvn clean javafx:run`
 
 <h2>Setup Instructions</h2>
 <h3>Windows</h3>
