@@ -13,9 +13,7 @@ public class GameState {
     public GameState() {
         this.savedAt = LocalDateTime.now();
     }
-    
-    // Getters and setters
-    
+        
     public static GameState getCurrentState() {
         if (currentState == null) {
             currentState = new GameState();

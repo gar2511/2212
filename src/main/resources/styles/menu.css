@@ -80,3 +80,35 @@
 .save-slot-list .scroll-bar:vertical {
     -fx-scale-x: 0;
 }
+
+.new-save-dialog {
+    -fx-background-color: white;
+    -fx-padding: 30px;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-max-width: 400px;
+    -fx-max-height: 300px;
+}
+
+.dialog-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.dialog-subtitle {
+    -fx-font-size: 18px;
+}
+
+.dialog-button {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-min-width: 120px;
+    -fx-min-height: 40px;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+
+.dialog-button:hover {
+    -fx-background-color: #F0F0F0;
+}
