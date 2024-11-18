@@ -47,6 +47,11 @@
     -fx-margin: 10px;
 }
 
+.save-slot-list .list-cell .label {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
 .save-slot-list .list-cell:empty {
     -fx-background-color: #D3D3D3;
     -fx-text-fill: black;
@@ -125,6 +130,8 @@
     -fx-min-height: 30px;
     -fx-border-color: black;
     -fx-border-width: 1px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 .save-slot-button:hover {

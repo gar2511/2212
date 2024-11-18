@@ -17,7 +17,7 @@
                       maxHeight="320"/>
         </VBox>
         
-        <VBox fx:id="newSaveDialog" spacing="15" alignment="CENTER" styleClass="new-save-dialog" visible="false">
+        <VBox fx:id="newSaveDialogue" spacing="15" alignment="CENTER" styleClass="new-save-dialog" visible="false">
             <Label text="CREATING NEW SAVE" styleClass="dialog-title"/>
             <Label text="NAME YOUR PET:" styleClass="dialog-subtitle"/>
             <TextField fx:id="petNameField" maxWidth="300"/>

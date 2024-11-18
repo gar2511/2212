@@ -1,22 +1,26 @@
 const chokidar = require("chokidar");
 const { exec } = require("child_process");
 
-// Watch all FXML and CSS files in the resources directory
-const watcher = chokidar.watch("src/main/resources/**/*.{fxml,css}", {
-  persistent: true
+const APP_PATH = "src/main/java/com/example/App.java";
+
+const watcher = chokidar.watch([
+  "src/main/resources/**/*.{fxml,css}",
+  "src/main/java/**/*.java"
+], {
+  persistent: true,
+  ignored: APP_PATH
 });
 
-console.log("Watching for FXML and CSS changes...");
+console.log("Watching for FXML, CSS, and Java changes...");
 
 watcher.on("change", (path) => {
   console.log(`File ${path} has been changed`);
   
-  // Touch the App.java file to trigger recompilation
-  exec("touch src/main/java/com/example/App.java", (error) => {
+  exec(`touch ${APP_PATH}`, (error) => {
     if (error) {
       console.error(`Error touching App.java: ${error}`);
       return;
     }
-    console.log("Triggered recompilation");
+    console.log("Recompiling...");
   });
 });

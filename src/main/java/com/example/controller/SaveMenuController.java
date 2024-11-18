@@ -17,7 +17,7 @@ public class SaveMenuController {
     private ListView<String> saveSlotList;
     
     @FXML
-    private VBox newSaveDialog;
+    private VBox newSaveDialogue;
     
     @FXML
     private TextField petNameField;
@@ -40,7 +40,7 @@ public class SaveMenuController {
             int index = saveSlotList.getSelectionModel().getSelectedIndex();
             if (index >= 0 && "CLICK TO CREATE NEW SAVE".equals(saveSlotList.getItems().get(index))) {
                 selectedSlotIndex = index;
-                showNewSaveDialog();
+                showNewSaveDialogue();
             }
         });
         
@@ -68,6 +68,16 @@ public class SaveMenuController {
                 playButton.setOnAction(e -> handlePlay(getItem()));
                 editButton.setOnAction(e -> handleEdit(getItem()));
                 deleteButton.setOnAction(e -> handleDelete(getItem()));
+
+                setOnMouseEntered(e -> {
+                    if (getItem() != null && !"CLICK TO CREATE NEW SAVE".equals(getItem())) {
+                        buttons.setVisible(true);
+                    }
+                });
+
+                setOnMouseExited(e -> {
+                    buttons.setVisible(false);
+                });
             }
 
             @Override
@@ -79,24 +89,20 @@ public class SaveMenuController {
                     Label text = new Label(item);
                     text.setMaxWidth(Double.MAX_VALUE);
                     HBox.setHgrow(text, Priority.ALWAYS);
-                    content.getChildren().setAll(text);
-                    
-                    if (!"CLICK TO CREATE NEW SAVE".equals(item)) {
-                        buttons.setVisible(true);
-                        content.getChildren().add(buttons);
-                    } else {
-                        buttons.setVisible(false);
-                    }
-                    
+                    content.getChildren().setAll(text, buttons);
                     setGraphic(content);
                 }
             }
         });
+        
+        saveSlotList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            saveSlotList.refresh();
+        });
     }
     
-    private void showNewSaveDialog() {
+    private void showNewSaveDialogue() {
         saveSlotList.setDisable(true);
-        newSaveDialog.setVisible(true);
+        newSaveDialogue.setVisible(true);
         petNameField.setText("PET " + (selectedSlotIndex + 1));
         petNameField.selectAll();
         petNameField.requestFocus();
@@ -108,18 +114,18 @@ public class SaveMenuController {
         if (!petName.isEmpty()) {
             ObservableList<String> slots = saveSlotList.getItems();
             slots.set(selectedSlotIndex, petName);
-            hideNewSaveDialog();
+            hideNewSaveDialogue();
             // TODO: Create actual save file
         }
     }
     
     @FXML
     private void cancelNewSave() {
-        hideNewSaveDialog();
+        hideNewSaveDialogue();
     }
     
-    private void hideNewSaveDialog() {
-        newSaveDialog.setVisible(false);
+    private void hideNewSaveDialogue() {
+        newSaveDialogue.setVisible(false);
         saveSlotList.setDisable(false);
         selectedSlotIndex = -1;
     }
@@ -136,11 +142,11 @@ public class SaveMenuController {
     
     private void handleEdit(String saveName) {
         selectedSlotIndex = saveSlotList.getItems().indexOf(saveName);
-        showNewSaveDialog();
+        showNewSaveDialogue();
     }
     
     private void handleDelete(String saveName) {
-        // TODO: Add confirmation dialog
+        // TODO: Add confirmation dialogue
         int index = saveSlotList.getItems().indexOf(saveName);
         saveSlotList.getItems().set(index, "CLICK TO CREATE NEW SAVE");
     }
