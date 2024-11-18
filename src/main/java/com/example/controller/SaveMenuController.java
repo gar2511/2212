@@ -14,6 +14,10 @@ import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.util.FileHandler;
 
+/**
+ * Controller for the save game menu interface.
+ * Handles save slot management, including creating, editing, and deleting saves.
+ */
 public class SaveMenuController {
     @FXML
     private ListView<String> saveSlotList;
@@ -26,9 +30,18 @@ public class SaveMenuController {
 
     private int selectedSlotIndex = -1;
 
+    /**
+     * Initializes the save menu interface.
+     * - Creates default save slots
+     * - Loads existing saves from files
+     * - Sets up event handlers
+     */
     @FXML
     public void initialize() {
+        // Create file handler for save operations
         FileHandler fileHandler = new FileHandler();
+        
+        // Initialize list with default "empty" save slots
         ObservableList<String> slots = FXCollections.observableArrayList(
                 "CLICK TO CREATE NEW SAVE",
                 "CLICK TO CREATE NEW SAVE",
@@ -36,10 +49,11 @@ public class SaveMenuController {
                 "CLICK TO CREATE NEW SAVE"
         );
 
-        // Load existing saves
+        // Load existing save files and update slots with pet names
         File[] saveFiles = fileHandler.getSaveFiles();
         if (saveFiles != null) {
             for (File file : saveFiles) {
+                // Extract slot number from filename (e.g., "slot0.json" → 0)
                 String fileName = file.getName();
                 if (fileName.matches("slot\\d+\\.json")) {
                     int slotIndex = Integer.parseInt(fileName.replaceAll("[^0-9]", ""));
@@ -69,8 +83,17 @@ public class SaveMenuController {
         setupCustomListCells();
     }
 
+    /**
+     * Sets up custom list cell rendering with interactive buttons.
+     * Each save slot displays:
+     * - Pet name or "CLICK TO CREATE NEW SAVE"
+     * - PLAY button - loads the save
+     * - EDIT button - allows renaming the pet
+     * - DELETE button - removes the save
+     */
     private void setupCustomListCells() {
         saveSlotList.setCellFactory(lv -> new ListCell<String>() {
+            // Create buttons and containers for the custom cell layout
             private final Button playButton = new Button("PLAY");
             private final Button editButton = new Button("EDIT");
             private final Button deleteButton = new Button("DELETE");
@@ -78,7 +101,8 @@ public class SaveMenuController {
             private final HBox content = new HBox(20);
 
             {
-                buttons.setVisible(false);
+                // Initialize cell styling and behavior
+                buttons.setVisible(false);  // Hide buttons by default
                 buttons.getStyleClass().add("save-slot-buttons");
                 playButton.getStyleClass().add("save-slot-button");
                 editButton.getStyleClass().add("save-slot-button");
@@ -87,8 +111,9 @@ public class SaveMenuController {
                 content.setAlignment(javafx.geometry.Pos.CENTER);
                 buttons.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
 
+                // Set up button click handlers
                 playButton.setOnAction(e -> {
-                    e.consume();
+                    e.consume();  // Prevent event bubbling
                     handlePlay(getItem());
                 });
                 editButton.setOnAction(e -> {
@@ -100,6 +125,7 @@ public class SaveMenuController {
                     handleDelete(getItem());
                 });
 
+                // Show/hide buttons on mouse hover
                 setOnMouseEntered(e -> {
                     if (getItem() != null && !"CLICK TO CREATE NEW SAVE".equals(getItem())) {
                         buttons.setVisible(true);
@@ -118,6 +144,9 @@ public class SaveMenuController {
                 });
             }
 
+            /**
+             * Updates the cell content when data changes
+             */
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -138,6 +167,12 @@ public class SaveMenuController {
         });
     }
 
+    /**
+     * Displays the new save dialogue for creating/editing a save
+     * - Disables the save slot list
+     * - Shows the input field with default pet name
+     * - Focuses the input field
+     */
     private void showNewSaveDialogue() {
         saveSlotList.setDisable(true);
         newSaveDialogue.setVisible(true);
@@ -146,6 +181,12 @@ public class SaveMenuController {
         petNameField.requestFocus();
     }
 
+    /**
+     * Creates a new save with the entered pet name
+     * - Creates new GameState and Pet objects
+     * - Saves to file using FileHandler
+     * - Updates the UI with the new pet name
+     */
     @FXML
     private void confirmNewSave() {
         String petName = petNameField.getText().trim();
@@ -197,6 +238,12 @@ public class SaveMenuController {
         showNewSaveDialogue();
     }
 
+    /**
+     * Handles the deletion of a save file
+     * - Removes the save file
+     * - Updates the UI to show empty slot
+     * @param saveName The name of the save to delete
+     */
     private void handleDelete(String saveName) {
         int index = saveSlotList.getItems().indexOf(saveName);
         try {
