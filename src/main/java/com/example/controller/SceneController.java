@@ -34,6 +34,10 @@ public class SceneController {
         loadFXML("main_menu.fxml");
     }
 
+    public void switchToSettings() {
+        loadFXML("settings.fxml");
+    }
+
     private Scene getCurrentScene() {
         if (currentScene == null) {
             Window window = Stage.getWindows().stream()
