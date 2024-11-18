@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.application.Platform;
 
 public class SaveMenuController {
     @FXML
@@ -61,9 +62,18 @@ public class SaveMenuController {
                 content.setAlignment(javafx.geometry.Pos.CENTER);
                 buttons.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
 
-                playButton.setOnAction(e -> handlePlay(getItem()));
-                editButton.setOnAction(e -> handleEdit(getItem()));
-                deleteButton.setOnAction(e -> handleDelete(getItem()));
+                playButton.setOnAction(e -> {
+                    e.consume();
+                    handlePlay(getItem());
+                });
+                editButton.setOnAction(e -> {
+                    e.consume();
+                    handleEdit(getItem());
+                });
+                deleteButton.setOnAction(e -> {
+                    e.consume();
+                    handleDelete(getItem());
+                });
 
                 setOnMouseEntered(e -> {
                     if (getItem() != null && !"CLICK TO CREATE NEW SAVE".equals(getItem())) {
@@ -73,6 +83,13 @@ public class SaveMenuController {
 
                 setOnMouseExited(e -> {
                     buttons.setVisible(false);
+                });
+
+                buttons.setOnMouseClicked(event -> event.consume());
+                content.setOnMouseClicked(event -> {
+                    if (getItem() != null && !"CLICK TO CREATE NEW SAVE".equals(getItem())) {
+                        event.consume();
+                    }
                 });
             }
 
@@ -144,6 +161,9 @@ public class SaveMenuController {
     private void handleDelete(String saveName) {
         // TODO: Add confirmation dialogue
         int index = saveSlotList.getItems().indexOf(saveName);
-        saveSlotList.getItems().set(index, "CLICK TO CREATE NEW SAVE");
+        Platform.runLater(() -> {
+            saveSlotList.getItems().set(index, "CLICK TO CREATE NEW SAVE");
+            saveSlotList.getSelectionModel().clearSelection();
+        });
     }
 }
