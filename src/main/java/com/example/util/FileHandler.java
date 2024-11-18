@@ -12,11 +12,11 @@ import java.nio.file.Paths;
 public class FileHandler {
     private static final String SAVES_DIR = "saves";
     private final ObjectMapper mapper = new ObjectMapper();
-    
+
     public FileHandler() {
         createSavesDirectory();
     }
-    
+
     private void createSavesDirectory() {
         try {
             Files.createDirectories(Paths.get(SAVES_DIR));
@@ -24,22 +24,22 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
-    
+
     public void saveGame(String saveName, GameState state) throws IOException {
         Path savePath = Paths.get(SAVES_DIR, saveName + ".json");
         mapper.writeValue(savePath.toFile(), state);
     }
-    
+
     public GameState loadGame(String saveName) throws IOException {
         Path savePath = Paths.get(SAVES_DIR, saveName + ".json");
         return mapper.readValue(savePath.toFile(), GameState.class);
     }
-    
+
     public void deleteSave(String saveName) throws IOException {
         Path savePath = Paths.get(SAVES_DIR, saveName + ".json");
         Files.deleteIfExists(savePath);
     }
-    
+
     public File[] getSaveFiles() {
         File savesDir = new File(SAVES_DIR);
         return savesDir.listFiles((dir, name) -> name.endsWith(".json"));

@@ -1,19 +1,20 @@
 package com.example.controller;
 
-import java.io.IOException;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import java.io.IOException;
+
 public class SceneController {
     private static SceneController instance;
     private Scene currentScene;
-    
-    private SceneController() {}
-    
+
+    private SceneController() {
+    }
+
     public static SceneController getInstance() {
         if (instance == null) {
             instance = new SceneController();
@@ -36,10 +37,10 @@ public class SceneController {
     private Scene getCurrentScene() {
         if (currentScene == null) {
             Window window = Stage.getWindows().stream()
-                .filter(Window::isShowing)
-                .findFirst()
-                .orElse(null);
-            
+                    .filter(Window::isShowing)
+                    .findFirst()
+                    .orElse(null);
+
             if (window != null) {
                 currentScene = ((Stage) window).getScene();
             }

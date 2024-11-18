@@ -1,41 +1,37 @@
 package com.example.controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.ListCell;
 import javafx.scene.layout.Priority;
-import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 public class SaveMenuController {
     @FXML
     private ListView<String> saveSlotList;
-    
+
     @FXML
     private VBox newSaveDialogue;
-    
+
     @FXML
     private TextField petNameField;
-    
+
     private int selectedSlotIndex = -1;
-    
+
     @FXML
     public void initialize() {
         ObservableList<String> slots = FXCollections.observableArrayList(
-            "CLICK TO CREATE NEW SAVE",
-            "CLICK TO CREATE NEW SAVE",
-            "CLICK TO CREATE NEW SAVE",
-            "CLICK TO CREATE NEW SAVE"
+                "CLICK TO CREATE NEW SAVE",
+                "CLICK TO CREATE NEW SAVE",
+                "CLICK TO CREATE NEW SAVE",
+                "CLICK TO CREATE NEW SAVE"
         );
         saveSlotList.setItems(slots);
-        
+
         saveSlotList.setFocusTraversable(false);
-        
+
         saveSlotList.setOnMouseClicked(event -> {
             int index = saveSlotList.getSelectionModel().getSelectedIndex();
             if (index >= 0 && "CLICK TO CREATE NEW SAVE".equals(saveSlotList.getItems().get(index))) {
@@ -43,10 +39,10 @@ public class SaveMenuController {
                 showNewSaveDialogue();
             }
         });
-        
+
         setupCustomListCells();
     }
-    
+
     private void setupCustomListCells() {
         saveSlotList.setCellFactory(lv -> new ListCell<String>() {
             private final Button playButton = new Button("PLAY");
@@ -61,10 +57,10 @@ public class SaveMenuController {
                 playButton.getStyleClass().add("save-slot-button");
                 editButton.getStyleClass().add("save-slot-button");
                 deleteButton.getStyleClass().add("save-slot-button");
-                
+
                 content.setAlignment(javafx.geometry.Pos.CENTER);
                 buttons.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-                
+
                 playButton.setOnAction(e -> handlePlay(getItem()));
                 editButton.setOnAction(e -> handleEdit(getItem()));
                 deleteButton.setOnAction(e -> handleDelete(getItem()));
@@ -94,12 +90,12 @@ public class SaveMenuController {
                 }
             }
         });
-        
+
         saveSlotList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             saveSlotList.refresh();
         });
     }
-    
+
     private void showNewSaveDialogue() {
         saveSlotList.setDisable(true);
         newSaveDialogue.setVisible(true);
@@ -107,7 +103,7 @@ public class SaveMenuController {
         petNameField.selectAll();
         petNameField.requestFocus();
     }
-    
+
     @FXML
     private void confirmNewSave() {
         String petName = petNameField.getText().trim();
@@ -118,33 +114,33 @@ public class SaveMenuController {
             // TODO: Create actual save file
         }
     }
-    
+
     @FXML
     private void cancelNewSave() {
         hideNewSaveDialogue();
     }
-    
+
     private void hideNewSaveDialogue() {
         newSaveDialogue.setVisible(false);
         saveSlotList.setDisable(false);
         selectedSlotIndex = -1;
     }
-    
+
     @FXML
     private void goBack() {
         SceneController.getInstance().switchToMainMenu();
     }
-    
+
     private void handlePlay(String saveName) {
         // TODO: Implement play functionality
         System.out.println("Playing: " + saveName);
     }
-    
+
     private void handleEdit(String saveName) {
         selectedSlotIndex = saveSlotList.getItems().indexOf(saveName);
         showNewSaveDialogue();
     }
-    
+
     private void handleDelete(String saveName) {
         // TODO: Add confirmation dialogue
         int index = saveSlotList.getItems().indexOf(saveName);

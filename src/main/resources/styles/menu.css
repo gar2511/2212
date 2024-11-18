@@ -12,9 +12,7 @@
 }
 
 .menu-button:hover {
-    -fx-background-color: #287486;
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
+    -fx-cursor: hand;
 }
 
 .save-menu {
@@ -86,7 +84,7 @@
     -fx-scale-x: 0;
 }
 
-.new-save-dialog {
+.new-save-dialogue {
     -fx-background-color: white;
     -fx-padding: 30px;
     -fx-border-color: black;
@@ -95,16 +93,16 @@
     -fx-max-height: 300px;
 }
 
-.dialog-title {
+.dialogue-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
 
-.dialog-subtitle {
+.dialogue-subtitle {
     -fx-font-size: 18px;
 }
 
-.dialog-button {
+.dialogue-button {
     -fx-background-color: white;
     -fx-text-fill: black;
     -fx-font-size: 16px;
@@ -114,7 +112,7 @@
     -fx-border-width: 2px;
 }
 
-.dialog-button:hover {
+.dialogue-button:hover {
     -fx-background-color: #F0F0F0;
 }
 

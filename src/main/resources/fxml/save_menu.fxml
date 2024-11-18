@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<VBox xmlns:fx="http://javafx.com/fxml" 
+<VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.controller.SaveMenuController"
       spacing="20" alignment="CENTER" styleClass="save-menu">
-    
+
     <Label text="Create Or Load Save Files" styleClass="title-label"/>
-    
+
     <StackPane VBox.vgrow="ALWAYS">
         <VBox spacing="15" alignment="CENTER">
-            <ListView fx:id="saveSlotList" 
-                      VBox.vgrow="ALWAYS" 
+            <ListView fx:id="saveSlotList"
+                      VBox.vgrow="ALWAYS"
                       styleClass="save-slot-list"
                       fixedCellSize="80"
                       maxHeight="320"/>
         </VBox>
-        
-        <VBox fx:id="newSaveDialogue" spacing="15" alignment="CENTER" styleClass="new-save-dialog" visible="false">
-            <Label text="CREATING NEW SAVE" styleClass="dialog-title"/>
-            <Label text="NAME YOUR PET:" styleClass="dialog-subtitle"/>
+
+        <VBox fx:id="newSaveDialogue" spacing="15" alignment="CENTER" styleClass="new-save-dialogue" visible="false">
+            <Label text="CREATING NEW SAVE" styleClass="dialogue-title"/>
+            <Label text="NAME YOUR PET:" styleClass="dialogue-subtitle"/>
             <TextField fx:id="petNameField" maxWidth="300"/>
             <HBox spacing="20" alignment="CENTER">
-                <Button text="CONFIRM" onAction="#confirmNewSave" styleClass="dialog-button"/>
-                <Button text="CANCEL" onAction="#cancelNewSave" styleClass="dialog-button"/>
+                <Button text="CONFIRM" onAction="#confirmNewSave" styleClass="dialogue-button"/>
+                <Button text="CANCEL" onAction="#cancelNewSave" styleClass="dialogue-button"/>
             </HBox>
         </VBox>
     </StackPane>
-    
+
     <Button text="BACK TO MAIN MENU" styleClass="back-button" onAction="#goBack"/>
-    
+
     <padding>
         <Insets top="30" right="30" bottom="30" left="30"/>
     </padding>
