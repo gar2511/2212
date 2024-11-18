@@ -11,7 +11,7 @@ const watcher = chokidar.watch([
   ignored: APP_PATH
 });
 
-console.log("Watching for FXML, CSS, and Java changes...");
+console.log("Watching for changes...");
 
 watcher.on("change", (path) => {
   console.log(`File ${path} has been changed`);

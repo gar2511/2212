@@ -23,7 +23,6 @@ public class MainMenuController {
 
     @FXML
     public void initialize() {
-        // Create hover animations for each button
         setupHoverAnimation(newGameButton);
         setupHoverAnimation(loadGameButton);
         setupHoverAnimation(settingsButton);

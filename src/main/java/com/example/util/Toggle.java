@@ -33,7 +33,7 @@ package com.example.util;
                 updateState(newVal);
             });
     
-            getStyleClass().add("ios-toggle");
+            getStyleClass().add("toggle");
         }
     
         private void updateState(boolean selected) {
