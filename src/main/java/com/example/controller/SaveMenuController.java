@@ -6,6 +6,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.layout.Priority;
+import javafx.scene.control.Label;
 
 public class SaveMenuController {
     @FXML
@@ -33,9 +38,58 @@ public class SaveMenuController {
         
         saveSlotList.setOnMouseClicked(event -> {
             int index = saveSlotList.getSelectionModel().getSelectedIndex();
-            if (index >= 0) {
+            if (index >= 0 && "CLICK TO CREATE NEW SAVE".equals(saveSlotList.getItems().get(index))) {
                 selectedSlotIndex = index;
                 showNewSaveDialog();
+            }
+        });
+        
+        setupCustomListCells();
+    }
+    
+    private void setupCustomListCells() {
+        saveSlotList.setCellFactory(lv -> new ListCell<String>() {
+            private final Button playButton = new Button("PLAY");
+            private final Button editButton = new Button("EDIT");
+            private final Button deleteButton = new Button("DELETE");
+            private final HBox buttons = new HBox(10, playButton, editButton, deleteButton);
+            private final HBox content = new HBox(20);
+
+            {
+                buttons.setVisible(false);
+                buttons.getStyleClass().add("save-slot-buttons");
+                playButton.getStyleClass().add("save-slot-button");
+                editButton.getStyleClass().add("save-slot-button");
+                deleteButton.getStyleClass().add("save-slot-button");
+                
+                content.setAlignment(javafx.geometry.Pos.CENTER);
+                buttons.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+                
+                playButton.setOnAction(e -> handlePlay(getItem()));
+                editButton.setOnAction(e -> handleEdit(getItem()));
+                deleteButton.setOnAction(e -> handleDelete(getItem()));
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    Label text = new Label(item);
+                    text.setMaxWidth(Double.MAX_VALUE);
+                    HBox.setHgrow(text, Priority.ALWAYS);
+                    content.getChildren().setAll(text);
+                    
+                    if (!"CLICK TO CREATE NEW SAVE".equals(item)) {
+                        buttons.setVisible(true);
+                        content.getChildren().add(buttons);
+                    } else {
+                        buttons.setVisible(false);
+                    }
+                    
+                    setGraphic(content);
+                }
             }
         });
     }
@@ -73,5 +127,21 @@ public class SaveMenuController {
     @FXML
     private void goBack() {
         SceneController.getInstance().switchToMainMenu();
+    }
+    
+    private void handlePlay(String saveName) {
+        // TODO: Implement play functionality
+        System.out.println("Playing: " + saveName);
+    }
+    
+    private void handleEdit(String saveName) {
+        selectedSlotIndex = saveSlotList.getItems().indexOf(saveName);
+        showNewSaveDialog();
+    }
+    
+    private void handleDelete(String saveName) {
+        // TODO: Add confirmation dialog
+        int index = saveSlotList.getItems().indexOf(saveName);
+        saveSlotList.getItems().set(index, "CLICK TO CREATE NEW SAVE");
     }
 }

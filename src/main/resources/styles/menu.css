@@ -112,3 +112,22 @@
 .dialog-button:hover {
     -fx-background-color: #F0F0F0;
 }
+
+.save-slot-buttons {
+    -fx-spacing: 10;
+}
+
+.save-slot-button {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-min-width: 80px;
+    -fx-min-height: 30px;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+}
+
+.save-slot-button:hover {
+    -fx-background-color: #F0F0F0;
+    -fx-cursor: hand;
+}
