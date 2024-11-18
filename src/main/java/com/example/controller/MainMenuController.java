@@ -8,6 +8,8 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.animation.Interpolator;
+import javafx.animation.SequentialTransition;
 
 public class MainMenuController {
     @FXML
@@ -29,13 +31,56 @@ public class MainMenuController {
     }
 
     private void setupHoverAnimation(Button button) {
-        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(100), button);
-        scaleUp.setToX(1.05);
-        scaleUp.setToY(1.05);
+        SequentialTransition hoverAnimation = new SequentialTransition(button);
+        
+        ScaleTransition scaleUpBig = new ScaleTransition(Duration.millis(150));
+        scaleUpBig.setToX(1.1);
+        scaleUpBig.setToY(1.1);
+        scaleUpBig.setInterpolator(Interpolator.EASE_OUT);
+        
+        ScaleTransition scaleUpSmall = new ScaleTransition(Duration.millis(100));
+        scaleUpSmall.setToX(1.05);
+        scaleUpSmall.setToY(1.05);
+        scaleUpSmall.setInterpolator(Interpolator.EASE_OUT);
+        
+        hoverAnimation.getChildren().addAll(scaleUpBig, scaleUpSmall);
 
-        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(100), button);
-        scaleDown.setToX(1.0);
-        scaleDown.setToY(1.0);
+        SequentialTransition exitAnimation = new SequentialTransition(button);
+        
+        ScaleTransition scaleDownBig = new ScaleTransition(Duration.millis(150));
+        scaleDownBig.setToX(0.95);
+        scaleDownBig.setToY(0.95);
+        scaleDownBig.setInterpolator(Interpolator.EASE_OUT);
+        
+        ScaleTransition scaleDownSmall = new ScaleTransition(Duration.millis(100));
+        scaleDownSmall.setToX(1.0);
+        scaleDownSmall.setToY(1.0);
+        scaleDownSmall.setInterpolator(Interpolator.EASE_OUT);
+        
+        exitAnimation.getChildren().addAll(scaleDownBig, scaleDownSmall);
+
+        SequentialTransition clickAnimation = new SequentialTransition(button);
+        
+        ScaleTransition scaleClick = new ScaleTransition(Duration.millis(100));
+        scaleClick.setToX(0.8);
+        scaleClick.setToY(0.8);
+        scaleClick.setInterpolator(Interpolator.EASE_OUT);
+        
+        clickAnimation.getChildren().add(scaleClick);
+
+        SequentialTransition releaseAnimation = new SequentialTransition(button);
+        
+        ScaleTransition scaleReleaseBig = new ScaleTransition(Duration.millis(150));
+        scaleReleaseBig.setToX(1.1);
+        scaleReleaseBig.setToY(1.1);
+        scaleReleaseBig.setInterpolator(Interpolator.EASE_OUT);
+        
+        ScaleTransition scaleReleaseSmall = new ScaleTransition(Duration.millis(100));
+        scaleReleaseSmall.setToX(1.0);
+        scaleReleaseSmall.setToY(1.0);
+        scaleReleaseSmall.setInterpolator(Interpolator.EASE_OUT);
+        
+        releaseAnimation.getChildren().addAll(scaleReleaseBig, scaleReleaseSmall);
 
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setBrightness(0);
@@ -43,22 +88,30 @@ public class MainMenuController {
 
         Timeline colorTimeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(colorAdjust.brightnessProperty(), 0)),
-                new KeyFrame(Duration.millis(100), new KeyValue(colorAdjust.brightnessProperty(), -0.15))
+                new KeyFrame(Duration.millis(200), new KeyValue(colorAdjust.brightnessProperty(), -0.1))
         );
 
         Timeline reverseColorTimeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(colorAdjust.brightnessProperty(), -0.15)),
-                new KeyFrame(Duration.millis(100), new KeyValue(colorAdjust.brightnessProperty(), 0))
+                new KeyFrame(Duration.ZERO, new KeyValue(colorAdjust.brightnessProperty(), -0.1)),
+                new KeyFrame(Duration.millis(200), new KeyValue(colorAdjust.brightnessProperty(), 0))
         );
 
         button.setOnMouseEntered(e -> {
-            scaleUp.play();
+            hoverAnimation.play();
             colorTimeline.play();
         });
 
         button.setOnMouseExited(e -> {
-            scaleDown.play();
+            exitAnimation.play();
             reverseColorTimeline.play();
+        });
+
+        button.setOnMousePressed(e -> {
+            clickAnimation.play();
+        });
+
+        button.setOnMouseReleased(e -> {
+            releaseAnimation.play();
         });
     }
 
