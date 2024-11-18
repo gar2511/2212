@@ -10,9 +10,6 @@ public class GameController {
     }
 
     @FXML
-    private Button backButton;
-
-    @FXML
     private void goBack() {
         SceneController.getInstance().switchToMainMenu();
     }
