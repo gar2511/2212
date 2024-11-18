@@ -8,6 +8,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.application.Platform;
+import java.io.IOException;
+import java.io.File;
+import com.example.model.GameState;
+import com.example.model.Pet;
+import com.example.util.FileHandler;
 
 public class SaveMenuController {
     @FXML
@@ -23,14 +28,34 @@ public class SaveMenuController {
 
     @FXML
     public void initialize() {
+        FileHandler fileHandler = new FileHandler();
         ObservableList<String> slots = FXCollections.observableArrayList(
                 "CLICK TO CREATE NEW SAVE",
                 "CLICK TO CREATE NEW SAVE",
                 "CLICK TO CREATE NEW SAVE",
                 "CLICK TO CREATE NEW SAVE"
         );
-        saveSlotList.setItems(slots);
 
+        // Load existing saves
+        File[] saveFiles = fileHandler.getSaveFiles();
+        if (saveFiles != null) {
+            for (File file : saveFiles) {
+                String fileName = file.getName();
+                if (fileName.matches("slot\\d+\\.json")) {
+                    int slotIndex = Integer.parseInt(fileName.replaceAll("[^0-9]", ""));
+                    try {
+                        GameState state = fileHandler.loadGame("slot" + slotIndex);
+                        if (state != null && state.getPet() != null) {
+                            slots.set(slotIndex, state.getPet().getName());
+                        }
+                    } catch (IOException ignored) {
+                        // If file is corrupted, keep default text
+                    }
+                }
+            }
+        }
+
+        saveSlotList.setItems(slots);
         saveSlotList.setFocusTraversable(false);
 
         saveSlotList.setOnMouseClicked(event -> {
@@ -125,10 +150,24 @@ public class SaveMenuController {
     private void confirmNewSave() {
         String petName = petNameField.getText().trim();
         if (!petName.isEmpty()) {
-            ObservableList<String> slots = saveSlotList.getItems();
-            slots.set(selectedSlotIndex, petName);
-            hideNewSaveDialogue();
-            // TODO: Create actual save file
+            try {
+                // Create new GameState with pet
+                GameState gameState = new GameState();
+                Pet pet = new Pet(petName);
+                gameState.setPet(pet);
+                
+                // Save to file
+                FileHandler fileHandler = new FileHandler();
+                fileHandler.saveGame("slot" + selectedSlotIndex, gameState);
+                
+                // Update UI
+                ObservableList<String> slots = saveSlotList.getItems();
+                slots.set(selectedSlotIndex, petName);
+                hideNewSaveDialogue();
+            } catch (IOException e) {
+                // TODO: Show error dialog to user
+                e.printStackTrace();
+            }
         }
     }
 
@@ -159,11 +198,17 @@ public class SaveMenuController {
     }
 
     private void handleDelete(String saveName) {
-        // TODO: Add confirmation dialogue
         int index = saveSlotList.getItems().indexOf(saveName);
-        Platform.runLater(() -> {
-            saveSlotList.getItems().set(index, "CLICK TO CREATE NEW SAVE");
-            saveSlotList.getSelectionModel().clearSelection();
-        });
+        try {
+            FileHandler fileHandler = new FileHandler();
+            fileHandler.deleteSave("slot" + index);
+            Platform.runLater(() -> {
+                saveSlotList.getItems().set(index, "CLICK TO CREATE NEW SAVE");
+                saveSlotList.getSelectionModel().clearSelection();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO: Show error dialog to user
+        }
     }
 }

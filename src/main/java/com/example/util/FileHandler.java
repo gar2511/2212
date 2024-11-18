@@ -2,6 +2,7 @@ package com.example.util;
 
 import com.example.model.GameState;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +12,11 @@ import java.nio.file.Paths;
 
 public class FileHandler {
     private static final String SAVES_DIR = "saves";
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public FileHandler() {
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         createSavesDirectory();
     }
 
@@ -27,12 +30,12 @@ public class FileHandler {
 
     public void saveGame(String saveName, GameState state) throws IOException {
         Path savePath = Paths.get(SAVES_DIR, saveName + ".json");
-        mapper.writeValue(savePath.toFile(), state);
+        objectMapper.writeValue(savePath.toFile(), state);
     }
 
     public GameState loadGame(String saveName) throws IOException {
         Path savePath = Paths.get(SAVES_DIR, saveName + ".json");
-        return mapper.readValue(savePath.toFile(), GameState.class);
+        return objectMapper.readValue(savePath.toFile(), GameState.class);
     }
 
     public void deleteSave(String saveName) throws IOException {

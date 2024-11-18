@@ -8,7 +8,6 @@ public class GameState {
     private LocalDateTime savedAt;
     private Pet pet;
     private VitalStats stats;
-    // add other game state properties here
 
     public GameState() {
         this.savedAt = LocalDateTime.now();
@@ -23,6 +22,29 @@ public class GameState {
 
     public static void loadState(GameState state) {
         currentState = state;
-        // update game with the loaded state
+    }
+
+    public LocalDateTime getSavedAt() {
+        return savedAt;
+    }
+
+    public void setSavedAt(LocalDateTime savedAt) {
+        this.savedAt = savedAt;
+    }
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
+    public VitalStats getStats() {
+        return stats;
+    }
+
+    public void setStats(VitalStats stats) {
+        this.stats = stats;
     }
 }
