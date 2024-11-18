@@ -1,0 +1,14 @@
+.menu-button {
+    -fx-background-color: derive(#6495ED, 0%);
+    -fx-text-fill: #000000;
+    -fx-font-size: 18px;
+    -fx-padding: 15px;
+    -fx-background-radius: 5px;
+    -fx-transition: -fx-background-color 0.3s ease-out, -fx-opacity 0.3s ease-out;
+    -fx-opacity: 1;
+}
+
+.menu-button:hover {
+    -fx-background-color: derive(#3e5c95, 0%);
+    -fx-opacity: 0.8;
+}
