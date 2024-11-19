@@ -63,20 +63,19 @@ public class SceneController {
     // Loads and switches to a new FXML scene
     private void loadFXML(String fxml) {
         try {
-            // Load the FXML file from resources
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/" + fxml));
             Scene scene = getCurrentScene();
             if (scene != null) {
-                // Update the scene's root with the new FXML content
                 scene.setRoot(root);
+                scene.getStylesheets().clear();
+                scene.getStylesheets().addAll(
+                    getClass().getClassLoader().getResource("styles/main.css").toExternalForm(),
+                    getClass().getClassLoader().getResource("styles/menu.css").toExternalForm()
+                );
                 currentScene = scene;
-            } else {
-                System.err.println("No active scene found");
             }
         } catch (IOException e) {
-            // Error handling for FXML loading failures
             System.err.println("Failed to load FXML: " + fxml);
-            System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -3,54 +3,44 @@ package com.example.util;
 import javafx.animation.TranslateTransition;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-// Custom JavaFX toggle button component that provides a modern sliding switch appearance
 public class Toggle extends ToggleButton {
-    // UI components for the toggle switch
-    private final Rectangle background;  // The background rectangle/track
-    private final Circle thumb;         // The sliding circle/thumb
-    private final TranslateTransition transition;  // Animation for thumb movement
+    private final Rectangle background;
+    private final Circle thumb;
+    private final TranslateTransition transition;
 
-    // Constructor creates and configures the toggle switch components
     public Toggle() {
-        // Create and style the background track
+        // Create background track
         background = new Rectangle(52, 32);
-        background.setArcWidth(32);     // Rounded corners
+        background.setArcWidth(32);
         background.setArcHeight(32);
-        background.getStyleClass().add("toggle-background");
+        background.setFill(Color.valueOf("#e9e9eb"));
 
-        // Create and position the sliding thumb
-        thumb = new Circle(14);         // Radius of 14 pixels
-        thumb.setTranslateX(16);        // Initial position (unselected)
-        thumb.getStyleClass().add("toggle-thumb");
+        // Create thumb
+        thumb = new Circle(14);
+        thumb.setFill(Color.WHITE);
+        thumb.setTranslateX(16);
+        thumb.setEffect(new javafx.scene.effect.DropShadow(4, 0, 2, Color.rgb(0, 0, 0, 0.2)));
 
-        // Stack the components (background behind thumb)
+        // Stack components
         StackPane layout = new StackPane(background, thumb);
         setGraphic(layout);
 
-        // Set up the sliding animation
+        // Set up animation
         transition = new TranslateTransition(Duration.millis(200), thumb);
 
-        // Initialize to unselected state
-        updateState(false);
+        // Style the toggle button
+        setStyle("-fx-background-color: transparent; -fx-padding: 0;");
 
-        // Add listener to animate thumb position when selection changes
+        // Add listener for state changes
         selectedProperty().addListener((obs, oldVal, newVal) -> {
-            updateState(newVal);
+            background.setFill(newVal ? Color.valueOf("#34c759") : Color.valueOf("#e9e9eb"));
+            transition.setToX(newVal ? 36 : 16);
+            transition.play();
         });
-
-        // Add custom style class for CSS styling
-        getStyleClass().add("toggle");
-    }
-
-    // Updates the toggle's visual state
-    // @param selected true if toggle is selected/on, false if unselected/off
-    private void updateState(boolean selected) {
-        transition.stop();  // Stop any ongoing animation
-        transition.setToX(selected ? 36 : 16);  // Move thumb right when selected, left when unselected
-        transition.play();  // Start the animation
     }
 }

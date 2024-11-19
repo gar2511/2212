@@ -164,3 +164,12 @@
 .toggle:selected > .thumb-area {
     -fx-translate-x: 22;
 }
+
+.mole-sprite {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
+}
+
+.game {
+    -fx-background-color: #90EE90;
+    -fx-padding: 20;
+}
