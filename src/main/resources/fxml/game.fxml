@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
-<?import javafx.scene.image.Image?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.controller.GameController"
@@ -11,12 +10,12 @@
 
     <StackPane VBox.vgrow="ALWAYS">
         <ImageView fx:id="moleSprite"
-                  fitWidth="100"
-                  fitHeight="100"
+                  fitWidth="300"
+                  fitHeight="300"
                   preserveRatio="true"
                   styleClass="mole-sprite">
             <image>
-                <Image url="@/images/mole.png" />
+                <Image url="@../images/mole.png" />
             </image>
         </ImageView>
     </StackPane>
