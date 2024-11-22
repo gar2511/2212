@@ -11,12 +11,17 @@ public class Pet {
     private String species;
     private VitalStats stats;
 
+    private Inventory inventory;
+
     /**
      * Default no-arguments constructor.
      * Required for Jackson JSON serialization/deserialization.
      */
     public Pet() {
+        this.stats = new VitalStats();
+        this.inventory = new Inventory();
     }
+
 
     /**
      * Constructs a new {@code Pet} with the specified name.
@@ -27,6 +32,7 @@ public class Pet {
         this.name = name;
         this.species = species;
         this.stats = new VitalStats();
+        this.inventory = new Inventory();
     }
 
     /**
@@ -52,6 +58,12 @@ public class Pet {
     public VitalStats getStats() {
         return stats;
     }
+    /**
+     * Retrieves the inventory of the pet.
+     *
+     * @return The {@link Inventory} object representing the pet's inventory.
+     */
+    public Inventory getInventory() {return inventory;}
 
     public void performAction(PetAction action) {
         action.execute(stats);
