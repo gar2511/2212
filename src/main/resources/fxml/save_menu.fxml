@@ -8,7 +8,7 @@
       fx:controller="com.example.controller.SaveMenuController"
       spacing="20" alignment="CENTER" styleClass="save-menu">
 
-    <Label text="Create Or Load Save Files" styleClass="title-label"/>
+    <Label text="Start New Game or Load Save Files" styleClass="title-label"/>
 
     <StackPane VBox.vgrow="ALWAYS">
         <VBox spacing="15" alignment="CENTER">

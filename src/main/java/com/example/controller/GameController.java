@@ -18,7 +18,7 @@ public class GameController {
 
     @FXML
     private ImageView moleSprite;
-    
+
     private Timeline animation;
     private Random random = new Random();
 
@@ -38,7 +38,7 @@ public class GameController {
             } else {
                 moleSprite.setImage(moleImage);
             }
-            
+
             // Start mole animation
             startMoleAnimation();
         } catch (Exception e) {
@@ -54,11 +54,11 @@ public class GameController {
         moleRect.setFill(Color.BROWN);
         moleRect.setArcWidth(20);
         moleRect.setArcHeight(20);
-        
+
         SnapshotParameters params = new SnapshotParameters();
         params.setFill(Color.TRANSPARENT);
         WritableImage image = moleRect.snapshot(params, null);
-        
+
         moleSprite.setImage(image);
     }
 
@@ -66,40 +66,40 @@ public class GameController {
         // Center the mole initially
         moleSprite.setTranslateX(0);
         moleSprite.setTranslateY(0);
-        
+
         moleSprite.getParent().layoutBoundsProperty().addListener((obs, old, bounds) -> {
             // Get parent bounds
             double containerWidth = bounds.getWidth();
             double containerHeight = bounds.getHeight();
-            
+
             // Calculate movement bounds (half the distance from center in each direction)
             double maxOffset = Math.min(containerWidth, containerHeight) * 0.3; // 30% of smaller dimension
-            
+
             animation = new Timeline(
-                new KeyFrame(Duration.seconds(2), event -> {
-                    // Generate random positions relative to center
-                    double newX = (random.nextDouble() * maxOffset * 2) - maxOffset;
-                    double newY = (random.nextDouble() * maxOffset * 2) - maxOffset;
-                    
-                    // Determine direction for sprite facing
-                    double currentX = moleSprite.getTranslateX();
-                    if (newX < currentX) {
-                        moleSprite.setScaleX(-1);  // Face left
-                    } else {
-                        moleSprite.setScaleX(1);   // Face right
-                    }
-                    
-                    // Animate to new position
-                    Timeline moveAnimation = new Timeline(
-                        new KeyFrame(Duration.millis(1000),
-                            new KeyValue(moleSprite.translateXProperty(), newX),
-                            new KeyValue(moleSprite.translateYProperty(), newY)
-                        )
-                    );
-                    moveAnimation.play();
-                })
+                    new KeyFrame(Duration.seconds(2), event -> {
+                        // Generate random positions relative to center
+                        double newX = (random.nextDouble() * maxOffset * 2) - maxOffset;
+                        double newY = (random.nextDouble() * maxOffset * 2) - maxOffset;
+
+                        // Determine direction for sprite facing
+                        double currentX = moleSprite.getTranslateX();
+                        if (newX < currentX) {
+                            moleSprite.setScaleX(-1);  // Face left
+                        } else {
+                            moleSprite.setScaleX(1);   // Face right
+                        }
+
+                        // Animate to new position
+                        Timeline moveAnimation = new Timeline(
+                                new KeyFrame(Duration.millis(1000),
+                                        new KeyValue(moleSprite.translateXProperty(), newX),
+                                        new KeyValue(moleSprite.translateYProperty(), newY)
+                                )
+                        );
+                        moveAnimation.play();
+                    })
             );
-            
+
             animation.setCycleCount(Timeline.INDEFINITE);
             animation.play();
         });
