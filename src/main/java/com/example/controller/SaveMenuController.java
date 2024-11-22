@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.model.Cat;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,7 +14,7 @@ import java.io.File;
 import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.util.FileHandler;
-
+import javafx.collections.FXCollections;
 /**
  * Controller for the save game menu interface.
  * Handles save slot management, including creating, editing, and deleting saves.
@@ -194,13 +195,15 @@ public class SaveMenuController {
             try {
                 // Create new GameState with pet
                 GameState gameState = new GameState();
-                Pet pet = new Pet(petName);
+
+
+                Pet pet = new Cat(petName);
                 gameState.setPet(pet);
-                
+
                 // Save to file
                 FileHandler fileHandler = new FileHandler();
                 fileHandler.saveGame("slot" + selectedSlotIndex, gameState);
-                
+
                 // Update UI
                 ObservableList<String> slots = saveSlotList.getItems();
                 slots.set(selectedSlotIndex, petName);
@@ -229,7 +232,6 @@ public class SaveMenuController {
     }
 
     private void handlePlay(String saveName) {
-        // TODO: Implement play functionality
         System.out.println("Playing: " + saveName);
         SceneController.getInstance().switchToGame();
     }

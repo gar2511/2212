@@ -56,12 +56,12 @@
         <!-- Action Buttons -->
         <VBox spacing="15" alignment="CENTER" style="-fx-padding: 0 20;">
             <Label text="Actions" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-            <Button fx:id="feedButton" text="Feed" onAction="#goBack" styleClass="action-button" />
-            <Button fx:id="playButton" text="Play" onAction="#goBack" styleClass="action-button" />
-            <Button fx:id="giftButton" text="Give Gift" onAction="#goBack" styleClass="action-button" />
-            <Button fx:id="exerciseButton" text="Exercise" onAction="#goBack" styleClass="action-button" />
-            <Button fx:id="vetButton" text="Take to Vet" onAction="#goBack" styleClass="action-button" />
-            <Button fx:id="inventoryButton" text="Inventory" onAction="#goBack" styleClass="action-button" />
+            <Button fx:id="feedButton" text="Feed" onAction="#feedPet" styleClass="action-button" />
+            <Button fx:id="playButton" text="Play" onAction="#playWithPet" styleClass="action-button" />
+            <Button fx:id="giftButton" text="Give Gift" onAction="#giveGift" styleClass="action-button" />
+            <Button fx:id="exerciseButton" text="Exercise" onAction="#exercisePet" styleClass="action-button" />
+            <Button fx:id="vetButton" text="Take to Vet" onAction="#takePetToVet" styleClass="action-button" />
+            <Button fx:id="inventoryButton" text="Inventory" onAction="#openInventory" styleClass="action-button" />
         </VBox>
     </HBox>
 

@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.animation.Timeline;
@@ -113,5 +114,18 @@ public class GameController {
             animation.stop();
         }
         SceneController.getInstance().switchToMainMenu();
+    }
+    public void feedPet() {
+    }
+
+    public void playWithPet() {
+    }
+    public void giveGift() {
+    }
+    public void exercisePet() {
+    }
+    public void takePetToVet( ) {
+    }
+    public void openInventory( ) {
     }
 }
