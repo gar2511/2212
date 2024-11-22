@@ -76,7 +76,24 @@
     -fx-border-color: black;
     -fx-border-width: 2px;
 }
-
+.action-button {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-size: 18px;
+    -fx-min-width: 200px;
+    -fx-min-height: 50px;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+/* Progress Bar Styling */
+.progress-bar {
+    -fx-accent: #4CAF50; /* Progress color */
+    -fx-control-inner-background: #d3d3d3; /* Background color */
+    -fx-border-color: black; /* Border color */
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
 .back-button:hover {
     -fx-background-color: #F0F0F0;
 }
@@ -172,4 +189,27 @@
 .game {
     -fx-background-color: #90EE90;
     -fx-padding: 20;
+}
+
+.volume-slider {
+    -fx-background-color: transparent;
+}
+
+.volume-slider .track {
+    -fx-background-color: #e9e9eb;
+    -fx-background-radius: 4;
+    -fx-pref-height: 8;
+}
+
+.volume-slider .thumb {
+    -fx-background-color: #34c759;
+    -fx-background-radius: 8;
+    -fx-pref-height: 16;
+    -fx-pref-width: 16;
+}
+
+.volume-slider .colored-track {
+    -fx-fill: #34c759;
+    -fx-stroke-width: 0;
+    -fx-background-radius: 4;
 }
