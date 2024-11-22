@@ -14,10 +14,8 @@ import javafx.animation.SequentialTransition;
 // Controller class for the main menu interface
 public class MainMenuController {
     // FXML injected button elements from the UI
-    //TODO: REMOVE THIS
-    //@FXML
-    //private Button newGameButton;
-
+    @FXML
+    private Button newGameButton;
     @FXML
     private Button loadGameButton;
     @FXML
@@ -28,7 +26,7 @@ public class MainMenuController {
     // Initializes the controller and sets up animations for all buttons
     @FXML
     public void initialize() {
-        //setupHoverAnimation(newGameButton);
+        setupHoverAnimation(newGameButton);
         setupHoverAnimation(loadGameButton);
         setupHoverAnimation(settingsButton);
         setupHoverAnimation(exitButton);
@@ -133,7 +131,7 @@ public class MainMenuController {
     }
 
     // Handler for starting a new game
-    @FXML // TODO: DOWNGRADE TO 3 BUTTONS
+    @FXML
     private void startNewGame() {
         // Switch to the game scene
         SceneController.getInstance().switchToGame();
@@ -141,7 +139,7 @@ public class MainMenuController {
 
     // Handler for loading a saved game
     @FXML
-    private void startGame() {
+    private void loadGame() {
         // Switch to the save menu scene
         SceneController.getInstance().switchToSaveMenu();
     }

@@ -231,7 +231,6 @@ public class SaveMenuController {
     private void handlePlay(String saveName) {
         // TODO: Implement play functionality
         System.out.println("Playing: " + saveName);
-        SceneController.getInstance().switchToGame();
     }
 
     private void handleEdit(String saveName) {
