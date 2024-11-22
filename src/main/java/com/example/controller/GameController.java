@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.model.VitalStats;
+import com.example.util.FileHandler;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -16,6 +17,8 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
+
+import java.io.IOException;
 import java.util.Random;
 
 //TODO: Rewrite this whole file
@@ -101,4 +104,83 @@ public class GameController {
         }
         SceneController.getInstance().switchToMainMenu();
     }
+    @FXML
+    private void feedPet() {
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+
+        if (pet != null) {
+            VitalStats stats = pet.getStats();
+            stats.increaseHunger(20); // Increase hunger by 20
+            stats.increaseHappiness(10); // Increase happiness by 10
+            System.out.println(pet.getName() + " has been fed! Hunger and happiness increased.");
+        } else {
+            System.out.println("No pet to feed!");
+        }
+
+    }
+    @FXML
+    private void playPet(){
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+
+        if (pet != null) {
+            VitalStats stats = pet.getStats();
+            stats.decreaseEnergy(15); // Decrease energy by 15
+            stats.increaseHappiness(20); // Increase happiness by 20
+            stats.decreaseHunger(10); // Decrease hunger by 10
+            System.out.println(pet.getName() + " is playing! Energy and hunger decreased, happiness increased.");
+        } else {
+            System.out.println("No pet to play with!");
+        }
+    }
+    @FXML
+    private void giveGift(){}
+    @FXML
+    private void exercisePet(){
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+
+        if (pet != null) {
+            VitalStats stats = pet.getStats();
+            stats.decreaseHunger(20); // Decrease hunger
+            stats.decreaseHappiness(5); // Decrease happiness slightly
+            stats.increaseEnergy(10); // Increase energy
+            System.out.println(pet.getName() + " has exercised! Energy increased, hunger decreased.");
+        } else {
+            System.out.println("No pet to exercise!");
+        }
+    }
+    @FXML
+    private void takeVet(){
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+
+        if (pet != null) {
+            VitalStats stats = pet.getStats();
+            stats.increaseHygiene(50); // Increase hygiene
+            stats.increaseEnergy(30); // Increase health
+            stats.decreaseHappiness(10); // Decrease happiness
+            System.out.println(pet.getName() + " went to the vet! Health and hygiene increased, but happiness decreased.");
+        } else {
+            System.out.println("No pet to take to the vet!");
+        }
+    }
+    @FXML
+    private void openInventory(){System.out.println("Inventory has not been made yet");}
+    @FXML
+    private void saveGame() {
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+        try {
+            FileHandler fileHandler = new FileHandler();
+            fileHandler.saveGame("slot" + pet.getSaveID(), gameState); // Save with a filename
+            System.out.println("Game saved successfully!");
+        } catch (IOException e) {
+            System.err.println("Failed to save game: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
+
+

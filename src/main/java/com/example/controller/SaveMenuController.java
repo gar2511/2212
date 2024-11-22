@@ -167,7 +167,7 @@ public class SaveMenuController {
         String petType = petTypeComboBox.getSelectionModel().getSelectedItem();
         if (!petName.isEmpty() && petType != null) {
             try {
-                Pet pet = new Pet(petName, petType);
+                Pet pet = new Pet(petName, petType,selectedSlotIndex);
                 GameState gameState = GameState.getCurrentState();
                 gameState.setPet(pet);
 

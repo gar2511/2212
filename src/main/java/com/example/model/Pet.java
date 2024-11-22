@@ -12,6 +12,7 @@ public class Pet {
     private VitalStats stats;
 
     private Inventory inventory;
+    private int saveID;
 
     /**
      * Default no-arguments constructor.
@@ -28,11 +29,12 @@ public class Pet {
      *
      * @param name The name to assign to the pet.
      */
-    public Pet(String name, String species) {
+    public Pet(String name, String species,int saveID) {
         this.name = name;
         this.species = species;
         this.stats = new VitalStats();
         this.inventory = new Inventory();
+        this.saveID = saveID;
     }
 
     /**
@@ -57,6 +59,10 @@ public class Pet {
     }
     public VitalStats getStats() {
         return stats;
+    }
+
+    public int getSaveID() {
+        return saveID;
     }
     /**
      * Retrieves the inventory of the pet.
