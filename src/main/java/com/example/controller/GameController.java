@@ -1,6 +1,9 @@
 package com.example.controller;
 
+import com.example.model.GameState;
 import com.example.model.Pet;
+import com.example.model.VitalStats;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
@@ -23,6 +26,11 @@ import java.util.Random;
  */
 public class GameController {
 
+
+    public ProgressBar energyBar;
+    public ProgressBar hygieneBar;
+    public ProgressBar hungerBar;
+    public ProgressBar happinessBar;
     @FXML
     private ImageView moleSprite;
 
@@ -46,6 +54,25 @@ public class GameController {
      */
     @FXML
     public void initialize() {
+        // Get the current GameState instance
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet(); // Retrieve the Pet object
+        if (pet != null) {
+            VitalStats stats = pet.getStats();
+
+            // Bind progress bars to stats
+            energyBar.progressProperty().bind(Bindings.divide(stats.energyProperty(), 100.0));
+            hygieneBar.progressProperty().bind(Bindings.divide(stats.hygieneProperty(), 100.0));
+            hungerBar.progressProperty().bind(Bindings.divide(stats.hungerProperty(), 100.0));
+            happinessBar.progressProperty().bind(Bindings.divide(stats.happinessProperty(), 100.0));
+
+
+            System.out.println("Loaded Pet: " + pet.getName() + ", Type: " + pet.getSpecies());
+            // Update UI or initialize game logic with the Pet's data
+            //setupPetData(pet);
+        } else {
+            System.out.println("No pet found. Please create or load a save.");
+        }
         try {
             // Load image from resources
             Image moleImage = new Image(getClass().getResourceAsStream("/images/mole.png"));

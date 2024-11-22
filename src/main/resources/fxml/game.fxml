@@ -17,14 +17,14 @@
 
             <!-- Health Bar -->
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="HEALTH" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                <ProgressBar fx:id="healthBar" prefWidth="150" progress="0.7" />
+                <Label text="ENERGY" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+                <ProgressBar fx:id="energyBar" prefWidth="150" progress="0.7" />
             </HBox>
 
             <!-- Sleep Bar -->
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="SLEEP" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                <ProgressBar fx:id="sleepBar" prefWidth="150" progress="0.5" />
+                <Label text="HYGIENE" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+                <ProgressBar fx:id="hygieneBar" prefWidth="150" progress="0.5" />
             </HBox>
 
             <!-- Hunger Bar -->
