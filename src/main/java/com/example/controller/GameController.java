@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.animation.Timeline;
@@ -14,7 +13,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
 import java.util.Random;
 
-// Controller class responsible for managing the game scene/view
+/**
+ * Controller class responsible for managing the game scene/view.
+ * This class handles the mole animation, sprite rendering, and navigation
+ * to other scenes within the application.
+ */
 public class GameController {
 
     @FXML
@@ -23,11 +26,21 @@ public class GameController {
     private Timeline animation;
     private Random random = new Random();
 
-    // Constructor - called when the game scene is initialized
+    /**
+     * Constructor for GameController.
+     * Initializes the controller when the game scene is created.
+     */
     public GameController() {
         System.out.println("GameController initialized");
+
     }
 
+    /**
+     * Initializes the game scene.
+     * This method is automatically called after the FXML file is loaded.
+     * It sets up the mole sprite, handles fallback rendering in case of errors,
+     * and starts the mole animation.
+     */
     @FXML
     public void initialize() {
         try {
@@ -49,8 +62,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Creates a fallback mole sprite in case the default mole image cannot be loaded.
+     * The fallback sprite is a simple brown rectangle designed to mimic the mole's appearance.
+     */
     private void createFallbackMoleSprite() {
-        // Your existing rectangle creation code
         Rectangle moleRect = new Rectangle(300, 300);
         moleRect.setFill(Color.BROWN);
         moleRect.setArcWidth(20);
@@ -63,17 +79,21 @@ public class GameController {
         moleSprite.setImage(image);
     }
 
+    /**
+     * Starts the mole animation.
+     * The mole moves randomly within a predefined area and changes direction to face
+     * the direction of movement. Animation is designed to loop indefinitely.
+     */
     private void startMoleAnimation() {
         // Center the mole initially
         moleSprite.setTranslateX(0);
         moleSprite.setTranslateY(0);
 
         moleSprite.getParent().layoutBoundsProperty().addListener((obs, old, bounds) -> {
-            // Get parent bounds
             double containerWidth = bounds.getWidth();
             double containerHeight = bounds.getHeight();
 
-            // Calculate movement bounds (half the distance from center in each direction)
+            // Calculate movement bounds
             double maxOffset = Math.min(containerWidth, containerHeight) * 0.3; // 30% of smaller dimension
 
             animation = new Timeline(
@@ -106,26 +126,15 @@ public class GameController {
         });
     }
 
-    // Event handler for the back button
-    // Returns the user to the main menu when clicked
+    /**
+     * Event handler for the back button.
+     * Stops the mole animation and switches the scene back to the main menu.
+     */
     @FXML
     private void goBack() {
         if (animation != null) {
             animation.stop();
         }
         SceneController.getInstance().switchToMainMenu();
-    }
-    public void feedPet() {
-    }
-
-    public void playWithPet() {
-    }
-    public void giveGift() {
-    }
-    public void exercisePet() {
-    }
-    public void takePetToVet( ) {
-    }
-    public void openInventory( ) {
     }
 }

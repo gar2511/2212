@@ -4,7 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 <VBox xmlns:fx="http://javafx.com/fxml"
@@ -35,7 +34,6 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-
             <HBox spacing="20" alignment="CENTER">
                 <Button text="CONFIRM" onAction="#confirmNewSave" styleClass="dialogue-button"/>
                 <Button text="CANCEL" onAction="#cancelNewSave" styleClass="dialogue-button"/>
