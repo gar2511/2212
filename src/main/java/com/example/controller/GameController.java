@@ -167,7 +167,13 @@ public class GameController {
         }
     }
     @FXML
-    private void openInventory(){System.out.println("Inventory has not been made yet");}
+    private void openInventory(){
+        System.out.println("Inventory has not been made yet");
+        if (animation != null) {
+            animation.stop();
+        }
+        SceneController.getInstance().switchToInventory();
+    }
     @FXML
     private void saveGame() {
         GameState gameState = GameState.getCurrentState();
