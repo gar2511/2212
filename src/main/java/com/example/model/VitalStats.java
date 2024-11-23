@@ -59,6 +59,42 @@ public class VitalStats {
         hygiene.set(clampValue(value));
     }
 
+    // Adjust methods
+
+    public void increaseHygiene(int value) {
+        hygiene.set(Math.min(100, hygiene.get() + value));
+    }
+
+    public void decreaseHygiene(int value) {
+        hygiene.set(Math.max(0, hygiene.get() - value));
+    }
+
+    public void increaseHunger(int value) {
+        hunger.set(Math.min(100, hunger.get() + value));
+    }
+
+    public void decreaseHunger(int value) {
+        hunger.set(Math.max(0, hunger.get() - value));
+    }
+
+    public void increaseHappiness(int value) {
+        happiness.set(Math.min(100, happiness.get() + value));
+    }
+
+    public void decreaseHappiness(int value) {
+        happiness.set(Math.max(0, happiness.get() - value));
+    }
+
+    public void increaseEnergy(int value) {
+        energy.set(Math.min(100, energy.get() + value));
+    }
+
+    public void decreaseEnergy(int value) {
+        energy.set(Math.max(0, energy.get() - value));
+    }
+
+
+
     // Clamp method to ensure values stay within range
     private int clampValue(int value) {
         return Math.max(0, Math.min(100, value));

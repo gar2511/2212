@@ -165,10 +165,10 @@ public class SaveMenuController {
     private void confirmNewSave() {
         String petName = petNameField.getText().trim();
         String petType = petTypeComboBox.getSelectionModel().getSelectedItem();
-        if (!petName.isEmpty()) {
+        if (!petName.isEmpty() && petType != null) {
             try {
-                GameState gameState = new GameState();
-                Pet pet = new Pet(petName, petType);
+                Pet pet = new Pet(petName, petType,selectedSlotIndex);
+                GameState gameState = GameState.getCurrentState();
                 gameState.setPet(pet);
 
                 FileHandler fileHandler = new FileHandler();
@@ -216,10 +216,21 @@ public class SaveMenuController {
      * @param saveName The name of the save to load and play.
      */
     private void handlePlay(String saveName) {
-        // TODO: Implement play functionality
-        System.out.println("Playing: " + saveName);
+        int index = saveSlotList.getItems().indexOf(saveName); // This will grab either save slot 0,1,2,3
+        System.out.println(index);
+        try {
+            System.out.println("Playing: " + saveName);
+            // Load the game state from the file
+            FileHandler fileHandler = new FileHandler();
+            GameState loadedState = fileHandler.loadGame("slot" + index);
+            GameState.loadState(loadedState); // Set the loaded state as the current state
 
-        SceneController.getInstance().switchToGame();
+            // Transition to the game scene
+            SceneController.getInstance().switchToGame();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO: Show error dialog to user
+        }
     }
 
     /**
