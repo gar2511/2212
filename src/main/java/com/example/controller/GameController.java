@@ -101,15 +101,6 @@ public class GameController {
                     moleSprite.setImage(bearImage);
                 }
             }
-            else if (pet.getSpecies().equals("Cat")) {
-                // Load image from resources
-                Image catImage = new Image(getClass().getResourceAsStream("/images/cat.png"));
-                if (catImage.isError()) {
-                    System.err.println("Error loading mole image: " + catImage.getException());
-                } else {
-                    moleSprite.setImage(catImage);
-                }
-            }
             else { // if no image then mole image
                 System.out.println("Default Image, " + pet.getSpecies() + " image not found.");
                 Image moleImage = new Image(getClass().getResourceAsStream("/images/mole.png"));
