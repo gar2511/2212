@@ -77,12 +77,34 @@ public class GameController {
             System.out.println("No pet found. Please create or load a save.");
         }
         try {
-            // Load image from resources
-            Image moleImage = new Image(getClass().getResourceAsStream("/images/mole.png"));
-            if (moleImage.isError()) {
-                System.err.println("Error loading mole image: " + moleImage.getException());
-            } else {
-                moleSprite.setImage(moleImage);
+
+            // If pet is a certain species, load that image
+            if (pet.getSpecies().equals("Mole")) {
+                // Load image from resources
+                Image moleImage = new Image(getClass().getResourceAsStream("/images/mole.png"));
+                if (moleImage.isError()) {
+                    System.err.println("Error loading mole image: " + moleImage.getException());
+                } else {
+                    moleSprite.setImage(moleImage);
+                }
+            }
+            else if (pet.getSpecies().equals("Bear")) {
+                // Load image from resources
+                Image bearImage = new Image(getClass().getResourceAsStream("/images/bear.png"));
+                if (bearImage.isError()) {
+                    System.err.println("Error loading mole image: " + bearImage.getException());
+                } else {
+                    moleSprite.setImage(bearImage);
+                }
+            }
+            else { // if no image then mole image
+                System.out.println("Default Image, " + pet.getSpecies() + " image not found.");
+                Image moleImage = new Image(getClass().getResourceAsStream("/images/mole.png"));
+                if (moleImage.isError()) {
+                    System.err.println("Error loading mole image: " + moleImage.getException());
+                } else {
+                    moleSprite.setImage(moleImage);
+                }
             }
 
         } catch (Exception e) {
