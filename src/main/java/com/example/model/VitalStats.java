@@ -1,5 +1,6 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -107,7 +108,13 @@ public class VitalStats {
         energy.set(Math.max(0, energy.get() - value));
     }
     public int[] getState(){return this.petState;}
+
     public int getVitalState(int index) {return this.petState[index];}
+
+    @JsonProperty("state")
+    public void setState(int[] state) {
+        System.arraycopy(state, 0, this.petState, 0, Math.min(state.length, this.petState.length));
+    }
 
     // Update petState array based on the stat value
     private void updatePetState(int index, int newValue) {
