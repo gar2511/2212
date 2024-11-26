@@ -8,10 +8,10 @@ import javafx.beans.property.SimpleIntegerProperty;
  * Contains four items with quantities ranging from 0 to 100.
  */
 public class Inventory {
-    private final IntegerProperty item1 = new SimpleIntegerProperty(2);
-    private final IntegerProperty item2 = new SimpleIntegerProperty(2);
-    private final IntegerProperty item3 = new SimpleIntegerProperty(2);
-    private final IntegerProperty item4 = new SimpleIntegerProperty(2);
+    private final IntegerProperty item1 = new SimpleIntegerProperty(99);
+    private final IntegerProperty item2 = new SimpleIntegerProperty(99);
+    private final IntegerProperty item3 = new SimpleIntegerProperty(99);
+    private final IntegerProperty item4 = new SimpleIntegerProperty(299);
 
     // Getters and setters for Item 1
     public int getItem1() {

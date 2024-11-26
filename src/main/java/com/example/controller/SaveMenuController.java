@@ -70,11 +70,12 @@ public class SaveMenuController {
                             slots.set(slotIndex, pet.getName() + " " + pet.getSpecies());
                         }
                     } catch (IOException ignored) {
-                        // Ignore corrupted files and leave default text
+                        System.err.println("Error loading save file: " + file.getName());
                     }
                 }
             }
         }
+
 
         saveSlotList.setItems(slots);
         saveSlotList.setFocusTraversable(false);
