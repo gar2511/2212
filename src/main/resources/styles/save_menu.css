@@ -35,6 +35,8 @@
     -fx-font-size: 24px;
     -fx-alignment: center;
     -fx-text-alignment: center;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
 }
 
 .save-slot-list .list-cell .save-slot-text {
@@ -62,8 +64,8 @@
 
 .save-slot-button:hover {
     -fx-cursor: hand;
-    -fx-text-fill: red;
-    -fx-background-color: green;
+    -fx-text-fill: black;
+    -fx-background-color: white;
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
 }

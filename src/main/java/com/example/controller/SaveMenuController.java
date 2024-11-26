@@ -126,10 +126,12 @@ public class SaveMenuController {
                 buttons.getStyleClass().add("save-slot-buttons");
                 text.getStyleClass().add("save-slot-text");
                 
-                // Center the buttons in the StackPane
+                // center both text and buttons
+                StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
                 StackPane.setAlignment(buttons, javafx.geometry.Pos.CENTER);
                 buttons.setAlignment(javafx.geometry.Pos.CENTER);
                 
+                // setup button actions
                 playButton.setOnAction(e -> {
                     e.consume();
                     handlePlay(getItem());
@@ -148,8 +150,6 @@ public class SaveMenuController {
                 setOnMouseEntered(e -> {
                     if (getItem() != null && !"CLICK TO CREATE NEW SAVE".equals(getItem())) {
                         buttons.setVisible(true);
-                        buttons.setOpacity(0.0);
-                        buttons.setOpacity(1.0);
                         fadeTransition.setFromValue(1.0);
                         fadeTransition.setToValue(0.3);
                         fadeTransition.play();
@@ -172,7 +172,6 @@ public class SaveMenuController {
                 } else {
                     text.setText(item);
                     content.getChildren().setAll(text, buttons);
-                    StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
                     setGraphic(content);
                     
                     buttons.setVisible(false);
