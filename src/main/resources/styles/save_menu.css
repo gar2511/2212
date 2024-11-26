@@ -48,18 +48,22 @@
     -fx-alignment: center;
 }
 
-.save-menu-button {
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
+.save-slot-button {
+    -fx-background-color: white;
+    -fx-text-fill: black;
     -fx-font-size: 20px;
     -fx-min-width: 80px;
-    -fx-min-height: 50px;
+    -fx-min-height: 30px;
     -fx-alignment: center;
     -fx-text-alignment: center;
     -fx-font-family: "Courier New";
+    -fx-font-weight: bold;
 }
 
-.save-menu-button:hover {
+.save-slot-button:hover {
     -fx-cursor: hand;
-    -fx-text-fill: #F5E6D3;
+    -fx-text-fill: red;
+    -fx-background-color: green;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
 }

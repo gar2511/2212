@@ -16,6 +16,9 @@ import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.util.FileHandler;
 import com.example.components.CustomButton;
+import javafx.scene.layout.StackPane;
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
 
 /**
  * Controller for the save game menu interface.
@@ -105,15 +108,20 @@ public class SaveMenuController {
             private final CustomButton deleteButton = new CustomButton("DELETE");
             private final HBox buttons = new HBox(10, playButton, editButton, deleteButton);
             private final Label text = new Label();
-            private final javafx.scene.layout.StackPane content = new javafx.scene.layout.StackPane();
+            private final StackPane content = new StackPane();
+            private final FadeTransition fadeTransition = new FadeTransition(Duration.millis(150), text);
 
             {
+                playButton.getStyleClass().add("save-slot-button");
+                editButton.getStyleClass().add("save-slot-button");
+                deleteButton.getStyleClass().add("save-slot-button");
+                
                 buttons.setVisible(false);
                 buttons.getStyleClass().add("save-slot-buttons");
                 text.getStyleClass().add("save-slot-text");
                 
                 // Center the buttons in the StackPane
-                javafx.scene.layout.StackPane.setAlignment(buttons, javafx.geometry.Pos.CENTER);
+                StackPane.setAlignment(buttons, javafx.geometry.Pos.CENTER);
                 buttons.setAlignment(javafx.geometry.Pos.CENTER);
                 
                 playButton.setOnAction(e -> {
@@ -134,13 +142,19 @@ public class SaveMenuController {
                 setOnMouseEntered(e -> {
                     if (getItem() != null && !"CLICK TO CREATE NEW SAVE".equals(getItem())) {
                         buttons.setVisible(true);
-                        text.setOpacity(0.3);
+                        buttons.setOpacity(0.0);
+                        buttons.setOpacity(1.0);
+                        fadeTransition.setFromValue(1.0);
+                        fadeTransition.setToValue(0.3);
+                        fadeTransition.play();
                     }
                 });
 
                 setOnMouseExited(e -> {
                     buttons.setVisible(false);
-                    text.setOpacity(1.0);
+                    fadeTransition.setFromValue(0.3);
+                    fadeTransition.setToValue(1.0);
+                    fadeTransition.play();
                 });
             }
 
@@ -152,7 +166,7 @@ public class SaveMenuController {
                 } else {
                     text.setText(item);
                     content.getChildren().setAll(text, buttons);
-                    javafx.scene.layout.StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
+                    StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
                     setGraphic(content);
                     
                     buttons.setVisible(false);
