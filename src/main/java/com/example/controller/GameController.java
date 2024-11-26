@@ -93,6 +93,10 @@ public class GameController {
             System.err.println("Error in initialize: " + e.getMessage());
             e.printStackTrace();
         }
+
+        // Initialize hotkeys
+        setupHotkeys();
+
         startStatsDecay();
 
 
@@ -394,9 +398,43 @@ public class GameController {
                 break;
         }
     }
+    private void setupHotkeys() {
+        moleSprite.setFocusTraversable(true); // Ensure moleSprite can receive key events
+        moleSprite.requestFocus(); // Request focus on the moleSprite node
+
+        moleSprite.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case F: // Feed the pet
+                    feedPet();
+                    break;
+                case P: // Play with the pet
+                    playPet();
+                    break;
+                case G: // Give a gift
+                    giveGift();
+                    break;
+                case E: // Exercise the pet
+                    exercisePet();
+                    break;
+                case V: // Take the pet to the vet
+                    takeVet();
+                    break;
+                case I: // Open inventory
+                    openInventory();
+                    break;
+                case S: // Save the game
+                    saveGame();
+                    break;
+                case Q: // Go back to the main menu
+                    goBack();
+                    break;
+                default:
+                    System.out.println("Unhandled key: " + event.getCode());
+            }
+        });
 
 
-
+    }
 }
 
 
