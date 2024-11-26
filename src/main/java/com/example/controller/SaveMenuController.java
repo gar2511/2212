@@ -59,21 +59,26 @@ public class SaveMenuController {
 
         // Load existing save files and update slots with saved pet names
         File[] saveFiles = fileHandler.getSaveFiles();
-        System.out.println(Arrays.toString(saveFiles));
+        System.out.println("Initializing save menu with files: " + Arrays.toString(saveFiles));
+        
         if (saveFiles != null) {
             for (File file : saveFiles) {
                 String fileName = file.getName();
                 if (fileName.matches("slot\\d+\\.json")) {
-                    int slotIndex = Integer.parseInt(fileName.replaceAll("[^0-9]", ""));
                     try {
+                        int slotIndex = Integer.parseInt(fileName.replaceAll("[^0-9]", ""));
                         GameState state = fileHandler.loadGame("slot" + slotIndex);
                         if (state != null && state.getPet() != null) {
                             Pet pet = state.getPet();
                             // Update slot with both pet name and species
-                            slots.set(slotIndex, pet.getName() + " " + pet.getSpecies());
+                            if (slotIndex >= 0 && slotIndex < slots.size()) {
+                                slots.set(slotIndex, pet.getName() + " " + pet.getSpecies());
+                                System.out.println("Loaded save slot " + slotIndex + ": " + pet.getName() + " " + pet.getSpecies());
+                            }
                         }
-                    } catch (IOException ignored) {
-                        System.err.println("Error loading save file: " + file.getName());
+                    } catch (IOException e) {
+                        System.err.println("Error loading save file: " + fileName);
+                        e.printStackTrace();
                     }
                 }
             }
