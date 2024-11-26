@@ -13,6 +13,10 @@ public class Pet {
 
     private Inventory inventory;
     private int saveID;
+    private int[] states;
+    private int defaultItem12 = 1; // Default to item 1
+    private int defaultItem34 = 3; // Default to item 3
+
 
     /**
      * Default no-arguments constructor.
@@ -35,6 +39,8 @@ public class Pet {
         this.stats = new VitalStats();
         this.inventory = new Inventory();
         this.saveID = saveID;
+        this.defaultItem12 = 1;
+        this.defaultItem34 = 3;
     }
 
     /**
@@ -71,8 +77,28 @@ public class Pet {
      */
     public Inventory getInventory() {return inventory;}
 
+    // Called when a stat threshold is reached
+    private void handleThreshold() {
+        System.out.println("Threshold reached for " + name + ". Consider taking action!");
+        // Add additional logic, e.g., changing pet mood or triggering events
+    }
     public void performAction(PetAction action) {
         action.execute(stats);
+    }
+    public int getDefaultItem12() {
+        return defaultItem12;
+    }
+
+    public void setDefaultItem12(int defaultItem12) {
+        this.defaultItem12 = defaultItem12;
+    }
+
+    public int getDefaultItem34() {
+        return defaultItem34;
+    }
+
+    public void setDefaultItem34(int defaultItem34) {
+        this.defaultItem34 = defaultItem34;
     }
 
 }

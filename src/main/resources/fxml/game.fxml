@@ -4,10 +4,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.controller.GameController"
       spacing="20" alignment="CENTER" styleClass="game"
       style="-fx-padding: 20; -fx-background-color: #90EE90;">
+
+    <!-- Game Over Label -->
+    <Label fx:id="gameOverLabel" text="Game Over! Start a New Game or Load a Saved Game."
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: red;"
+           alignment="CENTER" visible="false" />
 
     <!-- Main Row: Status, Mole Image, and Actions -->
     <HBox spacing="50" alignment="CENTER" style="-fx-padding: 20;">
@@ -18,25 +23,25 @@
             <!-- Health Bar -->
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="ENERGY" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                <ProgressBar fx:id="energyBar" prefWidth="150" progress="0.7" />
+                <ProgressBar fx:id="energyBar" prefWidth="150" />
             </HBox>
 
             <!-- Sleep Bar -->
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="HYGIENE" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                <ProgressBar fx:id="hygieneBar" prefWidth="150" progress="0.5" />
+                <Label text="HEALTH" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+                <ProgressBar fx:id="healthBar" prefWidth="150" />
             </HBox>
 
             <!-- Hunger Bar -->
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="HUNGER" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                <ProgressBar fx:id="hungerBar" prefWidth="150" progress="0.3" />
+                <ProgressBar fx:id="hungerBar" prefWidth="150" />
             </HBox>
 
             <!-- Happiness Bar -->
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="HAPPINESS" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                <ProgressBar fx:id="happinessBar" prefWidth="150" progress="0.8" />
+                <ProgressBar fx:id="happinessBar" prefWidth="150" />
             </HBox>
         </VBox>
 
@@ -65,13 +70,13 @@
         </VBox>
     </HBox>
 
-    <!-- Back Button -->
+    <!-- Back and Save Buttons -->
     <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
-        <!-- Back Button -->
         <Button fx:id="backButton" text="Back" onAction="#goBack" styleClass="back-button" />
-
-        <!-- Save Button -->
         <Button fx:id="saveButton" text="Save" onAction="#saveGame" styleClass="action-button" />
     </HBox>
+
+    <!-- Play Time -->
+    <Label fx:id="playTimeLabel" text="Play Time: 00:00:00" style="-fx-font-size: 16px;" />
 
 </VBox>
