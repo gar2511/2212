@@ -1,0 +1,26 @@
+.save-menu-background {
+    -fx-background-color: #38250e;
+}
+
+.save-title-label {
+    -fx-font-size: 20px;
+    -fx-font-family: "Press Start 2P", monospace;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.save-menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-min-width: 80px;
+    -fx-min-height: 50px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-font-family: 'Press Start 2P', monospace;
+}
+
+.custom-button:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #F5E6D3;
+}
