@@ -3,10 +3,49 @@
 }
 
 .save-title-label {
-    -fx-font-size: 20px;
-    -fx-font-family: "Press Start 2P", monospace;
-    -fx-font-weight: bold;
+    -fx-font-size: 30px;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: 900;
     -fx-text-fill: white;
+}
+
+.save-slot-list {
+    -fx-background-color: transparent;
+    -fx-pref-height: 320px;
+    -fx-max-height: 320px;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 400px;
+    -fx-max-width: 400px;
+}
+
+.save-slot-list .list-cell {
+    -fx-pref-width: 400px;
+    -fx-max-width: 400px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.save-slot-list .list-cell:filled {
+    -fx-background-color: #F5E6D3;
+    -fx-opacity: 0.5;
+    -fx-background-radius: 25px;
+    -fx-padding: 5px;
+    -fx-background-insets: 0 0 20px 0;
+    -fx-font-size: 24px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.save-slot-list .list-cell .save-slot-text {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-font-size: 24px;
+}
+
+.save-slot-list .list-cell .save-slot-buttons {
+    -fx-spacing: 10;
+    -fx-alignment: center;
 }
 
 .save-menu-button {
@@ -17,10 +56,10 @@
     -fx-min-height: 50px;
     -fx-alignment: center;
     -fx-text-alignment: center;
-    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-family: "Courier New";
 }
 
-.custom-button:hover {
+.save-menu-button:hover {
     -fx-cursor: hand;
     -fx-text-fill: #F5E6D3;
 }

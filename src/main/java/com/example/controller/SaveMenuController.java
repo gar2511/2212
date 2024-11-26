@@ -104,13 +104,18 @@ public class SaveMenuController {
             private final CustomButton editButton = new CustomButton("EDIT");
             private final CustomButton deleteButton = new CustomButton("DELETE");
             private final HBox buttons = new HBox(10, playButton, editButton, deleteButton);
-            private final HBox content = new HBox(20);
+            private final Label text = new Label();
+            private final javafx.scene.layout.StackPane content = new javafx.scene.layout.StackPane();
 
             {
                 buttons.setVisible(false);
                 buttons.getStyleClass().add("save-slot-buttons");
-                content.setAlignment(javafx.geometry.Pos.CENTER);
-
+                text.getStyleClass().add("save-slot-text");
+                
+                // Center the buttons in the StackPane
+                javafx.scene.layout.StackPane.setAlignment(buttons, javafx.geometry.Pos.CENTER);
+                buttons.setAlignment(javafx.geometry.Pos.CENTER);
+                
                 playButton.setOnAction(e -> {
                     e.consume();
                     handlePlay(getItem());
@@ -129,10 +134,14 @@ public class SaveMenuController {
                 setOnMouseEntered(e -> {
                     if (getItem() != null && !"CLICK TO CREATE NEW SAVE".equals(getItem())) {
                         buttons.setVisible(true);
+                        text.setOpacity(0.3);
                     }
                 });
 
-                setOnMouseExited(e -> buttons.setVisible(false));
+                setOnMouseExited(e -> {
+                    buttons.setVisible(false);
+                    text.setOpacity(1.0);
+                });
             }
 
             @Override
@@ -141,10 +150,14 @@ public class SaveMenuController {
                 if (empty || item == null) {
                     setGraphic(null);
                 } else {
-                    Label text = new Label(item);
-                    HBox.setHgrow(text, Priority.ALWAYS);
+                    text.setText(item);
                     content.getChildren().setAll(text, buttons);
+                    javafx.scene.layout.StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
                     setGraphic(content);
+                    
+                    buttons.setVisible(false);
+                    buttons.setManaged(!"CLICK TO CREATE NEW SAVE".equals(item));
+                    text.setOpacity(1.0);
                 }
             }
         });

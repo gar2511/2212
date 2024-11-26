@@ -13,7 +13,7 @@
       spacing="20" alignment="CENTER" styleClass="save-menu-background"
       stylesheets="@../styles/save_menu.css">
 
-    <Label text="Start New Game or Load Save Files" styleClass="save-title-label"/>
+    <Label text="Start New Game or Load Save Files" styleClass="title-label"/>
 
     <StackPane VBox.vgrow="ALWAYS">
         <VBox spacing="15" alignment="CENTER">
