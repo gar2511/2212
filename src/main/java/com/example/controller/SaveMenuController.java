@@ -76,8 +76,9 @@ public class SaveMenuController {
                                 System.out.println("Loaded save slot " + slotIndex + ": " + pet.getName() + " " + pet.getSpecies());
                             }
                         }
-                    } catch (IOException ignored) {
-                        System.err.println("Error loading save file: " + file.getName());
+                    } catch (IOException e) {
+                        System.err.println("Error loading save file: " + fileName);
+                        e.printStackTrace();
                     }
                 }
             }
