@@ -55,6 +55,21 @@
         </VBox>
     </GridPane>
 
+    <!-- Default Selection Section -->
+    <VBox spacing="10" alignment="CENTER">
+        <Label text="Select Default for Items 1 and 2" style="-fx-font-size: 16px;" />
+        <HBox spacing="20" alignment="CENTER">
+            <RadioButton fx:id="radioItem1" text="Item 1" toggleGroup="$item12ToggleGroup" style="-fx-font-size: 14px;" />
+            <RadioButton fx:id="radioItem2" text="Item 2" toggleGroup="$item12ToggleGroup" style="-fx-font-size: 14px;" />
+        </HBox>
+
+        <Label text="Select Default for Items 3 and 4" style="-fx-font-size: 16px;" />
+        <HBox spacing="20" alignment="CENTER">
+            <RadioButton fx:id="radioItem3" text="Item 3" toggleGroup="$item34ToggleGroup" style="-fx-font-size: 14px;" />
+            <RadioButton fx:id="radioItem4" text="Item 4" toggleGroup="$item34ToggleGroup" style="-fx-font-size: 14px;" />
+        </HBox>
+    </VBox>
+
     <!-- Go Back Button -->
     <Button fx:id="goBackButton" text="Go Back" style="-fx-font-size: 14px;" onAction="#goBack" />
 </VBox>
