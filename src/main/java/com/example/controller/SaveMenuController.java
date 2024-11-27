@@ -59,32 +59,25 @@ public class SaveMenuController {
 
         // Load existing save files and update slots with saved pet names
         File[] saveFiles = fileHandler.getSaveFiles();
-        System.out.println("Initializing save menu with files: " + Arrays.toString(saveFiles));
-        
+        System.out.println(Arrays.toString(saveFiles));
         if (saveFiles != null) {
             for (File file : saveFiles) {
                 String fileName = file.getName();
                 if (fileName.matches("slot\\d+\\.json")) {
+                    int slotIndex = Integer.parseInt(fileName.replaceAll("[^0-9]", ""));
                     try {
-                        int slotIndex = Integer.parseInt(fileName.replaceAll("[^0-9]", ""));
                         GameState state = fileHandler.loadGame("slot" + slotIndex);
                         if (state != null && state.getPet() != null) {
                             Pet pet = state.getPet();
                             // Update slot with both pet name and species
-                            if (slotIndex >= 0 && slotIndex < slots.size()) {
-                                slots.set(slotIndex, pet.getName() + " " + pet.getSpecies());
-                                System.out.println("Loaded save slot " + slotIndex + ": " + pet.getName() + " " + pet.getSpecies());
-                            }
+                            slots.set(slotIndex, pet.getName() + " " + pet.getSpecies());
                         }
-                    } catch (IOException e) {
-                        System.err.println("Error loading save file: " + fileName);
-                        e.printStackTrace();
+                    } catch (IOException ignored) {
+                        // Ignore corrupted files and leave default text
                     }
                 }
             }
         }
-
-
 
         saveSlotList.setItems(slots);
         saveSlotList.setFocusTraversable(false);
@@ -126,12 +119,10 @@ public class SaveMenuController {
                 buttons.getStyleClass().add("save-slot-buttons");
                 text.getStyleClass().add("save-slot-text");
                 
-                // center both text and buttons
-                StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
+                // Center the buttons in the StackPane
                 StackPane.setAlignment(buttons, javafx.geometry.Pos.CENTER);
                 buttons.setAlignment(javafx.geometry.Pos.CENTER);
                 
-                // setup button actions
                 playButton.setOnAction(e -> {
                     e.consume();
                     handlePlay(getItem());
@@ -172,6 +163,7 @@ public class SaveMenuController {
                 } else {
                     text.setText(item);
                     content.getChildren().setAll(text, buttons);
+                    StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
                     setGraphic(content);
                     
                     buttons.setVisible(false);
@@ -204,7 +196,7 @@ public class SaveMenuController {
         String petType = petTypeComboBox.getSelectionModel().getSelectedItem();
         if (!petName.isEmpty() && petType != null) {
             try {
-                Pet pet = new Pet(petName, petType,selectedSlotIndex);
+                Pet pet = new Pet(petName, petType, selectedSlotIndex);
                 GameState gameState = GameState.getCurrentState();
                 gameState.setPet(pet);
 
@@ -214,8 +206,7 @@ public class SaveMenuController {
                 saveSlotList.getItems().set(selectedSlotIndex, petName + " " + petType);
                 hideNewSaveDialogue();
             } catch (IOException e) {
-                e.printStackTrace();
-                // TODO: Show error dialog to user
+                handleSaveError("save game", e);
             }
         }
     }
@@ -300,5 +291,13 @@ public class SaveMenuController {
             e.printStackTrace();
             // TODO: Show error dialog to user
         }
+    }
+
+    private void handleSaveError(String operation, Exception e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Save Error");
+        alert.setHeaderText("Failed to " + operation);
+        alert.setContentText("An error occurred: " + e.getMessage());
+        alert.showAndWait();
     }
 }
