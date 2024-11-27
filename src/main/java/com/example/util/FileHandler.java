@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 // Utility class for managing game save files and persistence
 public class FileHandler {
@@ -29,11 +30,14 @@ public class FileHandler {
     // Creates the saves directory if it doesn't exist
     // Called during initialization to ensure proper file structure
     private void createSavesDirectory() {
-        try {
-            Files.createDirectories(Paths.get(SAVES_DIR));
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO: Consider better error handling for directory creation failure
+        File savesDir = new File(SAVES_DIR);
+        if (!savesDir.exists()) {
+            boolean created = savesDir.mkdirs();
+            if (created) {
+                System.out.println("Created saves directory: " + savesDir.getAbsolutePath());
+            } else {
+                System.err.println("Failed to create saves directory: " + savesDir.getAbsolutePath());
+            }
         }
     }
 
@@ -67,6 +71,8 @@ public class FileHandler {
     // @return Array of File objects representing save files, or null if directory is empty
     public File[] getSaveFiles() {
         File savesDir = new File(SAVES_DIR);
-        return savesDir.listFiles((dir, name) -> name.endsWith(".json"));
+        File[] files = savesDir.listFiles((dir, name) -> name.endsWith(".json"));
+        System.out.println("Found save files: " + (files != null ? Arrays.toString(files) : "null"));
+        return files;
     }
 }

@@ -8,7 +8,8 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.controller.SettingsController"
-      spacing="20" alignment="CENTER" styleClass="settings">
+      spacing="20" alignment="CENTER" styleClass="settings-background"
+      fx:styleSheet="../styles/settings.css">
 
     <Label text="Settings" styleClass="title-label"/>
 

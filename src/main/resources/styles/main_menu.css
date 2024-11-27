@@ -1,0 +1,20 @@
+.main-menu-background {
+    -fx-background-color: #38250e;
+}
+
+.main-menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-min-width: 80px;
+    -fx-min-height: 50px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: 900;
+}
+
+.custom-button:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #F5E6D3;
+}

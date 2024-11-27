@@ -16,6 +16,9 @@ import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.util.FileHandler;
 import com.example.components.CustomButton;
+import javafx.scene.layout.StackPane;
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
 
 /**
  * Controller for the save game menu interface.
@@ -70,12 +73,11 @@ public class SaveMenuController {
                             slots.set(slotIndex, pet.getName() + " " + pet.getSpecies());
                         }
                     } catch (IOException ignored) {
-                        System.err.println("Error loading save file: " + file.getName());
+                        // Ignore corrupted files and leave default text
                     }
                 }
             }
         }
-
 
         saveSlotList.setItems(slots);
         saveSlotList.setFocusTraversable(false);
@@ -104,13 +106,23 @@ public class SaveMenuController {
             private final CustomButton editButton = new CustomButton("EDIT");
             private final CustomButton deleteButton = new CustomButton("DELETE");
             private final HBox buttons = new HBox(10, playButton, editButton, deleteButton);
-            private final HBox content = new HBox(20);
+            private final Label text = new Label();
+            private final StackPane content = new StackPane();
+            private final FadeTransition fadeTransition = new FadeTransition(Duration.millis(150), text);
 
             {
+                playButton.getStyleClass().add("save-slot-button");
+                editButton.getStyleClass().add("save-slot-button");
+                deleteButton.getStyleClass().add("save-slot-button");
+                
                 buttons.setVisible(false);
                 buttons.getStyleClass().add("save-slot-buttons");
-                content.setAlignment(javafx.geometry.Pos.CENTER);
-
+                text.getStyleClass().add("save-slot-text");
+                
+                // Center the buttons in the StackPane
+                StackPane.setAlignment(buttons, javafx.geometry.Pos.CENTER);
+                buttons.setAlignment(javafx.geometry.Pos.CENTER);
+                
                 playButton.setOnAction(e -> {
                     e.consume();
                     handlePlay(getItem());
@@ -129,10 +141,18 @@ public class SaveMenuController {
                 setOnMouseEntered(e -> {
                     if (getItem() != null && !"CLICK TO CREATE NEW SAVE".equals(getItem())) {
                         buttons.setVisible(true);
+                        fadeTransition.setFromValue(1.0);
+                        fadeTransition.setToValue(0.3);
+                        fadeTransition.play();
                     }
                 });
 
-                setOnMouseExited(e -> buttons.setVisible(false));
+                setOnMouseExited(e -> {
+                    buttons.setVisible(false);
+                    fadeTransition.setFromValue(0.3);
+                    fadeTransition.setToValue(1.0);
+                    fadeTransition.play();
+                });
             }
 
             @Override
@@ -141,10 +161,14 @@ public class SaveMenuController {
                 if (empty || item == null) {
                     setGraphic(null);
                 } else {
-                    Label text = new Label(item);
-                    HBox.setHgrow(text, Priority.ALWAYS);
+                    text.setText(item);
                     content.getChildren().setAll(text, buttons);
+                    StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
                     setGraphic(content);
+                    
+                    buttons.setVisible(false);
+                    buttons.setManaged(!"CLICK TO CREATE NEW SAVE".equals(item));
+                    text.setOpacity(1.0);
                 }
             }
         });
@@ -172,7 +196,7 @@ public class SaveMenuController {
         String petType = petTypeComboBox.getSelectionModel().getSelectedItem();
         if (!petName.isEmpty() && petType != null) {
             try {
-                Pet pet = new Pet(petName, petType,selectedSlotIndex);
+                Pet pet = new Pet(petName, petType, selectedSlotIndex);
                 GameState gameState = GameState.getCurrentState();
                 gameState.setPet(pet);
 
@@ -182,8 +206,7 @@ public class SaveMenuController {
                 saveSlotList.getItems().set(selectedSlotIndex, petName + " " + petType);
                 hideNewSaveDialogue();
             } catch (IOException e) {
-                e.printStackTrace();
-                // TODO: Show error dialog to user
+                handleSaveError("save game", e);
             }
         }
     }
@@ -268,5 +291,13 @@ public class SaveMenuController {
             e.printStackTrace();
             // TODO: Show error dialog to user
         }
+    }
+
+    private void handleSaveError(String operation, Exception e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Save Error");
+        alert.setHeaderText("Failed to " + operation);
+        alert.setContentText("An error occurred: " + e.getMessage());
+        alert.showAndWait();
     }
 }
