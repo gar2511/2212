@@ -10,9 +10,10 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.controller.SaveMenuController"
-      spacing="20" alignment="CENTER" styleClass="save-menu">
+      spacing="20" alignment="CENTER" styleClass="save-menu-background"
+      stylesheets="@../styles/save_menu.css">
 
-    <Label text="Start New Game or Load Save Files" styleClass="title-label"/>
+    <Label text="Start New Game or Load Save Files" styleClass="save-title-label"/>
 
     <StackPane VBox.vgrow="ALWAYS">
         <VBox spacing="15" alignment="CENTER">
@@ -24,10 +25,10 @@
         </VBox>
 
         <VBox fx:id="newSaveDialogue" spacing="15" alignment="CENTER" styleClass="new-save-dialogue" visible="false">
-            <Label text="CREATING NEW SAVE" styleClass="dialogue-title"/>
-            <Label text="NAME YOUR PET:" styleClass="dialogue-subtitle"/>
-            <TextField fx:id="petNameField" maxWidth="300"/>
-            <ComboBox fx:id="petTypeComboBox" maxWidth="300">
+            <Label text="CREATE NEW SAVE" styleClass="dialogue-title"/>
+            <Label text="Name your pet" styleClass="dialogue-subtitle"/>
+            <TextField fx:id="petNameField" maxWidth="300" styleClass="dialogue-input"/>
+            <ComboBox fx:id="petTypeComboBox" maxWidth="300" styleClass="dialogue-input" promptText="Choose pet type">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Mole"/>
@@ -37,8 +38,8 @@
                 </items>
             </ComboBox>
             <HBox spacing="20" alignment="CENTER">
-                <Button text="CONFIRM" onAction="#confirmNewSave" styleClass="dialogue-button"/>
-                <Button text="CANCEL" onAction="#cancelNewSave" styleClass="dialogue-button"/>
+                <CustomButton text="CONFIRM" onAction="#confirmNewSave" styleClass="dialogue-button-confirm"/>
+                <CustomButton text="CANCEL" onAction="#cancelNewSave" styleClass="dialogue-button-cancel"/>
             </HBox>
         </VBox>
     </StackPane>
