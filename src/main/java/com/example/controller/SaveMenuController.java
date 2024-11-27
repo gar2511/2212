@@ -179,9 +179,24 @@ public class SaveMenuController {
      * Allows the user to input a pet name and confirm the action.
      */
     private void showNewSaveDialogue() {
+        String petName = "PET " + (selectedSlotIndex + 1);
         saveSlotList.setDisable(true);
         newSaveDialogue.setVisible(true);
-        petNameField.setText("PET " + (selectedSlotIndex + 1));
+        petNameField.setText(petName);
+        petNameField.selectAll();
+        petNameField.requestFocus();
+    }
+
+    /**
+     * Displays the dialogue for creating or editing a save.
+     * Allows the user to input a pet name and confirm the action.
+     * If editing an existing save with a name, display that.
+     * @param petName the existing pet name
+     */
+    private void showNewSaveDialogue(String petName) {
+        saveSlotList.setDisable(true);
+        newSaveDialogue.setVisible(true);
+        petNameField.setText(petName);
         petNameField.selectAll();
         petNameField.requestFocus();
     }
@@ -268,8 +283,17 @@ public class SaveMenuController {
      * @param saveName The name of the save to edit.
      */
     private void handleEdit(String saveName) {
-        selectedSlotIndex = saveSlotList.getItems().indexOf(saveName);
-        showNewSaveDialogue();
+        int index = saveSlotList.getItems().indexOf(saveName);
+        try {
+            FileHandler fileHandler = new FileHandler();
+            GameState thisSave = fileHandler.loadGame("slot" + index);
+            Pet thisPet = thisSave.getPet();
+            String petName = thisPet.getName();
+            selectedSlotIndex = saveSlotList.getItems().indexOf(saveName);
+            showNewSaveDialogue(petName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
