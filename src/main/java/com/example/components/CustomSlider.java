@@ -49,7 +49,7 @@ public class CustomSlider extends Region {
         track.setArcWidth(trackHeight);
         track.setArcHeight(trackHeight);
         
-        // create colored progress track
+        // create coloured progress track
         progressTrack = new Rectangle();
         progressTrack.getStyleClass().add("slider-progress-track");
         progressTrack.setHeight(trackHeight);
@@ -59,7 +59,7 @@ public class CustomSlider extends Region {
         // create thumb
         thumb = new Circle();
         thumb.getStyleClass().add("slider-thumb");
-        thumb.setRadius(10);
+        thumb.setRadius(8);
         
         // create percentage label
         percentageLabel = new Label("50%");
@@ -103,8 +103,11 @@ public class CustomSlider extends Region {
         double trackWidth = getWidth() - (getPadding().getLeft() + getPadding().getRight());
         double mouseX = event.getX() - getPadding().getLeft();
         double proportion = mouseX / trackWidth;
+        
+        // Add padding to prevent going to absolute 0
+        double minValue = getMin() + (getMax() - getMin()) * 0.02; // 2% padding
         double newValue = getMin() + (proportion * (getMax() - getMin()));
-        double targetValue = Math.round(Math.min(getMax(), Math.max(getMin(), newValue)));
+        double targetValue = Math.round(Math.max(minValue, Math.min(getMax(), newValue)));
         
         // if dragging, update directly; if clicking, animate
         if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
@@ -138,32 +141,38 @@ public class CustomSlider extends Region {
         
         double trackHeight = 16;
         double trackY = (getHeight() - trackHeight) / 2;
+        double thumbRadius = thumb.getRadius();
         
         // layout track
         track.setWidth(getWidth() - (getPadding().getLeft() + getPadding().getRight()));
         track.setHeight(trackHeight);
         track.setX(getPadding().getLeft());
         track.setY(trackY);
-        track.setArcWidth(trackHeight);   // make ends semi-circular
-        track.setArcHeight(trackHeight);  // make ends semi-circular
+        track.setArcWidth(trackHeight);
+        track.setArcHeight(trackHeight);
         
-        // layout progress track
-        double progressWidth = (getValue() - getMin()) / (getMax() - getMin()) * track.getWidth();
+        // calculate thumb position first
+        double rawProgressWidth = (getValue() - getMin()) / (getMax() - getMin()) * track.getWidth();
+        double minThumbX = progressTrack.getX() + thumbRadius;
+        double maxThumbX = progressTrack.getX() + track.getWidth() - thumbRadius;
+        double thumbX = Math.max(minThumbX, Math.min(maxThumbX, progressTrack.getX() + rawProgressWidth));
+        double thumbY = getHeight() / 2;
+        
+        // layout progress track to match thumb position
+        double progressWidth = thumbX - progressTrack.getX();
         progressTrack.setWidth(progressWidth);
         progressTrack.setHeight(trackHeight);
         progressTrack.setX(getPadding().getLeft());
         progressTrack.setY(trackY);
-        progressTrack.setArcWidth(trackHeight);   // make ends semi-circular
-        progressTrack.setArcHeight(trackHeight);  // make ends semi-circular
+        progressTrack.setArcWidth(trackHeight);
+        progressTrack.setArcHeight(trackHeight);
         
-        // layout thumb
-        double thumbX = progressTrack.getX() + progressWidth;
-        double thumbY = getHeight() / 2;
+        // set thumb position
         thumb.setCenterX(thumbX);
         thumb.setCenterY(thumbY);
         
         // position the percentage label
-        double labelX = track.getX() + track.getWidth() + 10;
+        double labelX = track.getX() + track.getWidth();
         double labelY = (getHeight() - percentageLabel.prefHeight(-1)) / 2;
         percentageLabel.relocate(labelX, labelY);
     }
