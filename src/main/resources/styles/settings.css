@@ -1,3 +1,111 @@
-.settings.background {
-    -fx-background-color: #1a1a1a;
+.settings-background {
+    -fx-background-color: #38250e;
 }
+
+.settings-title-label {
+    -fx-font-size: 30px;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: 900;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 20 0;
+}
+
+.settings-container-background {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-background-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
+    -fx-max-width: 400;
+    -fx-min-height: 400;
+}
+
+.settings-container {
+    -fx-padding: 25;
+}
+
+.settings-section-label {
+    -fx-font-size: 24px;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.custom-slider {
+    -fx-background-color: transparent;
+    -fx-padding: 10 30 10 10;
+}
+
+.custom-slider .slider-track {
+    -fx-fill: #e9e9eb;
+}
+
+.custom-slider .slider-progress-track {
+    -fx-fill: #34c759;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.custom-slider .slider-thumb {
+    -fx-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.custom-slider:hover .slider-thumb {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 0, 3);
+}
+
+.custom-slider:pressed .slider-thumb {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 4);
+}
+
+.custom-slider:disabled {
+    -fx-opacity: 0.4;
+}
+
+.value-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #cccccc;
+}
+
+.settings-separator {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-padding: 1;
+}
+
+.version-info {
+    -fx-alignment: center;
+    -fx-padding: 10 0 0 0;
+}
+
+.version-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+}
+
+.copyright-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #474747;
+}
+
+.primary-button {
+    -fx-background-color: #34c759;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 12 24;
+    -fx-background-radius: 8;
+}
+
+.secondary-button {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+}
+
+.primary-button:hover {
+    -fx-background-color: #2fb350;
+}
+
+.secondary-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+

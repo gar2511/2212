@@ -2,13 +2,14 @@ package com.example.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Slider;
+//import javafx.scene.control.Slider;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.StackPane;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import com.example.components.CustomSlider;
 import com.example.components.CustomToggle;
+import javafx.scene.control.Label;
 
 /**
  * Controller class for managing game settings and preferences.
@@ -21,6 +22,9 @@ public class SettingsController {
     @FXML
     private CustomSlider volumeSlider;
 
+    @FXML
+    private Label volumeLabel;
+
     private Rectangle coloredTrack;
 
     /**
@@ -30,18 +34,24 @@ public class SettingsController {
      */
     @FXML
     public void initialize() {
-        // Listener for parental controls toggle
-        parentalControlsToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            handleParentalControlsToggle(newVal);
-        });
+        Platform.runLater(() -> {
+            // listener for parental controls toggle
+            parentalControlsToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                handleParentalControlsToggle(newVal);
+            });
 
-        // Listener for volume slider value changes
-        volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            handleVolumeChange(newVal.intValue());
-        });
+            // listener for volume slider value changes
+            volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                handleVolumeChange(newVal.intValue());
+                volumeLabel.setText(newVal.intValue() + "%");
+            });
 
-        // Delayed setup for the volume slider after the scene loads
-        Platform.runLater(this::setupVolumeSlider);
+            // set initial value
+            volumeSlider.setValue(50);
+
+            // setup volume slider
+            setupVolumeSlider();
+        });
     }
 
     /**
@@ -89,7 +99,9 @@ public class SettingsController {
      * @param enabled {@code true} if parental controls are enabled, {@code false} otherwise.
      */
     private void handleParentalControlsToggle(boolean enabled) {
-        System.out.println("Parental controls " + (enabled ? "enabled" : "disabled"));
+        if (parentalControlsToggle != null) {
+            System.out.println("Parental controls " + (enabled ? "enabled" : "disabled"));
+        }
     }
 
     /**

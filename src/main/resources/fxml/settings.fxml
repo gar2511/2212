@@ -5,33 +5,62 @@
 <?import javafx.scene.layout.*?>
 <?import com.example.components.CustomSlider?>
 <?import com.example.components.CustomToggle?>
+<?import com.example.components.CustomButton?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.controller.SettingsController"
-      spacing="20" alignment="CENTER" styleClass="settings-background"
-      fx:styleSheet="../styles/settings.css">
-
-    <Label text="Settings" styleClass="title-label"/>
-
-    <HBox spacing="15" alignment="CENTER">
-        <Label text="Parental Controls" styleClass="subtitle-label"/>
-        <CustomToggle fx:id="parentalControlsToggle"/>
-    </HBox>
-
-    <Button text="Parental Controls"
-            onAction="#goParent"
-            styleClass="back-button"/>
-
-    <HBox spacing="15" alignment="CENTER">
-        <Label text="Sound Volume" styleClass="subtitle-label"/>
-        <CustomSlider fx:id="volumeSlider" prefWidth="200"/>
-    </HBox>
-
-    <Button text="Back to Main Menu" 
-            onAction="#goBack" 
-            styleClass="back-button"/>
-
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.controller.SettingsController"
+           styleClass="settings-background"
+           stylesheets="@../styles/settings.css">
+           
+    <VBox alignment="CENTER" spacing="20">
+        <!-- Title Section -->
+        <Label text="Settings" styleClass="settings-title-label"/>
+        
+        <!-- White Background Container -->
+        <StackPane styleClass="settings-container-background">
+            <!-- Settings Content -->
+            <VBox spacing="25" styleClass="settings-container">
+                <!-- Volume Control -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Label text="Volume" styleClass="settings-section-label"/>
+                    <HBox spacing="15" alignment="CENTER">
+                        <CustomSlider fx:id="volumeSlider" prefWidth="300" styleClass="custom-slider"/>
+                        <Label fx:id="volumeLabel" text="50%" styleClass="value-label"/>
+                    </HBox>
+                </VBox>
+                
+                <Separator styleClass="settings-separator"/>
+                
+                <!-- Parental Controls -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Label text="Parental Controls" styleClass="settings-section-label"/>
+                    <HBox spacing="15" alignment="CENTER">
+                        <CustomToggle fx:id="parentalControlsToggle"/>
+                        <Label fx:id="parentalStatusLabel" text="Disabled" styleClass="value-label"/>
+                    </HBox>
+                    <CustomButton text="Configure Parental Controls" 
+                              onAction="#goParent"
+                              styleClass="secondary-button"
+                              visible="${parentalControlsToggle.selected}"/>
+                </VBox>
+                
+                <Separator styleClass="settings-separator"/>
+                
+                <!-- Version Info -->
+                <VBox spacing="5" styleClass="version-info">
+                    <Label text="Version 2.0" styleClass="version-label"/>
+                    <Label text="© 2024 Team 17" styleClass="copyright-label"/>
+                </VBox>
+                
+                <!-- Back Button -->
+                <CustomButton text="Back to Main Menu" 
+                           onAction="#goBack"
+                           styleClass="primary-button"/>
+            </VBox>
+        </StackPane>
+    </VBox>
+    
     <padding>
         <Insets top="30" right="30" bottom="30" left="30"/>
     </padding>
-</VBox>
+</StackPane>
