@@ -21,10 +21,10 @@
             <!-- Settings Content -->
             <VBox spacing="25" styleClass="settings-container">
                 <!-- Volume Control -->
-                <VBox spacing="10">
-                    <Label text="Sound Volume" styleClass="settings-section-label"/>
-                    <HBox spacing="15" alignment="CENTER_LEFT">
-                        <CustomSlider fx:id="volumeSlider" prefWidth="300"/>
+                <VBox spacing="10" alignment="CENTER">
+                    <Label text="Volume" styleClass="settings-section-label"/>
+                    <HBox spacing="15" alignment="CENTER">
+                        <CustomSlider fx:id="volumeSlider" prefWidth="300" styleClass="custom-slider"/>
                         <Label fx:id="volumeLabel" text="50%" styleClass="value-label"/>
                     </HBox>
                 </VBox>
@@ -32,9 +32,9 @@
                 <Separator styleClass="settings-separator"/>
                 
                 <!-- Parental Controls -->
-                <VBox spacing="10">
+                <VBox spacing="10" alignment="CENTER">
                     <Label text="Parental Controls" styleClass="settings-section-label"/>
-                    <HBox spacing="15" alignment="CENTER_LEFT">
+                    <HBox spacing="15" alignment="CENTER">
                         <CustomToggle fx:id="parentalControlsToggle"/>
                         <Label fx:id="parentalStatusLabel" text="Disabled" styleClass="value-label"/>
                     </HBox>
@@ -48,8 +48,8 @@
                 
                 <!-- Version Info -->
                 <VBox spacing="5" styleClass="version-info">
-                    <Label text="Version 1.0.0" styleClass="version-label"/>
-                    <Label text="© 2024 Team 14" styleClass="copyright-label"/>
+                    <Label text="Version 2.0" styleClass="version-label"/>
+                    <Label text="© 2024 Team 17" styleClass="copyright-label"/>
                 </VBox>
                 
                 <!-- Back Button -->

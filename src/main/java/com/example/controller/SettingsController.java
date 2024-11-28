@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import com.example.components.CustomSlider;
 import com.example.components.CustomToggle;
+import javafx.scene.control.Label;
 
 /**
  * Controller class for managing game settings and preferences.
@@ -20,6 +21,9 @@ public class SettingsController {
 
     @FXML
     private CustomSlider volumeSlider;
+
+    @FXML
+    private Label volumeLabel;
 
     private Rectangle coloredTrack;
 
@@ -39,7 +43,11 @@ public class SettingsController {
             // listener for volume slider value changes
             volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
                 handleVolumeChange(newVal.intValue());
+                volumeLabel.setText(newVal.intValue() + "%");
             });
+
+            // set initial value
+            volumeSlider.setValue(50);
 
             // setup volume slider
             setupVolumeSlider();
