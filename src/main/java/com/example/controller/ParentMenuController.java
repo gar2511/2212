@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 public class ParentMenuController {
 
+    public Label petScoreLabel;
     @FXML
     private ToggleButton parentModeToggle;
     @FXML
@@ -77,6 +78,8 @@ public class ParentMenuController {
 
                 if (pet != null) {
                     // Update UI components with the pet's current state
+                    petScoreLabel.setText("Score: " + pet.getScore());
+                    petScoreLabel.setVisible(true);
                     item1Spinner.getValueFactory().setValue(pet.getInventory().getItem1());
                     item2Spinner.getValueFactory().setValue(pet.getInventory().getItem2());
                     item3Spinner.getValueFactory().setValue(pet.getInventory().getItem3());
@@ -94,6 +97,7 @@ public class ParentMenuController {
             }
         }
     }
+
 
     @FXML
     private void handleToggleParentMode() {
