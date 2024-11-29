@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+import java.util.Arrays;
+
 public class VitalStats {
     private int hungerMod = 0;
     private int happinessMod = 0;
@@ -19,32 +21,38 @@ public class VitalStats {
     private final int[] petState = {0, 0, 0, 0}; // Index 0 = Hunger, 1 = Happiness, 2 = Energy, 3 = Health
 
     // Define thresholds for stats
-    private static final int[] CRITICAL_THRESHOLD = {20,25,0,0}; // Critical threshold for warnings
+    private static final int[] CRITICAL_THRESHOLD = {20, 25, 0, 0}; // Critical threshold for warnings
+
     private boolean suppressListeners = false;
 
-    public void setSuppressListeners(boolean suppress) {
-        this.suppressListeners = suppress;
-    }
     public VitalStats() {
         // Add listeners to enforce clamping and update state
         hunger.addListener((observable, oldValue, newValue) -> {
-            hunger.set(clampValue(newValue.intValue()));
-            updatePetState(0, hunger.get());
+            if (!suppressListeners) {
+                hunger.set(clampValue(newValue.intValue()));
+                updatePetState(0, hunger.get());
+            }
         });
 
         happiness.addListener((observable, oldValue, newValue) -> {
-            happiness.set(clampValue(newValue.intValue()));
-            updatePetState(1, happiness.get());
+            if (!suppressListeners) {
+                happiness.set(clampValue(newValue.intValue()));
+                updatePetState(1, happiness.get());
+            }
         });
 
         energy.addListener((observable, oldValue, newValue) -> {
-            energy.set(clampValue(newValue.intValue()));
-            updatePetState(2, energy.get());
+            if (!suppressListeners) {
+                energy.set(clampValue(newValue.intValue()));
+                updatePetState(2, energy.get());
+            }
         });
 
         health.addListener((observable, oldValue, newValue) -> {
-            health.set(clampValue(newValue.intValue()));
-            updatePetState(3, health.get());
+            if (!suppressListeners) {
+                health.set(clampValue(newValue.intValue()));
+                updatePetState(3, health.get());
+            }
         });
     }
 
@@ -165,42 +173,43 @@ public class VitalStats {
     }
 
     public int[] getState() {
-        return this.petState;
+        return petState.clone();
     }
 
     @JsonProperty("state")
     public void setState(int[] state) {
-        System.arraycopy(state, 0, this.petState, 0, Math.min(state.length, this.petState.length));
+        System.arraycopy(state, 0, petState, 0, Math.min(state.length, petState.length));
     }
 
     public int getVitalState(int index) {
-        return this.petState[index];
+        return petState[index];
     }
 
     // Update petState array based on the stat value
     private void updatePetState(int index, int newValue) {
-        if (suppressListeners) {
-            return; // Skip checks during initialization
-        }
-        // Check if the health index (3) has reached 100; if so, reset the critical threshold
-        if (index == 2 && newValue == 100) {
-            CRITICAL_THRESHOLD[index] = 20; // Reset the threshold to its default
-            System.out.println(getStatName(index) + " is fully recovered! Threshold reset.");
+
+        if (index == 2) { // Handle energy-specific logic
+            System.out.println(getStatName(index) + " is currently: " + newValue);
+            if (newValue == 0 && petState[index] == 0) {
+                petState[index] = 1; // Set to critical state when energy first drops to 0
+                System.out.println(getStatName(index) + " has dropped to 0! Entering critical state.");
+            } else if (newValue == 100 && petState[index] == 1) {
+                petState[index] = 0; // Exit critical state when energy fully restores to 100
+                System.out.println(getStatName(index) + " is fully restored to 100! Exiting critical state.");
+            }
+            return; // Exit after handling energy
         }
 
-        // Handle critical state based on the current value and critical threshold
+        // Handle other stats
         if (newValue <= CRITICAL_THRESHOLD[index]) {
             petState[index] = 1; // Critical state
             System.out.println(getStatName(index) + " is critically low! Current value: " + newValue);
-            if (index == 2) {
-                // Lock the threshold for health until it reaches 100 again
-                CRITICAL_THRESHOLD[index] = 100;
-            }
-        } else if (newValue > CRITICAL_THRESHOLD[index]) {
+        } else {
             petState[index] = 0; // Normal state
             System.out.println(getStatName(index) + " is no longer critically low! Current value: " + newValue);
         }
     }
+
 
 
     // Helper to get the stat name from the index
@@ -222,5 +231,16 @@ public class VitalStats {
     // Clamp method to ensure values stay within range
     private int clampValue(int value) {
         return Math.max(0, Math.min(100, value));
+    }
+
+    // Restore all stats to their maximum values
+    public void restoreAll() {
+        suppressListeners = true; // Suppress listeners to avoid redundant updates
+        setHealth(100);
+        setEnergy(100);
+        setHunger(100);
+        setHappiness(100);
+        suppressListeners = false; // Re-enable listeners
+        Arrays.fill(petState, 0); // Reset all states to normal
     }
 }
