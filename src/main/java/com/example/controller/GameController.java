@@ -4,6 +4,7 @@ import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.model.VitalStats;
 import com.example.util.FileHandler;
+import com.example.components.StatBar;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -28,10 +29,14 @@ import com.example.model.ScoreKeeper;
 public class GameController {
 
 
-    public ProgressBar energyBar;
-    public ProgressBar healthBar;
-    public ProgressBar hungerBar;
-    public ProgressBar happinessBar;
+    @FXML
+    private StatBar energyBar;
+    @FXML
+    private StatBar healthBar;
+    @FXML
+    private StatBar hungerBar;
+    @FXML
+    private StatBar happinessBar;
     @FXML
     private ImageView moleSprite;
 
@@ -148,27 +153,33 @@ public class GameController {
         startTimeTracker();
     }
     private void startTimeTracker() {
-        timeTracker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+        timeTracker = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             GameState gameState = GameState.getCurrentState();
             Pet pet = gameState.getPet();
 
             if (pet != null) {
-                // Increment playtime
-                currentPlayTime++;
-                pet.addTimeSpent(1);
+                // increment by 50ms (0.05 seconds) since we're running every 50ms
+                currentPlayTime += 0.05;
+                // only add to timeSpent every full second
+                if (currentPlayTime % 1 < 0.05) {
+                    pet.addTimeSpent(1);
+                }
+                
                 System.out.println("THIS IS YOUR TIME LIMIT BTW: " + pet.getTimeLimit());
-                // Check if the time limit is reached
-                if (pet.getTimeLimit() > 0 && currentPlayTime >= pet.getTimeLimit()) {
+                // Check if the time limit is reached (convert currentPlayTime to seconds)
+                if (pet.getTimeLimit() > 0 && (int)currentPlayTime >= pet.getTimeLimit()) {
                     System.out.println("Time limit reached! Saving and exiting.");
                     stopTimeTracker();
                     saveGame();
                     goBack(); // Exit to the main menu
                 }
 
-                // Update UI or log playtime if necessary
-                Platform.runLater(() -> {
-                    System.out.println("Current Playtime: " + formatPlayTime(currentPlayTime));
-                });
+                // Update UI or log playtime if necessary (only log every second)
+                if (currentPlayTime % 1 < 0.05) {
+                    Platform.runLater(() -> {
+                        System.out.println("Current Playtime: " + formatPlayTime((long)currentPlayTime));
+                    });
+                }
             }
         }));
         timeTracker.setCycleCount(Timeline.INDEFINITE);
