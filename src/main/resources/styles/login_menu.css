@@ -1,0 +1,95 @@
+.login-background {
+    -fx-background-color: #38250e;
+}
+
+.login-title-label {
+    -fx-font-size: 30px;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: 900;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 20 0;
+}
+
+.login-container-background {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-background-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
+    -fx-max-width: 400;
+    -fx-min-height: 300;
+}
+
+.login-container {
+    -fx-padding: 20 30 20 30;
+    -fx-spacing: 20;
+}
+
+.input-label {
+    -fx-font-size: 18px;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.input-field {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(0,0,0,0.1);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-font-size: 16px;
+    -fx-font-family: "Courier New", monospace;
+    -fx-padding: 8 12;
+}
+
+.error-label {
+    -fx-text-fill: #e74c3c;
+    -fx-font-size: 14px;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
+}
+
+.login-button {
+    -fx-background-color: #2a8df7;
+    -fx-background-radius: 15;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10;
+    -fx-min-width: 70;
+}
+
+.login-button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #1a7de7;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.back-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10;
+    -fx-min-width: 70;
+}
+
+.back-button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 15;
+}
+
+.login-button:disabled {
+    -fx-background-color: #cccccc;
+    -fx-opacity: 0.7;
+    -fx-cursor: default;
+    -fx-effect: none;
+}
+
+.login-button:disabled:hover {
+    -fx-background-color: #cccccc;
+    -fx-cursor: default;
+    -fx-effect: none;
+}

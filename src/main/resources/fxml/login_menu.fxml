@@ -3,38 +3,62 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import com.example.components.CustomButton?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.controller.LoginController"
-      alignment="CENTER"
-      spacing="15"
-      style="-fx-padding: 20; -fx-font-family: Arial;">
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.controller.LoginController"
+           styleClass="login-background"
+           stylesheets="@../styles/login_menu.css">
+           
+    <VBox alignment="CENTER" spacing="20">
+        <!-- Title -->
+        <Label text="Parent Login" styleClass="login-title-label"/>
+        
+        <!-- Main Container -->
+        <StackPane styleClass="login-container-background">
+            <VBox styleClass="login-container">
+                <!-- Username Section -->
+                <VBox spacing="5">
+                    <Label text="Username" styleClass="input-label"/>
+                    <TextField fx:id="usernameField" 
+                             promptText="Enter username"
+                             styleClass="input-field"/>
+                    <Label fx:id="userError" 
+                           text="Invalid username"
+                           styleClass="error-label"
+                           visible="false"/>
+                </VBox>
 
-    <!-- Title -->
-    <Label text="Parent Login" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+                <!-- Password Section -->
+                <VBox spacing="5">
+                    <Label text="Password" styleClass="input-label"/>
+                    <PasswordField fx:id="passwordField" 
+                                 promptText="Enter password"
+                                 styleClass="input-field"/>
+                    <Label fx:id="passwordError" 
+                           text="Invalid password"
+                           styleClass="error-label"
+                           visible="false"/>
+                </VBox>
 
-    <!-- User Section -->
-    <VBox spacing="5" alignment="CENTER_LEFT">
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="User" style="-fx-font-size: 16px;" />
-            <TextField fx:id="usernameField" promptText="Enter username" />
-        </HBox>
-        <Label fx:id="userError" text="Invalid user" visible="false" style="-fx-text-fill: red; -fx-font-size: 12px;" />
+                <!-- Buttons Section -->
+                <HBox spacing="20" alignment="CENTER">
+                    <CustomButton fx:id="loginButton" 
+                            text="LOGIN" 
+                            onAction="#handleLogin"
+                            styleClass="login-button"
+                            disable="true"/>
+                    <CustomButton fx:id="goBackButton" 
+                            text="BACK" 
+                            onAction="#goBack"
+                            styleClass="back-button"/>
+                </HBox>
+            </VBox>
+        </StackPane>
+
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
     </VBox>
-
-    <!-- Password Section -->
-    <VBox spacing="5" alignment="CENTER_LEFT">
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Password" style="-fx-font-size: 16px;" />
-            <PasswordField fx:id="passwordField" promptText="Enter password" />
-        </HBox>
-        <Label fx:id="passwordError" text="Invalid password" visible="false" style="-fx-text-fill: red; -fx-font-size: 12px;" />
-    </VBox>
-
-    <!-- Buttons Section -->
-    <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="loginButton" text="Login" onAction="#handleLogin" style="-fx-font-size: 14px;" />
-        <Button fx:id="goBackButton" text="Go Back" onAction="#goBack" style="-fx-font-size: 14px;" />
-    </HBox>
-</VBox>
+</StackPane>
