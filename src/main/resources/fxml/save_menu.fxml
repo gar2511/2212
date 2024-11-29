@@ -44,7 +44,7 @@
         </VBox>
     </StackPane>
 
-    <CustomButton text="BACK TO MAIN MENU" styleClass="back-button" onAction="#goBack"/>
+    <CustomButton text="BACK" styleClass="back-button" onAction="#goBack"/>
 
     <padding>
         <Insets top="30" right="30" bottom="30" left="30"/>
