@@ -76,7 +76,9 @@
         <Button fx:id="saveButton" text="Save" onAction="#saveGame" styleClass="action-button" />
     </HBox>
 
-    <!-- Play Time -->
-    <Label fx:id="playTimeLabel" text="Play Time: 00:00:00" style="-fx-font-size: 16px;" />
-
+    <!-- Play Time and Score -->
+    <HBox spacing="50" alignment="CENTER" style="-fx-padding: 10;">
+        <Label fx:id="playTimeLabel" text="Play Time: 00:00:00" style="-fx-font-size: 16px;" />
+        <Label fx:id="scoreLabel" text="Score: 0" style="-fx-font-size: 16px;" />
+    </HBox>
 </VBox>

@@ -4,6 +4,7 @@ import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.model.VitalStats;
 import com.example.util.FileHandler;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.util.Random;
+import com.example.model.ScoreKeeper;
 
 /**
  * Controller class responsible for managing the game scene/view.
@@ -33,7 +35,6 @@ public class GameController {
     @FXML
     private ImageView moleSprite;
 
-
     private Timeline animation;
     private Timeline statsDecayTimeline;
     private Random random = new Random();
@@ -42,7 +43,12 @@ public class GameController {
 
     @FXML
     private Label gameOverLabel; // For the "Game Over" message
+    private ScoreKeeper scoreKeeper; // Scorekeeper instance
+    @FXML
+    private Label scoreLabel; // Label to display the score
 
+    private Timeline timeTracker; // Timeline to track playtime
+    private long currentPlayTime = 0; // Current session playtime in seconds
 
     /**
      * Constructor for GameController.
@@ -129,8 +135,66 @@ public class GameController {
         setupHotkeys();
 
         startStatsDecay();
+        // Initialize the ScoreKeeper with 10 points per second
+        scoreKeeper = new ScoreKeeper(10);
+        scoreKeeper.setScore(pet.getScore());
 
+        // Bind the scorekeeper's score to the label
+        scoreLabel.textProperty().bind(Bindings.convert(scoreKeeper.scoreProperty()));
 
+        // Start the scorekeeper
+        scoreKeeper.start();
+        // Start tracking playtime
+        startTimeTracker();
+    }
+    private void startTimeTracker() {
+        timeTracker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            GameState gameState = GameState.getCurrentState();
+            Pet pet = gameState.getPet();
+
+            if (pet != null) {
+                // Increment playtime
+                currentPlayTime++;
+                pet.addTimeSpent(1);
+                System.out.println("THIS IS YOUR TIME LIMIT BTW: " + pet.getTimeLimit());
+                // Check if the time limit is reached
+                if (pet.getTimeLimit() > 0 && currentPlayTime >= pet.getTimeLimit()) {
+                    System.out.println("Time limit reached! Saving and exiting.");
+                    stopTimeTracker();
+                    saveGame();
+                    goBack(); // Exit to the main menu
+                }
+
+                // Update UI or log playtime if necessary
+                Platform.runLater(() -> {
+                    System.out.println("Current Playtime: " + formatPlayTime(currentPlayTime));
+                });
+            }
+        }));
+        timeTracker.setCycleCount(Timeline.INDEFINITE);
+        timeTracker.play();
+    }
+
+    /**
+     * Stops the time tracker.
+     */
+    private void stopTimeTracker() {
+        if (timeTracker != null) {
+            timeTracker.stop();
+        }
+    }
+
+    /**
+     * Formats the playtime in HH:mm:ss format.
+     *
+     * @param seconds Total seconds of playtime.
+     * @return Formatted time string.
+     */
+    private String formatPlayTime(long seconds) {
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long secs = seconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
     /**
      * Starts the timeline for the constant decay of stats.
@@ -175,13 +239,12 @@ public class GameController {
                         break;
                 }
 
-
-
                 // Decay the stats
                 stats.decreaseEnergy(2+ speciesEnergyMod+ pet.getStats().getEnergyMod());   // Decrease energy by 1 every second
                 stats.decreaseHealth(2+ speciesHealthMod+ pet.getStats().getHealthMod());  // Decrease health by 1 every second
                 stats.decreaseHunger(2+ speciesHungerMod+ pet.getStats().getHungerMod());   // Decrease hunger by 1 every second
                 stats.decreaseHappiness(2+ speciesHappinessMod+pet.getStats().getHappinessMod()); // Decrease happiness by 1 every second
+                System.out.println("Here is my Decay of Happiness " + 2+ speciesHungerMod+ pet.getStats().getHungerMod());
 
                 // Log the changes (for debugging)
                 System.out.println("Stats Decayed: Energy=" + stats.getEnergy() +
@@ -223,8 +286,12 @@ public class GameController {
     @FXML
     private void goBack() {
         stopStatsDecay();
+        stopTimeTracker(); // Stop tracking playtime
         if (animation != null) {
             animation.stop();
+        }
+        if (scoreKeeper != null) {
+            scoreKeeper.stop(); // Stop the scorekeeper
         }
         SceneController.getInstance().switchToMainMenu();
     }
@@ -238,12 +305,14 @@ public class GameController {
                 VitalStats stats = pet.getStats();
                 stats.increaseHunger(20); // Increase hunger by 20
                 stats.increaseHappiness(10); // Increase happiness by 10
+                pet.getInventory().decreaseItem1();
                 System.out.println(pet.getName() + " has been fed Item 1! Hunger and happiness increased.");
             }
             if (pet.getDefaultItem12()==2) {
                 VitalStats stats = pet.getStats();
                 stats.increaseHunger(30); // Increase hunger by 20
                 stats.increaseHappiness(5); // Increase happiness by 10
+                pet.getInventory().decreaseItem2();
                 System.out.println(pet.getName() + " has been fed Item 2! Hunger and happiness increased.");
             }
         } else {
@@ -276,12 +345,14 @@ public class GameController {
             stats.increaseEnergy(20); // Increase Energy by 20
             stats.increaseHappiness(10); // Increase happiness by 10
             stats.decreaseHealth(40);
+            pet.getInventory().decreaseItem3();
             System.out.println(pet.getName() + " has been fed Item 3! Hunger and happiness increased.");
         }
         if (pet.getDefaultItem34()==4) {
             VitalStats stats = pet.getStats();
             stats.increaseHunger(60); // Increase hunger by 60
             stats.increaseHappiness(15); // Decrease happiness by 15
+            pet.getInventory().decreaseItem4();
             System.out.println(pet.getName() + " has been fed Item 4! Hunger and happiness increased.");
         }
     }
@@ -296,6 +367,7 @@ public class GameController {
             stats.decreaseHappiness(5); // Decrease happiness slightly
             stats.increaseEnergy(10); // Increase energy
             System.out.println(pet.getName() + " has exercised! Energy increased, hunger decreased.");
+
         } else {
             System.out.println("No pet to exercise!");
         }
@@ -322,12 +394,16 @@ public class GameController {
         if (animation != null) {
             animation.stop();
         }
+        if (scoreKeeper != null) {
+            scoreKeeper.stop(); // Stop the scorekeeper
+        }
         SceneController.getInstance().switchToInventory();
     }
     @FXML
     private void saveGame() {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
+        pet.setScore(scoreKeeper.getScore());
         try {
             FileHandler fileHandler = new FileHandler();
             fileHandler.saveGame("slot" + pet.getSaveID(), gameState); // Save with a filename
@@ -382,8 +458,11 @@ public class GameController {
                     break;
                 case 1: // Happiness
                     System.out.println("Happiness is critically low! Consider playing with the pet.");
-                    exerciseButton.setDisable(true);
-                    vetButton.setDisable(true);
+                    Platform.runLater(() -> {
+                        exerciseButton.setDisable(true);
+                        vetButton.setDisable(true);
+                    });
+                    stats.setHappinessMod(4);
                     break;
                 case 2: // Energy
                     System.out.println("Energy is critically low! Pet needs rest.");
@@ -416,6 +495,7 @@ public class GameController {
             case 1:
                 exerciseButton.setDisable(false);
                 vetButton.setDisable(false);
+                stats.setHappinessMod(2);
                 break;
             case 2:
                 feedButton.setDisable(false);

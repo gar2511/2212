@@ -51,7 +51,7 @@
 }
 
 .save-slot-button {
-    -fx-background-color: clear;
+    -fx-background-color: transparent;
     -fx-text-fill: black;
     -fx-font-family: "Courier New", monospace;
     -fx-font-size: 20px;
