@@ -25,6 +25,9 @@ public class SettingsController {
     @FXML
     private Label volumeLabel;
 
+    @FXML
+    private Label parentalStatusLabel;
+
     private Rectangle coloredTrack;
 
     /**
@@ -38,6 +41,7 @@ public class SettingsController {
             // listener for parental controls toggle
             parentalControlsToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
                 handleParentalControlsToggle(newVal);
+                parentalStatusLabel.setText(newVal ? "Enabled" : "Disabled");
             });
 
             // listener for volume slider value changes
