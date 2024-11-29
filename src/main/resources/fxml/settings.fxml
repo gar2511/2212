@@ -12,19 +12,20 @@
            styleClass="settings-background"
            stylesheets="@../styles/settings.css">
            
-    <VBox alignment="CENTER" spacing="20">
+    <VBox alignment="CENTER" spacing="20" style="-fx-padding: 0 50 0 50;">
         <!-- Title Section -->
         <Label text="Settings" styleClass="settings-title-label"/>
         
         <!-- White Background Container -->
         <StackPane styleClass="settings-container-background">
             <!-- Settings Content -->
-            <VBox spacing="25" styleClass="settings-container">
+            <VBox spacing="15" styleClass="settings-container">
                 <!-- Volume Control -->
-                <VBox spacing="10" alignment="CENTER">
+                <VBox spacing="8" alignment="CENTER">
                     <Label text="Volume" styleClass="settings-section-label"/>
-                    <HBox spacing="15" alignment="CENTER">
+                    <HBox spacing="10" alignment="CENTER">
                         <CustomSlider fx:id="volumeSlider" prefWidth="300" styleClass="custom-slider"/>
+                        <Label fx:id="volumeLabel" styleClass="value-label"/>
                     </HBox>
                 </VBox>
                 
@@ -35,7 +36,7 @@
                     <Label text="Parental Controls" styleClass="settings-section-label"/>
                     <HBox spacing="15" alignment="CENTER">
                         <CustomToggle fx:id="parentalControlsToggle"/>
-                        <Label fx:id="parentalStatusLabel" text="Disabled" styleClass="value-label"/>
+                        <Label fx:id="parentalStatusLabel" text="Disabled" styleClass="parental-status-label"/>
                     </HBox>
                     <CustomButton text="Configure Parental Controls" 
                               onAction="#goParent"

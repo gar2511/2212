@@ -1,6 +1,7 @@
 package com.example.util;
 
 import com.example.model.GameState;
+import com.example.model.UserPreferences;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -74,5 +75,21 @@ public class FileHandler {
         File[] files = savesDir.listFiles((dir, name) -> name.endsWith(".json"));
         System.out.println("Found save files: " + (files != null ? Arrays.toString(files) : "null"));
         return files;
+    }
+
+    private static final String PREFS_FILE = "preferences.json";
+
+    public void savePreferences(UserPreferences prefs) throws IOException {
+        createSavesDirectory(); // Ensure directory exists
+        Path prefsPath = Paths.get(SAVES_DIR, PREFS_FILE);
+        objectMapper.writeValue(prefsPath.toFile(), prefs);
+    }
+
+    public UserPreferences loadPreferences() throws IOException {
+        Path prefsPath = Paths.get(SAVES_DIR, PREFS_FILE);
+        if (Files.exists(prefsPath)) {
+            return objectMapper.readValue(prefsPath.toFile(), UserPreferences.class);
+        }
+        return new UserPreferences(); // return default preferences if file doesn't exist
     }
 }

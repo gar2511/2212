@@ -10,6 +10,9 @@ import javafx.scene.Node;
 import com.example.components.CustomSlider;
 import com.example.components.CustomToggle;
 import javafx.scene.control.Label;
+import com.example.model.UserPreferences;
+import com.example.util.FileHandler;
+import java.io.IOException;
 
 /**
  * Controller class for managing game settings and preferences.
@@ -29,6 +32,8 @@ public class SettingsController {
     private Label parentalStatusLabel;
 
     private Rectangle coloredTrack;
+    private UserPreferences userPrefs;
+    private FileHandler fileHandler;
 
     /**
      * Initializes the settings menu.
@@ -37,23 +42,52 @@ public class SettingsController {
      */
     @FXML
     public void initialize() {
+        fileHandler = new FileHandler();
+        
+        // Load preferences
+        try {
+            userPrefs = fileHandler.loadPreferences();
+        } catch (IOException e) {
+            System.err.println("Failed to load preferences: " + e.getMessage());
+            userPrefs = new UserPreferences();
+        }
+
+        // Wrap all UI operations in Platform.runLater to ensure FXML elements are initialized
         Platform.runLater(() -> {
-            // listener for parental controls toggle
-            parentalControlsToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
-                handleParentalControlsToggle(newVal);
-                parentalStatusLabel.setText(newVal ? "Enabled" : "Disabled");
-            });
+            // Set initial values from preferences
+            if (volumeSlider != null && volumeLabel != null) {
+                volumeSlider.setValue(userPrefs.getVolume());
+                volumeLabel.setText((int)userPrefs.getVolume() + "%");
+            }
+            
+            if (parentalControlsToggle != null && parentalStatusLabel != null) {
+                parentalControlsToggle.setSelected(userPrefs.isParentControlsEnabled());
+                parentalStatusLabel.setText(userPrefs.isParentControlsEnabled() ? "Enabled" : "Disabled");
+            }
 
-            // listener for volume slider value changes
-            volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-                handleVolumeChange(newVal.intValue());
-                volumeLabel.setText(newVal.intValue() + "%");
-            });
+            // Add listeners for preferences changes
+            if (parentalControlsToggle != null) {
+                parentalControlsToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                    handleParentalControlsToggle(newVal);
+                    if (parentalStatusLabel != null) {
+                        parentalStatusLabel.setText(newVal ? "Enabled" : "Disabled");
+                    }
+                    userPrefs.setParentControlsEnabled(newVal);
+                    savePreferences();
+                });
+            }
 
-            // set initial value
-            volumeSlider.setValue(50);
+            if (volumeSlider != null) {
+                volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                    handleVolumeChange(newVal.intValue());
+                    if (volumeLabel != null) {
+                        volumeLabel.setText(newVal.intValue() + "%");
+                    }
+                    userPrefs.setVolume(newVal.doubleValue());
+                    savePreferences();
+                });
+            }
 
-            // setup volume slider
             setupVolumeSlider();
         });
     }
@@ -80,7 +114,13 @@ public class SettingsController {
 
             // Add listeners to update the track when slider width or value changes
             volumeSlider.widthProperty().addListener((obs, oldVal, newVal) -> updateColoredTrack());
-            volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> updateColoredTrack());
+            volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                updateColoredTrack();
+                // Only update the label text, not the track text
+                if (volumeLabel != null) {
+                    volumeLabel.setText(newVal.intValue() + "%");
+                }
+            });
         }
     }
 
@@ -114,7 +154,7 @@ public class SettingsController {
      * @param volume The new volume level as an integer between the slider's minimum and maximum.
      */
     private void handleVolumeChange(int volume) {
-        System.out.println("Volume: " + volume + "%");
+        System.out.println("Volume changed to: " + volume);
     }
 
     /**
@@ -127,4 +167,12 @@ public class SettingsController {
 
     @FXML
     private void goParent(){SceneController.getInstance().switchToLoginParent();}
+
+    private void savePreferences() {
+        try {
+            fileHandler.savePreferences(userPrefs);
+        } catch (IOException e) {
+            System.err.println("Failed to save preferences: " + e.getMessage());
+        }
+    }
 }
