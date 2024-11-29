@@ -8,10 +8,16 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.util.Duration;
+import javafx.animation.Interpolator;
 import java.io.IOException;
 import com.example.util.FileHandler;
 import com.example.model.UserPreferences;
 import com.example.components.CustomButton;
+import javafx.scene.text.Text;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.TextInputControl;
 
 public class LoginController {
 
@@ -29,6 +35,12 @@ public class LoginController {
 
     @FXML
     private CustomButton loginButton;
+
+    @FXML
+    private StackPane userErrorIcon;
+
+    @FXML
+    private StackPane passwordErrorIcon;
 
     private FileHandler fileHandler;
     private UserPreferences userPrefs;
@@ -62,16 +74,10 @@ public class LoginController {
         
         // setup new animation
         fadeTimeline.getKeyFrames().clear();
-        KeyFrame keyFrame;
-        if (isValid) {
-            // fade in
-            keyFrame = new KeyFrame(Duration.millis(300),
-                new KeyValue(loginButton.opacityProperty(), 1.0));
-        } else {
-            // fade out
-            keyFrame = new KeyFrame(Duration.millis(300),
-                new KeyValue(loginButton.opacityProperty(), 0.7));
-        }
+        KeyFrame keyFrame = new KeyFrame(
+            Duration.millis(300),
+            new KeyValue(loginButton.opacityProperty(), isValid ? 1.0 : 0.7)
+        );
         
         fadeTimeline.getKeyFrames().add(keyFrame);
         fadeTimeline.play();
@@ -79,21 +85,37 @@ public class LoginController {
         loginButton.setDisable(!isValid);
     }
 
+    private void shakeField(TextInputControl field, StackPane errorIcon) {
+        field.getStyleClass().add("error");
+        errorIcon.setOpacity(1);
+        
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.ZERO, new KeyValue(field.translateXProperty(), 0)),
+            new KeyFrame(Duration.millis(100), new KeyValue(field.translateXProperty(), -10)),
+            new KeyFrame(Duration.millis(200), new KeyValue(field.translateXProperty(), 10)),
+            new KeyFrame(Duration.millis(300), new KeyValue(field.translateXProperty(), -10)),
+            new KeyFrame(Duration.millis(400), new KeyValue(field.translateXProperty(), 10)),
+            new KeyFrame(Duration.millis(500), new KeyValue(field.translateXProperty(), 0))
+        );
+        timeline.play();
+    }
+
     @FXML
     private void handleLogin() {
-        // Clear previous error messages
-        userError.setVisible(false);
-        passwordError.setVisible(false);
+        // Reset error states
+        userErrorIcon.setOpacity(0);
+        passwordErrorIcon.setOpacity(0);
+        usernameField.getStyleClass().remove("error");
+        passwordField.getStyleClass().remove("error");
 
-        // Validate user input
         boolean valid = true;
         if (!usernameField.getText().equals(userPrefs.getParentUsername())) {
-            userError.setVisible(true);
+            shakeField(usernameField, userErrorIcon);
             valid = false;
         }
 
         if (!passwordField.getText().equals(userPrefs.getParentPassword())) {
-            passwordError.setVisible(true);
+            shakeField(passwordField, passwordErrorIcon);
             valid = false;
         }
 

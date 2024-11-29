@@ -4,6 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import com.example.components.CustomButton?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Circle?>
 
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
@@ -21,25 +23,35 @@
                 <!-- Username Section -->
                 <VBox spacing="5">
                     <Label text="Username" styleClass="input-label"/>
-                    <TextField fx:id="usernameField" 
-                             promptText="Enter username"
-                             styleClass="input-field"/>
-                    <Label fx:id="userError" 
-                           text="Invalid username"
-                           styleClass="error-label"
-                           visible="false"/>
+                    <StackPane>
+                        <TextField fx:id="usernameField" 
+                                 promptText="Enter username"
+                                 styleClass="input-field"/>
+                        <StackPane fx:id="userErrorIcon" 
+                                 styleClass="error-icon"
+                                 mouseTransparent="true"
+                                 StackPane.alignment="CENTER_RIGHT">
+                            <Region styleClass="error-circle" minWidth="16" minHeight="16"/>
+                            <Text text="!" styleClass="error-text"/>
+                        </StackPane>
+                    </StackPane>
                 </VBox>
 
                 <!-- Password Section -->
                 <VBox spacing="5">
                     <Label text="Password" styleClass="input-label"/>
-                    <PasswordField fx:id="passwordField" 
-                                 promptText="Enter password"
-                                 styleClass="input-field"/>
-                    <Label fx:id="passwordError" 
-                           text="Invalid password"
-                           styleClass="error-label"
-                           visible="false"/>
+                    <StackPane>
+                        <PasswordField fx:id="passwordField" 
+                                     promptText="Enter password"
+                                     styleClass="input-field"/>
+                        <StackPane fx:id="passwordErrorIcon" 
+                                 styleClass="error-icon"
+                                 mouseTransparent="true"
+                                 StackPane.alignment="CENTER_RIGHT">
+                            <Region styleClass="error-circle" minWidth="16" minHeight="16"/>
+                            <Text text="!" styleClass="error-text"/>
+                        </StackPane>
+                    </StackPane>
                 </VBox>
 
                 <!-- Buttons Section -->
