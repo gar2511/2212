@@ -25,7 +25,6 @@
                     <Label text="Volume" styleClass="settings-section-label"/>
                     <HBox spacing="15" alignment="CENTER">
                         <CustomSlider fx:id="volumeSlider" prefWidth="300" styleClass="custom-slider"/>
-                        <Label fx:id="volumeLabel" text="50%" styleClass="value-label"/>
                     </HBox>
                 </VBox>
                 
@@ -51,13 +50,13 @@
                     <Label text="Version 2.0" styleClass="version-label"/>
                     <Label text="© 2024 Team 17" styleClass="copyright-label"/>
                 </VBox>
-                
-                <!-- Back Button -->
-                <CustomButton text="Back to Main Menu" 
-                           onAction="#goBack"
-                           styleClass="primary-button"/>
             </VBox>
         </StackPane>
+
+        <!-- Back Button -->
+        <CustomButton text="BACK" 
+                     onAction="#goBack"
+                     styleClass="back-button"/>
     </VBox>
     
     <padding>

@@ -63,7 +63,13 @@ public class CustomSlider extends Region {
         
         // create percentage label
         percentageLabel = new Label("50%");
-        percentageLabel.setStyle("-fx-text-fill: #666666; -fx-font-size: 12px;");
+        percentageLabel.setStyle(
+            "-fx-text-fill: white; " +
+            "-fx-font-size: 16px;" +
+            "-fx-font-family: 'Courier New', monospace;" +
+            "-fx-font-weight: bold;" +
+            "-fx-padding: 0 0 0 10;"
+        );
         
         // add all elements including the label
         getChildren().addAll(track, progressTrack, thumb, percentageLabel);
@@ -100,16 +106,14 @@ public class CustomSlider extends Region {
 
     private void handleMouseEvent(MouseEvent event) {
         isDragging = true;
-        double trackWidth = getWidth() - (getPadding().getLeft() + getPadding().getRight());
-        double mouseX = event.getX() - getPadding().getLeft();
-        double proportion = mouseX / trackWidth;
+        double trackWidth = getWidth() - (getPadding().getLeft() + getPadding().getRight()) - 16;
+        double mouseX = event.getX() - getPadding().getLeft() - 8;
+        double proportion = Math.min(1, Math.max(0, mouseX / trackWidth));
         
-        // Add padding to prevent going to absolute 0
-        double minValue = getMin() + (getMax() - getMin()) * 0.02; // 2% padding
+        // calculate value directly from proportion
         double newValue = getMin() + (proportion * (getMax() - getMin()));
-        double targetValue = Math.round(Math.max(minValue, Math.min(getMax(), newValue)));
+        double targetValue = Math.round(Math.max(getMin(), Math.min(getMax(), newValue)));
         
-        // if dragging, update directly; if clicking, animate
         if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
             animateToValue(targetValue);
         } else {
@@ -160,7 +164,7 @@ public class CustomSlider extends Region {
         
         // layout progress track to match thumb position
         double progressWidth = thumbX - progressTrack.getX();
-        progressTrack.setWidth(progressWidth);
+        progressTrack.setWidth(progressWidth + 8);
         progressTrack.setHeight(trackHeight);
         progressTrack.setX(getPadding().getLeft());
         progressTrack.setY(trackY);

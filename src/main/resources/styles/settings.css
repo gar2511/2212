@@ -60,14 +60,18 @@
     -fx-opacity: 0.4;
 }
 
-.value-label {
-    -fx-font-size: 16px;
-    -fx-text-fill: #cccccc;
-}
-
 .settings-separator {
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-padding: 1;
+}
+
+.value-label {
+    -fx-min-width: 80px;
+    -fx-pref-width: 80px;
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
 }
 
 .version-info {
@@ -78,34 +82,41 @@
 .version-label {
     -fx-font-size: 14px;
     -fx-text-fill: black;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
 }
 
 .copyright-label {
     -fx-font-size: 12px;
-    -fx-text-fill: #474747;
-}
-
-.primary-button {
-    -fx-background-color: #34c759;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 12 24;
-    -fx-background-radius: 8;
+    -fx-text-fill: black;
+    -fx-font-family: "Courier New", monospace;
 }
 
 .secondary-button {
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-text-fill: white;
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
     -fx-padding: 8 16;
-    -fx-background-radius: 6;
-}
-
-.primary-button:hover {
-    -fx-background-color: #2fb350;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
+    -fx-background-radius: 15;
 }
 
 .secondary-button:hover {
     -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-cursor: hand;
 }
 
+.back-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.back-button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 15;
+}
