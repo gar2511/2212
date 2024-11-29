@@ -34,8 +34,9 @@
 
     <!-- View Stats -->
     <HBox alignment="CENTER_LEFT" spacing="10" visible="false" fx:id="viewStatsSection">
-        <RadioButton fx:id="viewStatsToggle" text="View Stats" />
+        <Label fx:id="petScoreLabel" text="Score: 0" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
     </HBox>
+
 
     <!-- Revive Pet -->
     <Button fx:id="revivePetButton" text="Revive Pet" visible="false" onAction="#revivePet" />
