@@ -18,6 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.layout.VBox;
 
 public class LoginController {
 
@@ -28,10 +29,16 @@ public class LoginController {
     private PasswordField passwordField;
 
     @FXML
+    private PasswordField confirmPasswordField;
+
+    @FXML
     private Label userError;
 
     @FXML
     private Label passwordError;
+
+    @FXML
+    private Label confirmPasswordError;
 
     @FXML
     private CustomButton loginButton;
@@ -42,15 +49,25 @@ public class LoginController {
     @FXML
     private StackPane passwordErrorIcon;
 
+    @FXML
+    private StackPane confirmPasswordErrorIcon;
+
+    @FXML
+    private Label titleLabel;
+
     private FileHandler fileHandler;
     private UserPreferences userPrefs;
     private Timeline fadeTimeline;
+    private boolean isCreationMode = true;
 
     @FXML
     public void initialize() {
         fileHandler = new FileHandler();
         try {
             userPrefs = fileHandler.loadPreferences();
+            isCreationMode = !userPrefs.isParentControlsEnabled();
+            
+            updateUIForMode();
         } catch (IOException e) {
             System.err.println("Failed to load preferences: " + e.getMessage());
             userPrefs = new UserPreferences();
@@ -63,11 +80,26 @@ public class LoginController {
         // add listeners to validate input fields
         usernameField.textProperty().addListener((obs, oldVal, newVal) -> validateInputs());
         passwordField.textProperty().addListener((obs, oldVal, newVal) -> validateInputs());
+        if (isCreationMode) {
+            confirmPasswordField.textProperty().addListener((obs, oldVal, newVal) -> validateInputs());
+        }
+    }
+
+    private void updateUIForMode() {
+        titleLabel.setText(isCreationMode ? "Create Parent Account" : "Parent Login");
+        loginButton.setText(isCreationMode ? "CREATE" : "LOGIN");
+        
+        // Hide both the field and its container
+        confirmPasswordField.setVisible(isCreationMode);
+        confirmPasswordField.setManaged(isCreationMode);
+        ((VBox) confirmPasswordField.getParent().getParent()).setVisible(isCreationMode);
+        ((VBox) confirmPasswordField.getParent().getParent()).setManaged(isCreationMode);
     }
 
     private void validateInputs() {
         boolean isValid = !usernameField.getText().trim().isEmpty() 
-                      && !passwordField.getText().trim().isEmpty();
+                      && !passwordField.getText().trim().isEmpty()
+                      && (!isCreationMode || !confirmPasswordField.getText().trim().isEmpty());
         
         // stop any running animation
         fadeTimeline.stop();
@@ -102,25 +134,60 @@ public class LoginController {
 
     @FXML
     private void handleLogin() {
+        if (isCreationMode) {
+            handleCreate();
+        } else {
+            handleAuthentication();
+        }
+    }
+
+    private void handleAuthentication() {
         // Reset error states
         userErrorIcon.setOpacity(0);
         passwordErrorIcon.setOpacity(0);
         usernameField.getStyleClass().remove("error");
         passwordField.getStyleClass().remove("error");
 
-        boolean valid = true;
+        // First check username
         if (!usernameField.getText().equals(userPrefs.getParentUsername())) {
             shakeField(usernameField, userErrorIcon);
-            valid = false;
+            shakeField(passwordField, passwordErrorIcon);
+            return;
         }
-
+        
+        // If username is correct, then check password
         if (!passwordField.getText().equals(userPrefs.getParentPassword())) {
             shakeField(passwordField, passwordErrorIcon);
-            valid = false;
+            return;
         }
+        
+        // Both are correct
+        SceneController.getInstance().switchToParentMenu();
+    }
 
-        if (valid) {
+    private void handleCreate() {
+        // Reset error states
+        passwordErrorIcon.setOpacity(0);
+        confirmPasswordErrorIcon.setOpacity(0);
+        passwordField.getStyleClass().remove("error");
+        confirmPasswordField.getStyleClass().remove("error");
+        
+        if (!passwordField.getText().equals(confirmPasswordField.getText())) {
+            shakeField(passwordField, passwordErrorIcon);
+            shakeField(confirmPasswordField, confirmPasswordErrorIcon);
+            return;
+        }
+        
+        // Save the new credentials
+        userPrefs.setParentUsername(usernameField.getText());
+        userPrefs.setParentPassword(passwordField.getText());
+        userPrefs.setParentControlsEnabled(true);
+        
+        try {
+            fileHandler.savePreferences(userPrefs);
             SceneController.getInstance().switchToParentMenu();
+        } catch (IOException e) {
+            System.err.println("Failed to save preferences: " + e.getMessage());
         }
     }
 

@@ -75,12 +75,10 @@
 }
 
 .parental-status-label {
-    -fx-min-width: 80px;
-    -fx-pref-width: 80px;
     -fx-font-size: 16px;
-    -fx-text-fill: white;
     -fx-font-family: "Courier New", monospace;
     -fx-font-weight: bold;
+    -fx-text-fill: white;
 }
 
 .version-info {

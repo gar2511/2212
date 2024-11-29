@@ -15,7 +15,7 @@
            
     <VBox alignment="CENTER" spacing="20">
         <!-- Title -->
-        <Label text="Parent Login" styleClass="login-title-label"/>
+        <Label fx:id="titleLabel" text="Create Parent Account" styleClass="login-title-label"/>
         
         <!-- Main Container -->
         <StackPane styleClass="login-container-background">
@@ -54,13 +54,29 @@
                     </StackPane>
                 </VBox>
 
+                <!-- Confirm Password Section -->
+                <VBox spacing="5">
+                    <Label text="Confirm Password" styleClass="input-label"/>
+                    <StackPane>
+                        <PasswordField fx:id="confirmPasswordField" 
+                                     promptText="Confirm password"
+                                     styleClass="input-field"/>
+                        <StackPane fx:id="confirmPasswordErrorIcon" 
+                                 styleClass="error-icon"
+                                 mouseTransparent="true"
+                                 StackPane.alignment="CENTER_RIGHT">
+                            <Region styleClass="error-circle" minWidth="16" minHeight="16"/>
+                            <Text text="!" styleClass="error-text"/>
+                        </StackPane>
+                    </StackPane>
+                </VBox>
+
                 <!-- Buttons Section -->
                 <HBox spacing="20" alignment="CENTER">
                     <CustomButton fx:id="loginButton" 
                             text="LOGIN" 
                             onAction="#handleLogin"
-                            styleClass="login-button"
-                            disable="true"/>
+                            styleClass="login-button"/>
                     <CustomButton fx:id="goBackButton" 
                             text="BACK" 
                             onAction="#goBack"
