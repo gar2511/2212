@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import java.io.IOException;
+import com.example.util.FileHandler;
+import com.example.model.UserPreferences;
 
 public class LoginController {
 
@@ -19,34 +22,40 @@ public class LoginController {
     @FXML
     private Label passwordError;
 
+    private FileHandler fileHandler;
+    private UserPreferences userPrefs;
+
+    @FXML
+    public void initialize() {
+        fileHandler = new FileHandler();
+        try {
+            userPrefs = fileHandler.loadPreferences();
+        } catch (IOException e) {
+            System.err.println("Failed to load preferences: " + e.getMessage());
+            userPrefs = new UserPreferences();
+        }
+    }
+
     @FXML
     private void handleLogin() {
-        // Mock credentials for demo purposes
-        String validUsername = "CS2212";
-        String validPassword = "Rubberducky!";
-
         // Clear previous error messages
         userError.setVisible(false);
         passwordError.setVisible(false);
 
         // Validate user input
         boolean valid = true;
-        if (!usernameField.getText().equals(validUsername)) {
+        if (!usernameField.getText().equals(userPrefs.getParentUsername())) {
             userError.setVisible(true);
             valid = false;
         }
 
-        if (!passwordField.getText().equals(validPassword)) {
+        if (!passwordField.getText().equals(userPrefs.getParentPassword())) {
             passwordError.setVisible(true);
             valid = false;
         }
 
         if (valid) {
-            System.out.println("Login successful!");
-            // Proceed to the next screen or action
             SceneController.getInstance().switchToParentMenu();
-        } else {
-            System.out.println("Login failed. Please check your credentials.");
         }
     }
 
