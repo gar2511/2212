@@ -21,26 +21,26 @@ public class CustomSlider extends Region {
     private final Rectangle track;
     private final Rectangle progressTrack;
     private final Circle thumb;
-    private final Label percentageLabel;
     private final DoubleProperty value = new SimpleDoubleProperty(0);
     private final DoubleProperty min = new SimpleDoubleProperty(0);
     private final DoubleProperty max = new SimpleDoubleProperty(100);
     private boolean isDragging = false;
     private TranslateTransition thumbAnimation;
     private Timeline valueTransition;
+    private boolean isAnimating = false;
 
     public CustomSlider() {
-        // setup base styling
-        setPadding(new Insets(10));
-        setPrefHeight(40);
-        setMinHeight(40);
-        setMaxHeight(40);
+        // setup base styling with reduced padding
+        setPadding(new Insets(5, 20, 5, 20));
+        setPrefHeight(30);
+        setMinHeight(30);
+        setMaxHeight(30);
         
         // set integer range
         setMin(0);
         setMax(100);
         
-        double trackHeight = 16;
+        double trackHeight = 12;
         
         // create background track
         track = new Rectangle();
@@ -56,32 +56,21 @@ public class CustomSlider extends Region {
         progressTrack.setArcWidth(trackHeight);
         progressTrack.setArcHeight(trackHeight);
         
-        // create thumb
+        // create thumb with smaller radius
         thumb = new Circle();
         thumb.getStyleClass().add("slider-thumb");
         thumb.setRadius(8);
         
-        // create percentage label
-        percentageLabel = new Label("50%");
-        percentageLabel.setStyle(
-            "-fx-text-fill: white; " +
-            "-fx-font-size: 16px;" +
-            "-fx-font-family: 'Courier New', monospace;" +
-            "-fx-font-weight: bold;" +
-            "-fx-padding: 0 0 0 10;"
-        );
-        
-        // add all elements including the label
-        getChildren().addAll(track, progressTrack, thumb, percentageLabel);
+        // add elements (without the percentage label)
+        getChildren().addAll(track, progressTrack, thumb);
         
         // setup event handlers
         setupEventHandlers();
         
-        // modify the value listener to update label and use integer
+        // modify the value listener to use integer values
         valueProperty().addListener((obs, oldVal, newVal) -> {
             int intValue = (int) Math.round(newVal.doubleValue());
             setValue(intValue);
-            percentageLabel.setText(intValue + "%");
         });
         
         // setup initial value
@@ -105,7 +94,6 @@ public class CustomSlider extends Region {
     }
 
     private void handleMouseEvent(MouseEvent event) {
-        isDragging = true;
         double trackWidth = getWidth() - (getPadding().getLeft() + getPadding().getRight()) - 16;
         double mouseX = event.getX() - getPadding().getLeft() - 8;
         double proportion = Math.min(1, Math.max(0, mouseX / trackWidth));
@@ -115,27 +103,35 @@ public class CustomSlider extends Region {
         double targetValue = Math.round(Math.max(getMin(), Math.min(getMax(), newValue)));
         
         if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+            // Always start a new animation on click, even if one is running
+            valueTransition.stop();
             animateToValue(targetValue);
-        } else {
+        } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+            isDragging = true;
+            // During drag, immediately update value
+            valueTransition.stop();
             setValue(targetValue);
         }
     }
 
     private void animateToValue(double targetValue) {
         valueTransition.stop();
+        isAnimating = true;
         
-        // Option 1: Built-in interpolators with different acceleration curves
         KeyValue keyValue = new KeyValue(
             valueProperty(),
             targetValue,
             Interpolator.SPLINE(0.25, 0.1, 0.25, 1)
         );
 
-        // Duration stays the same
         KeyFrame keyFrame = new KeyFrame(Duration.millis(600), keyValue);
         
         valueTransition.getKeyFrames().clear();
         valueTransition.getKeyFrames().add(keyFrame);
+        valueTransition.setOnFinished(e -> {
+            isAnimating = false;
+            requestLayout();
+        });
         valueTransition.play();
     }
 
@@ -174,11 +170,6 @@ public class CustomSlider extends Region {
         // set thumb position
         thumb.setCenterX(thumbX);
         thumb.setCenterY(thumbY);
-        
-        // position the percentage label
-        double labelX = track.getX() + track.getWidth();
-        double labelY = (getHeight() - percentageLabel.prefHeight(-1)) / 2;
-        percentageLabel.relocate(labelX, labelY);
     }
 
     public double getValue() {
