@@ -1,5 +1,8 @@
 package com.example.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.scene.control.Label;
+
 /**
  * Model class representing a virtual pet in the game.
  * Encapsulates the pet's name and provides constructors for creation
@@ -16,8 +19,10 @@ public class Pet {
     private int[] states;
     private int defaultItem12 = 1; // Default to item 1
     private int defaultItem34 = 3; // Default to item 3
+    private int score = 0; // Score of the Pet
 
-
+    private long totalTimeSpent = 0; // Total time spent in seconds
+    private long timeLimit = 0; // Time limit in seconds (0 = no limit)
     /**
      * Default no-arguments constructor.
      * Required for Jackson JSON serialization/deserialization.
@@ -39,8 +44,7 @@ public class Pet {
         this.stats = new VitalStats();
         this.inventory = new Inventory();
         this.saveID = saveID;
-        this.defaultItem12 = 1;
-        this.defaultItem34 = 3;
+
     }
 
     /**
@@ -99,6 +103,31 @@ public class Pet {
 
     public void setDefaultItem34(int defaultItem34) {
         this.defaultItem34 = defaultItem34;
+    }
+
+    public void setScore(int value) {
+        this.score = value;
+    }
+    public int getScore() { return this.score;}
+    public long getTotalTimeSpent() {
+        return totalTimeSpent;
+    }
+
+    public void addTimeSpent(long seconds) {
+        this.totalTimeSpent += seconds;
+    }
+
+    public void resetTotalTimeSpent() {
+        this.totalTimeSpent = 0;
+    }
+
+    // Getter and setter for timeLimit
+    public long getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(long timeLimit) {
+        this.timeLimit = timeLimit;
     }
 
 }
