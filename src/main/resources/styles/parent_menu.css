@@ -1,0 +1,171 @@
+.parent-menu-background {
+    -fx-background-color: #38250e;
+}
+
+.custom-toggle {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+}
+
+.parent-menu-title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+}
+
+.parent-menu-container-background {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-background-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
+    -fx-max-width: 400;
+    -fx-min-height: 400;
+}
+
+.parent-menu-container {
+    -fx-padding: 20 30 20 30;
+}
+
+.parent-menu-section-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+}
+
+.toggle-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-padding: 0 0 0 10;
+    -fx-font-family: "Courier New", monospace;
+    -fx-min-width: 30px;
+    -fx-alignment: center-left;
+}
+
+.custom-toggle:hover {
+    -fx-cursor: hand;
+}
+
+.custom-toggle .background {
+    -fx-fill: #e9e9eb;
+    -fx-arc-width: 24;
+    -fx-arc-height: 24;
+}
+
+.custom-toggle:selected .background {
+    -fx-fill: #34c759;
+}
+
+.custom-toggle .thumb {
+    -fx-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1.5);
+}
+
+.parent-menu-dropdown {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 14px;
+    -fx-min-width: 200px;
+    -fx-alignment: center;
+    -fx-background-radius: 10;
+}
+
+.parent-menu-dropdown:hover {
+    -fx-cursor: hand;
+}
+
+.parent-menu-dropdown .list-cell {
+    -fx-text-fill: black;
+    -fx-font-family: "Courier New", monospace;
+    -fx-alignment: center;
+    -fx-background-radius: 10;
+}
+
+.parent-menu-dropdown .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+}
+
+.parent-menu-spinner {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 14px;
+    -fx-min-width: 100px;
+    -fx-alignment: center;
+    -fx-background-radius: 10;
+}
+
+.parent-menu-spinner .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-background-radius: 10;
+}
+
+.parent-menu-spinner .increment-arrow-button,
+.parent-menu-spinner .decrement-arrow-button {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-background-radius: 0 10 10 0;
+}
+
+.parent-menu-spinner .increment-arrow-button:hover,
+.parent-menu-spinner .decrement-arrow-button:hover {
+    -fx-background-color: rgba(245, 230, 211, 0.7);
+    -fx-cursor: hand;
+}
+
+.parent-menu-spinner .increment-arrow,
+.parent-menu-spinner .decrement-arrow {
+    -fx-background-color: black;
+}
+
+.parent-menu-button {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-text-fill: black;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 12px;
+    -fx-min-width: 80px;
+    -fx-background-radius: 10;
+}
+
+.parent-menu-button:hover {
+    -fx-background-color: rgba(245, 230, 211, 0.7);
+    -fx-cursor: hand;
+}
+
+.parent-menu-divider {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-padding: 1;
+}
+
+.parent-menu-sublabel {
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+    -fx-opacity: 0.8;
+}
+
+.parent-menu-score-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+}
+
+.revive-pet-button {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-text-fill: black;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 12px;
+    -fx-min-width: 80px;
+    -fx-background-radius: 10;
+}
+
+.revive-pet-button:hover {
+    -fx-background-color: rgba(245, 230, 211, 0.7);
+    -fx-cursor: hand;
+}

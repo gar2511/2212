@@ -34,14 +34,17 @@
                 <!-- Parental Controls -->
                 <VBox spacing="10" alignment="CENTER">
                     <Label text="Parental Controls" styleClass="settings-section-label"/>
-                    <HBox spacing="15" alignment="CENTER">
-                        <CustomToggle fx:id="parentalControlsToggle"/>
+                    <VBox spacing="5" alignment="CENTER">
                         <Label fx:id="parentalStatusLabel" text="Disabled" styleClass="parental-status-label"/>
-                    </HBox>
-                    <CustomButton text="Configure Parental Controls" 
-                              onAction="#goParent"
-                              styleClass="secondary-button"
-                              visible="${parentalControlsToggle.selected}"/>
+                        <CustomButton fx:id="parentalControlsButton" 
+                                     text="Enable Parental Controls"
+                                     onAction="#handleParentalControls"
+                                     styleClass="secondary-button"/>
+                        <CustomButton text="Configure Parental Controls" 
+                                     onAction="#goParent"
+                                     styleClass="secondary-button"
+                                     fx:id="configureButton"/>
+                    </VBox>
                 </VBox>
                 
                 <Separator styleClass="settings-separator"/>

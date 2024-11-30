@@ -1,7 +1,16 @@
 package com.example.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.scene.Scene;
+import javafx.geometry.Pos;
 import com.example.components.CustomButton;
+import javafx.application.Platform;
+import javafx.scene.layout.StackPane;
 
 /**
  * Controller class for the main menu interface.
@@ -15,6 +24,8 @@ public class MainMenuController {
     private CustomButton settingsButton;
     @FXML
     private CustomButton exitButton;
+    @FXML
+    private StackPane exitDialog;
 
     /**
      * Handles the "Load Game" button action.
@@ -36,10 +47,28 @@ public class MainMenuController {
 
     /**
      * Handles the "Exit" button action.
-     * Terminates the application.
+     * Shows the exit confirmation dialog.
      */
     @FXML
     private void exitGame() {
-        System.exit(0);
+        exitDialog.setVisible(true);
+    }
+
+    /**
+     * Handles the confirmation of exit.
+     * Closes the application.
+     */
+    @FXML
+    private void confirmExit() {
+        Platform.exit();
+    }
+
+    /**
+     * Handles the cancellation of exit.
+     * Hides the exit confirmation dialog.
+     */
+    @FXML
+    private void cancelExit() {
+        exitDialog.setVisible(false);
     }
 }

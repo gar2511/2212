@@ -25,6 +25,8 @@ public class VitalStats {
 
     private boolean suppressListeners = false;
 
+    private boolean alive = true;  // Add this field
+
     public VitalStats() {
         // Add listeners to enforce clamping and update state
         hunger.addListener((observable, oldValue, newValue) -> {
@@ -242,5 +244,19 @@ public class VitalStats {
         setHappiness(100);
         suppressListeners = false; // Re-enable listeners
         Arrays.fill(petState, 0); // Reset all states to normal
+    }
+
+    @JsonProperty("alive")
+    public boolean isAlive() {
+        return health.get() > 0;
+    }
+
+    @JsonProperty("alive")
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+        // If setting to true, ensure health is above 0
+        if (alive && health.get() <= 0) {
+            setHealth(1);
+        }
     }
 }
