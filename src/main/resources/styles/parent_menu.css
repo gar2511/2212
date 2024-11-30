@@ -1,0 +1,30 @@
+.parent-menu-background {
+    -fx-background-color: #38250e;
+}
+
+.custom-toggle {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+}
+
+.custom-toggle:hover {
+    -fx-cursor: hand;
+}
+
+.custom-toggle .background {
+    -fx-fill: #e9e9eb;
+    -fx-arc-width: 24;
+    -fx-arc-height: 24;
+}
+
+.custom-toggle:selected .background {
+    -fx-fill: #34c759;
+}
+
+.custom-toggle .thumb {
+    -fx-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1.5);
+} 
