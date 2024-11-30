@@ -48,9 +48,20 @@ public class ParentMenuController {
     public void initialize() {
         fileHandler = new FileHandler();
 
+        // Hide all sections initially
+        timeLimitSection.setVisible(false);
+        timeLimitSection.setManaged(false);
+        viewStatsSection.setVisible(false);
+        viewStatsSection.setManaged(false);
+        revivePetButton.setVisible(false);
+        revivePetButton.setManaged(false);
+        inventorySection.setVisible(false);
+        inventorySection.setManaged(false);
+
         // Populate the dropdown with save files
         File[] saveFiles = fileHandler.getSaveFiles();
         if (saveFiles != null) {
+            selectSaveDropdown.getItems().add("Select a save file...");
             for (File file : saveFiles) {
                 String fileName = file.getName();
                 if (fileName.endsWith(".json")) {
@@ -58,9 +69,34 @@ public class ParentMenuController {
                 }
             }
         }
+        selectSaveDropdown.setValue("Select a save file...");
 
         // Add listener to dropdown for save selection
-        selectSaveDropdown.setOnAction(event -> loadSelectedSave());
+        selectSaveDropdown.setOnAction(event -> {
+            String selected = selectSaveDropdown.getValue();
+            if (selected != null && !selected.equals("Select a save file...")) {
+                loadSelectedSave();
+                // Show sections only when a valid save is selected
+                timeLimitSection.setVisible(true);
+                timeLimitSection.setManaged(true);
+                viewStatsSection.setVisible(true);
+                viewStatsSection.setManaged(true);
+                revivePetButton.setVisible(true);
+                revivePetButton.setManaged(true);
+                inventorySection.setVisible(true);
+                inventorySection.setManaged(true);
+            } else {
+                // Hide sections when no save is selected
+                timeLimitSection.setVisible(false);
+                timeLimitSection.setManaged(false);
+                viewStatsSection.setVisible(false);
+                viewStatsSection.setManaged(false);
+                revivePetButton.setVisible(false);
+                revivePetButton.setManaged(false);
+                inventorySection.setVisible(false);
+                inventorySection.setManaged(false);
+            }
+        });
 
         // Initialize spinners with default values
         item1Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
@@ -103,7 +139,6 @@ public class ParentMenuController {
     private void handleToggleParentMode() {
         isParentModeEnabled = !isParentModeEnabled;
         if (isParentModeEnabled) {
-            parentModeToggle.setText("ON");
             // Enable blue text sections
             selectSaveDropdown.setVisible(true);
             timeLimitSection.setVisible(true);
@@ -111,7 +146,6 @@ public class ParentMenuController {
             revivePetButton.setVisible(true);
             inventorySection.setVisible(true);
         } else {
-            parentModeToggle.setText("OFF");
             // Hide all related controls
             selectSaveDropdown.setVisible(false);
             timeLimitSection.setVisible(false);

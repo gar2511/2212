@@ -3,25 +3,32 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import com.example.components.CustomToggle?>
+<?import com.example.components.CustomButton?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
+<StackPane xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.controller.ParentMenuController"
-      alignment="TOP_CENTER"
-      spacing="20"
-      style="-fx-padding: 20; -fx-font-family: Arial;">
+      styleClass="parent-menu-background"
+      stylesheets="@../styles/parent_menu.css">
 
-    <!-- Title -->
-    <Label text="Parent Controls" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+    <VBox alignment="CENTER" spacing="20" style="-fx-padding: 0 50 0 50;">
+        <!-- Title -->
+        <Label text="Parent Control Settings" styleClass="parent-menu-title-label" />
+        <StackPane styleClass="parent-menu-container-background">
+
+            <VBox spacing="15" styleClass="parent-menu-container">
 
     <!-- Toggle Switch -->
     <HBox alignment="CENTER" spacing="10">
-        <Label text="Turn On" style="-fx-font-size: 18px;" />
-        <ToggleButton fx:id="parentModeToggle" text="OFF" onAction="#handleToggleParentMode" />
+        <Label text="Parental Controls" styleClass="parent-menu-section-label" />
+        <CustomToggle fx:id="parentModeToggle" onAction="#handleToggleParentMode" styleClass="toggle-label"/>
     </HBox>
 
     <!-- Select Save -->
-    <ComboBox fx:id="selectSaveDropdown" promptText="Select Save" visible="false" />
+    <ComboBox fx:id="selectSaveDropdown" 
+              promptText="Select Save" 
+              styleClass="parent-menu-dropdown"/>
 
     <!-- Time Limit -->
     <VBox alignment="CENTER" spacing="10" visible="false" fx:id="timeLimitSection">
@@ -59,9 +66,12 @@
             <Label text="Item4" style="-fx-font-size: 12px;" />
             <Spinner fx:id="item4Spinner" min="0" max="100" initialValue="0" onMouseReleased="#updateItem4" />
         </VBox>
-    </HBox>
+                </HBox>
 
-
+            </VBox>
+        </StackPane>
     <!-- Go Back Button -->
     <Button fx:id="goBackButton" text="Go Back" onAction="#handleGoBack" />
-</VBox>
+    </VBox>
+
+</StackPane>

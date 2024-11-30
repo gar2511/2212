@@ -10,6 +10,42 @@
     -fx-border-width: 0;
 }
 
+.parent-menu-title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+}
+
+.parent-menu-container-background {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-background-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
+    -fx-max-width: 400;
+    -fx-min-height: 400;
+}
+
+.parent-menu-container {
+    -fx-padding: 20 30 20 30;
+}
+
+.parent-menu-section-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+}
+
+.toggle-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-padding: 0 0 0 10;
+    -fx-font-family: "Courier New", monospace;
+    -fx-min-width: 30px;
+    -fx-alignment: center-left;
+}
+
 .custom-toggle:hover {
     -fx-cursor: hand;
 }
@@ -27,4 +63,23 @@
 .custom-toggle .thumb {
     -fx-fill: white;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1.5);
+}
+
+.parent-menu-dropdown {
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 14px;
+    -fx-min-width: 200px;
+    -fx-alignment: center;
+}
+
+.parent-menu-dropdown .list-cell {
+    -fx-text-fill: black;
+    -fx-font-family: "Courier New", monospace;
+    -fx-alignment: center;
+}
+
+.parent-menu-dropdown .list-view {
+    -fx-background-color: rgba(245, 230, 211, 0.8);
 } 
