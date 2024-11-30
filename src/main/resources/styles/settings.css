@@ -50,6 +50,7 @@
 
 .custom-slider:hover .slider-thumb {
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 0, 3);
+    -fx-cursor: hand;
 }
 
 .custom-slider:pressed .slider-thumb {

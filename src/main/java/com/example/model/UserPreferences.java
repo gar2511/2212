@@ -3,66 +3,57 @@ package com.example.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserPreferences {
-    @JsonProperty("volume")
-    private double volume;
-    
-    @JsonProperty("parentControlsEnabled")
     private boolean parentControlsEnabled;
-    
-    @JsonProperty("parentUsername")
+    private double volume;
     private String parentUsername;
-    
-    @JsonProperty("parentPassword")
     private String parentPassword;
-    
-    private boolean parentalControlsEnabled = false;
-    
-    // Default constructor
+
+    // default constructor
     public UserPreferences() {
-        this.volume = 50.0;
         this.parentControlsEnabled = false;
-        this.parentUsername = "CS2212";
-        this.parentPassword = "Rubberducky!";
+        this.volume = 50.0;
+        this.parentUsername = "";
+        this.parentPassword = "";
     }
-    
-    // Getters and setters
-    public double getVolume() {
-        return volume;
-    }
-    
-    public void setVolume(double volume) {
-        this.volume = volume;
-    }
-    
+
+    // getters and setters
+    @JsonProperty("parentControlsEnabled")
     public boolean isParentControlsEnabled() {
         return parentControlsEnabled;
     }
-    
+
+    @JsonProperty("parentControlsEnabled")
     public void setParentControlsEnabled(boolean parentControlsEnabled) {
         this.parentControlsEnabled = parentControlsEnabled;
     }
-    
+
+    @JsonProperty("volume")
+    public double getVolume() {
+        return volume;
+    }
+
+    @JsonProperty("volume")
+    public void setVolume(double volume) {
+        this.volume = volume;
+    }
+
+    @JsonProperty("parentUsername")
     public String getParentUsername() {
         return parentUsername;
     }
-    
+
+    @JsonProperty("parentUsername")
     public void setParentUsername(String parentUsername) {
         this.parentUsername = parentUsername;
     }
-    
+
+    @JsonProperty("parentPassword")
     public String getParentPassword() {
         return parentPassword;
     }
-    
+
+    @JsonProperty("parentPassword")
     public void setParentPassword(String parentPassword) {
         this.parentPassword = parentPassword;
-    }
-    
-    public boolean isParentalControlsEnabled() {
-        return parentalControlsEnabled;
-    }
-    
-    public void setParentalControlsEnabled(boolean enabled) {
-        this.parentalControlsEnabled = enabled;
     }
 }
