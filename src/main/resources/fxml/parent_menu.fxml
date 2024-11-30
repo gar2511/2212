@@ -25,11 +25,12 @@
         <CustomToggle fx:id="parentModeToggle" onAction="#handleToggleParentMode" styleClass="toggle-label"/>
     </HBox>
 
+<VBox alignment="CENTER" spacing="10">
     <!-- Select Save -->
     <ComboBox fx:id="selectSaveDropdown" 
               promptText="Select Save" 
               styleClass="parent-menu-dropdown"/>
-
+</VBox>
     <!-- Time Limit -->
     <VBox alignment="CENTER" spacing="10" visible="false" fx:id="timeLimitSection">
         <HBox alignment="CENTER_LEFT" spacing="10">

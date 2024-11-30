@@ -15,6 +15,8 @@ public class UserPreferences {
     @JsonProperty("parentPassword")
     private String parentPassword;
     
+    private boolean parentalControlsEnabled = false;
+    
     // Default constructor
     public UserPreferences() {
         this.volume = 50.0;
@@ -54,5 +56,13 @@ public class UserPreferences {
     
     public void setParentPassword(String parentPassword) {
         this.parentPassword = parentPassword;
+    }
+    
+    public boolean isParentalControlsEnabled() {
+        return parentalControlsEnabled;
+    }
+    
+    public void setParentalControlsEnabled(boolean enabled) {
+        this.parentalControlsEnabled = enabled;
     }
 }

@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.util.FileHandler;
+import com.example.model.UserPreferences;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -43,12 +44,49 @@ public class ParentMenuController {
     private FileHandler fileHandler;
     private GameState currentGameState;
     private boolean isParentModeEnabled = false;
+    private UserPreferences userPrefs;
 
     @FXML
     public void initialize() {
         fileHandler = new FileHandler();
+        
+        // load preferences first
+        try {
+            userPrefs = fileHandler.loadPreferences();
+            isParentModeEnabled = userPrefs.isParentalControlsEnabled();
+            parentModeToggle.setSelected(isParentModeEnabled);
+            
+            // Set initial visibility based on parent mode
+            selectSaveDropdown.setVisible(isParentModeEnabled);
+            selectSaveDropdown.setManaged(isParentModeEnabled);
+        } catch (IOException e) {
+            System.err.println("failed to load preferences: " + e.getMessage());
+            userPrefs = new UserPreferences();
+        }
 
-        // Hide all sections initially
+        // populate the dropdown with save files
+        File[] saveFiles = fileHandler.getSaveFiles();
+        if (saveFiles != null) {
+            selectSaveDropdown.getItems().add("Select a save file...");
+            for (File file : saveFiles) {
+                String fileName = file.getName();
+                if (fileName.endsWith(".json")) {
+                    try {
+                        // load the game state to get the pet name
+                        GameState state = fileHandler.loadGame(fileName.replace(".json", ""));
+                        if (state != null && state.getPet() != null) {
+                            String petName = state.getPet().getName() + " " + state.getPet().getSpecies();
+                            selectSaveDropdown.getItems().add(petName);
+                        }
+                    } catch (IOException e) {
+                        System.err.println("Failed to load save file: " + e.getMessage());
+                    }
+                }
+            }
+        }
+        selectSaveDropdown.setValue("Select a save file...");
+        
+        // Make sure sections are hidden when "Select a save file..." is initially selected
         timeLimitSection.setVisible(false);
         timeLimitSection.setManaged(false);
         viewStatsSection.setVisible(false);
@@ -57,19 +95,6 @@ public class ParentMenuController {
         revivePetButton.setManaged(false);
         inventorySection.setVisible(false);
         inventorySection.setManaged(false);
-
-        // Populate the dropdown with save files
-        File[] saveFiles = fileHandler.getSaveFiles();
-        if (saveFiles != null) {
-            selectSaveDropdown.getItems().add("Select a save file...");
-            for (File file : saveFiles) {
-                String fileName = file.getName();
-                if (fileName.endsWith(".json")) {
-                    selectSaveDropdown.getItems().add(fileName.replace(".json", ""));
-                }
-            }
-        }
-        selectSaveDropdown.setValue("Select a save file...");
 
         // Add listener to dropdown for save selection
         selectSaveDropdown.setOnAction(event -> {
@@ -105,31 +130,35 @@ public class ParentMenuController {
         item4Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
     }
     private void loadSelectedSave() {
-        String selectedSave = selectSaveDropdown.getValue();
-        if (selectedSave != null) {
+        String selectedPetName = selectSaveDropdown.getValue();
+        if (selectedPetName != null && !selectedPetName.equals("Select a save file...")) {
             try {
-                // Load the selected save file
-                currentGameState = fileHandler.loadGame(selectedSave);
-                Pet pet = currentGameState.getPet();
-
-                if (pet != null) {
-                    // Update UI components with the pet's current state
-                    petScoreLabel.setText("Score: " + pet.getScore());
-                    petScoreLabel.setVisible(true);
-                    item1Spinner.getValueFactory().setValue(pet.getInventory().getItem1());
-                    item2Spinner.getValueFactory().setValue(pet.getInventory().getItem2());
-                    item3Spinner.getValueFactory().setValue(pet.getInventory().getItem3());
-                    item4Spinner.getValueFactory().setValue(pet.getInventory().getItem4());
-
-                    saveScoreLabel.setText("Score: " + pet.getScore());
-                    saveScoreLabel.setVisible(true);
-
-                    System.out.println("Save " + selectedSave + " loaded for pet: " + pet.getName());
-                } else {
-                    System.out.println("No pet found in save file: " + selectedSave);
+                // Find the corresponding save file by iterating through saves
+                File[] saveFiles = fileHandler.getSaveFiles();
+                for (File file : saveFiles) {
+                    String fileName = file.getName();
+                    if (fileName.endsWith(".json")) {
+                        GameState state = fileHandler.loadGame(fileName.replace(".json", ""));
+                        if (state != null && state.getPet() != null) {
+                            String petFullName = state.getPet().getName() + " " + state.getPet().getSpecies();
+                            if (petFullName.equals(selectedPetName)) {
+                                currentGameState = state;
+                                Pet pet = currentGameState.getPet();
+                                
+                                // Update UI components with the pet's current state
+                                petScoreLabel.setText("Score: " + pet.getScore());
+                                petScoreLabel.setVisible(true);
+                                item1Spinner.getValueFactory().setValue(pet.getInventory().getItem1());
+                                item2Spinner.getValueFactory().setValue(pet.getInventory().getItem2());
+                                item3Spinner.getValueFactory().setValue(pet.getInventory().getItem3());
+                                item4Spinner.getValueFactory().setValue(pet.getInventory().getItem4());
+                                break;
+                            }
+                        }
+                    }
                 }
             } catch (IOException e) {
-                System.out.println("Failed to load save file: " + e.getMessage());
+                System.err.println("Failed to load save file: " + e.getMessage());
             }
         }
     }
@@ -138,21 +167,44 @@ public class ParentMenuController {
     @FXML
     private void handleToggleParentMode() {
         isParentModeEnabled = !isParentModeEnabled;
+        
+        // update preferences
+        userPrefs.setParentalControlsEnabled(isParentModeEnabled);
+        try {
+            fileHandler.savePreferences(userPrefs);
+        } catch (IOException e) {
+            System.err.println("failed to save preferences: " + e.getMessage());
+        }
+        
         if (isParentModeEnabled) {
-            // Enable blue text sections
+            // Only show the dropdown initially
             selectSaveDropdown.setVisible(true);
-            timeLimitSection.setVisible(true);
-            viewStatsSection.setVisible(true);
-            revivePetButton.setVisible(true);
-            inventorySection.setVisible(true);
+            selectSaveDropdown.setManaged(true);
+            selectSaveDropdown.setValue("Select a save file...");
+            
+            // Keep other sections hidden until a save is selected
+            timeLimitSection.setVisible(false);
+            timeLimitSection.setManaged(false);
+            viewStatsSection.setVisible(false);
+            viewStatsSection.setManaged(false);
+            revivePetButton.setVisible(false);
+            revivePetButton.setManaged(false);
+            inventorySection.setVisible(false);
+            inventorySection.setManaged(false);
         } else {
             // Hide all related controls
             selectSaveDropdown.setVisible(false);
+            selectSaveDropdown.setManaged(false);
             timeLimitSection.setVisible(false);
+            timeLimitSection.setManaged(false);
             timeLimitInput.setVisible(false);
+            timeLimitInput.setManaged(false);
             viewStatsSection.setVisible(false);
+            viewStatsSection.setManaged(false);
             revivePetButton.setVisible(false);
+            revivePetButton.setManaged(false);
             inventorySection.setVisible(false);
+            inventorySection.setManaged(false);
         }
     }
     @FXML
@@ -253,10 +305,11 @@ public class ParentMenuController {
 
     private void saveCurrentGameState() {
         try {
-            String selectedSave = selectSaveDropdown.getValue();
-            if (selectedSave != null && currentGameState != null) {
-                fileHandler.saveGame(selectedSave, currentGameState);
-                System.out.println("Save file " + selectedSave + " updated.");
+            if (currentGameState != null) {
+                // get the slot number from the current game state
+                String slotNumber = "slot" + currentGameState.getPet().getSaveID();
+                fileHandler.saveGame(slotNumber, currentGameState);
+                System.out.println("Save file " + slotNumber + " updated.");
             }
         } catch (IOException e) {
             System.out.println("Failed to save game state: " + e.getMessage());
