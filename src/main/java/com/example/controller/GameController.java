@@ -75,6 +75,7 @@ public class GameController {
         // Get the current GameState instance
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet(); // Retrieve the Pet object
+        String species = pet.getSpecies();
         if (pet != null) {
             VitalStats stats = pet.getStats();
 
@@ -93,42 +94,12 @@ public class GameController {
         }
         try {
 
-            // If pet is a certain species, load that image
-            if (pet.getSpecies().equals("Mole")) {
-                // Load image from resources
-                Image moleImage = new Image(getClass().getResourceAsStream("/images/mole.png"));
-                if (moleImage.isError()) {
-                    System.err.println("Error loading mole image: " + moleImage.getException());
-                } else {
-                    moleSprite.setImage(moleImage);
-                }
-            }
-            else if (pet.getSpecies().equals("Bear")) {
-                // Load image from resources
-                Image bearImage = new Image(getClass().getResourceAsStream("/images/bear.png"));
-                if (bearImage.isError()) {
-                    System.err.println("Error loading mole image: " + bearImage.getException());
-                } else {
-                    moleSprite.setImage(bearImage);
-                }
-            }
-            else if (pet.getSpecies().equals("Cat")) {
-                // Load image from resources
-                Image catImage = new Image(getClass().getResourceAsStream("/images/cat.png"));
-                if (catImage.isError()) {
-                    System.err.println("Error loading mole image: " + catImage.getException());
-                } else {
-                    moleSprite.setImage(catImage);
-                }
-            }
-            else { // if no image then mole image
-                System.out.println("Default Image, " + pet.getSpecies() + " image not found.");
-                Image moleImage = new Image(getClass().getResourceAsStream("/images/mole.png"));
-                if (moleImage.isError()) {
-                    System.err.println("Error loading mole image: " + moleImage.getException());
-                } else {
-                    moleSprite.setImage(moleImage);
-                }
+            // Load image from resourcesSS
+            Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + ".png"));
+            if (petImage.isError()) {
+                System.err.println("Error loading mole image: " + petImage.getException());
+            } else {
+                moleSprite.setImage(petImage);
             }
 
         } catch (Exception e) {
@@ -311,6 +282,9 @@ public class GameController {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
+        // setting pet image to eating
+        setPetStateImage("eating");
+
         if (pet != null) {
             if (pet.getDefaultItem12()==1) {
                 VitalStats stats = pet.getStats();
@@ -336,6 +310,9 @@ public class GameController {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
+        //setting pet image to default happy image
+        setPetStateImage();
+
         if (pet != null) {
             VitalStats stats = pet.getStats();
             stats.decreaseEnergy(15); // Decrease energy by 15
@@ -350,6 +327,9 @@ public class GameController {
     private void giveGift(){
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
+
+        // setting pet image to eating
+        setPetStateImage("eating");
 
         if (pet.getDefaultItem34()==3) {
             VitalStats stats = pet.getStats();
@@ -387,6 +367,9 @@ public class GameController {
     private void takeVet(){
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
+
+        // setting pet image to eating
+        setPetStateImage("sleeping");
 
         if (pet != null) {
             VitalStats stats = pet.getStats();
@@ -451,6 +434,9 @@ public class GameController {
                 vetButton.setDisable(true);
                 inventoryButton.setDisable(true);
 
+                // Show dead pet image
+                setPetStateImage("dead");
+
                 // Show "Game Over" message
                 if (gameOverLabel == null) {
                     System.err.println("gameOverLabel is null. Check FXML binding.");
@@ -466,9 +452,11 @@ public class GameController {
                     System.out.println("Hunger is critically low! Consider feeding the pet.");
                     stats.setHappinessMod(5);
                     stats.setHealthMod(5);
+                    setPetStateImage("hungry");
                     break;
                 case 1: // Happiness
                     System.out.println("Happiness is critically low! Consider playing with the pet.");
+                    setPetStateImage("angry");
                     Platform.runLater(() -> {
                         exerciseButton.setDisable(true);
                         vetButton.setDisable(true);
@@ -477,6 +465,7 @@ public class GameController {
                     break;
                 case 2: // Energy
                     System.out.println("Energy is critically low! Pet needs rest.");
+                    setPetStateImage("sleepy");
                     feedButton.setDisable(true);
                     playButton.setDisable(true);
                     giftButton.setDisable(true);
@@ -486,10 +475,12 @@ public class GameController {
                     break;
                 default:
                     System.out.println("Unknown critical state detected.");
+                    setPetStateImage("sleepy");
                     break;
             }
         }
     }
+
     private void maintainState(int index) {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
@@ -520,6 +511,7 @@ public class GameController {
                 break;
         }
     }
+
     private void setupHotkeys() {
         moleSprite.setFocusTraversable(true); // Ensure moleSprite can receive key events
         moleSprite.requestFocus(); // Request focus on the moleSprite node
@@ -557,6 +549,36 @@ public class GameController {
 
 
     }
+
+    private void setPetStateImage() {
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+        String species = pet.getSpecies();
+
+        if (pet == null) {
+            System.err.println("No pet found in setPetImage.");
+        }
+        else {
+            Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + ".png"));
+            moleSprite.setImage(petImage);
+        }
+    }
+
+    private void setPetStateImage(String petState) {
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+        String species = pet.getSpecies();
+
+        if (pet == null) {
+            System.err.println("No pet found in setPetImage.");
+        }
+        else if ((pet != null && petState == null) || (pet != null && (petState.toLowerCase().equals("happy") || petState.toLowerCase().equals("normal")))) {
+            Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + ".png"));
+            moleSprite.setImage(petImage);
+        }
+        else {
+            Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + "_" + petState.toLowerCase() + ".png"));
+            moleSprite.setImage(petImage);
+        }
+    }
 }
-
-
