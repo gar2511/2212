@@ -7,6 +7,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.StackPane;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import com.example.components.CustomButton;
 import com.example.components.CustomSlider;
 import com.example.components.CustomToggle;
 import javafx.scene.control.Label;
@@ -28,6 +29,10 @@ public class SettingsController {
     @FXML
     private Label volumeLabel;
 
+    @FXML
+    private CustomButton parentalControlsButton;
+    @FXML
+    private CustomButton configureButton;
     @FXML
     private Label parentalStatusLabel;
 
@@ -54,6 +59,8 @@ public class SettingsController {
 
         // Wrap all UI operations in Platform.runLater to ensure FXML elements are initialized
         Platform.runLater(() -> {
+            updateParentalControlsUI(userPrefs.isParentControlsEnabled());
+            
             // Set initial values from preferences
             if (volumeSlider != null && volumeLabel != null) {
                 volumeSlider.setValue(userPrefs.getVolume());
@@ -174,5 +181,16 @@ public class SettingsController {
         } catch (IOException e) {
             System.err.println("Failed to save preferences: " + e.getMessage());
         }
+    }
+
+    private void updateParentalControlsUI(boolean enabled) {
+        parentalStatusLabel.setText(enabled ? "Enabled" : "Disabled");
+        parentalControlsButton.setVisible(!enabled);
+        configureButton.setVisible(enabled);
+    }
+
+    @FXML
+    private void handleParentalControls() {
+        SceneController.getInstance().switchToLoginParent();
     }
 }

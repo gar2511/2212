@@ -2,6 +2,8 @@
 
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
 <?import com.example.components.CustomButton?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
@@ -13,4 +15,15 @@
         <CustomButton fx:id="settingsButton" text="Settings" onAction="#openSettings" styleClass="main-menu-button"/>
         <CustomButton fx:id="exitButton" text="Exit" onAction="#exitGame" styleClass="main-menu-button"/>
     </VBox>
+
+    <StackPane fx:id="exitDialog" visible="false" styleClass="dialog-overlay">
+        <VBox styleClass="dialog-content" alignment="CENTER" spacing="20">
+            <Label text="Exit Game?" styleClass="dialog-title"/>
+            <Label text="Any unsaved progress will be lost!" styleClass="dialog-message"/>
+            <HBox spacing="20" alignment="CENTER">
+                <CustomButton text="EXIT" onAction="#confirmExit" styleClass="dialog-button-confirm"/>
+                <CustomButton text="BACK" onAction="#cancelExit" styleClass="dialog-button-cancel"/>
+            </HBox>
+        </VBox>
+    </StackPane>
 </StackPane>

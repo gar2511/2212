@@ -13,6 +13,8 @@ import javafx.animation.Interpolator;
 public class CustomButton extends Button {
     private Timeline colorTimeline;
     private Timeline reverseColorTimeline;
+    private ScaleTransition pressTransition;
+    private ScaleTransition releaseTransition;
 
     public CustomButton() {
         this("");
@@ -21,7 +23,6 @@ public class CustomButton extends Button {
     public CustomButton(String text) {
         super(text);
         setupAnimation();
-        // set default style class
         getStyleClass().add("custom-button");
     }
 
@@ -54,14 +55,16 @@ public class CustomButton extends Button {
         
         exitAnimation.getChildren().addAll(scaleDownBig, scaleDownSmall);
 
-        // click animation
-        SequentialTransition clickAnimation = new SequentialTransition(this);
-        ScaleTransition scaleClick = new ScaleTransition(Duration.millis(100));
-        scaleClick.setToX(0.8);
-        scaleClick.setToY(0.8);
-        scaleClick.setInterpolator(Interpolator.EASE_OUT);
-        
-        clickAnimation.getChildren().add(scaleClick);
+        // press/release animations
+        pressTransition = new ScaleTransition(Duration.millis(100), this);
+        pressTransition.setToX(0.9);
+        pressTransition.setToY(0.9);
+        pressTransition.setInterpolator(Interpolator.EASE_OUT);
+
+        releaseTransition = new ScaleTransition(Duration.millis(100), this);
+        releaseTransition.setToX(1.05);
+        releaseTransition.setToY(1.05);
+        releaseTransition.setInterpolator(Interpolator.EASE_OUT);
 
         // color effect
         ColorAdjust colorAdjust = new ColorAdjust();
@@ -90,6 +93,7 @@ public class CustomButton extends Button {
             reverseColorTimeline.play();
         });
 
-        setOnMousePressed(e -> clickAnimation.play());
+        setOnMousePressed(e -> pressTransition.play());
+        setOnMouseReleased(e -> releaseTransition.play());
     }
 }

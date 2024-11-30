@@ -79,17 +79,28 @@ public class FileHandler {
 
     private static final String PREFS_FILE = "preferences.json";
 
-    public void savePreferences(UserPreferences prefs) throws IOException {
-        createSavesDirectory(); // Ensure directory exists
-        Path prefsPath = Paths.get(SAVES_DIR, PREFS_FILE);
-        objectMapper.writeValue(prefsPath.toFile(), prefs);
+    public void savePreferences(UserPreferences preferences) throws IOException {
+        File savesDir = new File("saves");
+        if (!savesDir.exists()) {
+            savesDir.mkdirs();
+        }
+        objectMapper.writeValue(new File("saves/preferences.json"), preferences);
     }
 
     public UserPreferences loadPreferences() throws IOException {
-        Path prefsPath = Paths.get(SAVES_DIR, PREFS_FILE);
-        if (Files.exists(prefsPath)) {
-            return objectMapper.readValue(prefsPath.toFile(), UserPreferences.class);
+        File preferencesFile = new File("saves/preferences.json");
+        if (!preferencesFile.exists()) {
+            // return default preferences if file doesn't exist
+            return new UserPreferences();
         }
-        return new UserPreferences(); // return default preferences if file doesn't exist
+
+        try {
+            return objectMapper.readValue(preferencesFile, UserPreferences.class);
+        } catch (IOException e) {
+            System.err.println("error loading preferences: " + e.getMessage());
+            // if file is corrupted, delete it and return default preferences
+            preferencesFile.delete();
+            return new UserPreferences();
+        }
     }
 }
