@@ -35,19 +35,20 @@
 .dialog-title {
     -fx-font-family: "Courier New", monospace;
     -fx-font-size: 24px;
-    -fx-text-fill: white;
+    -fx-text-fill: #F5E6D3;
     -fx-font-weight: bold;
 }
 
 .dialog-message {
     -fx-font-family: "Courier New", monospace;
     -fx-font-size: 16px;
-    -fx-text-fill: white;
+    -fx-text-fill: #F5E6D3;
+    -fx-opacity: 0.9;
 }
 
 .dialog-button-confirm, .dialog-button-cancel {
     -fx-min-width: 80px;
-    -fx-background-radius: 10;
+    -fx-background-radius: 5;
     -fx-padding: 8 16;
     -fx-font-family: "Courier New", monospace;
     -fx-font-size: 14px;
@@ -55,24 +56,23 @@
 }
 
 .dialog-button-confirm {
-    -fx-background-color: white;
+    -fx-background-color: #F5E6D3;
     -fx-text-fill: #38250e;
     -fx-font-weight: bold;
 }
 
 .dialog-button-cancel {
     -fx-background-color: transparent;
-    -fx-border-color: white;
+    -fx-border-color: #F5E6D3;
     -fx-border-width: 1;
-    -fx-text-fill: white;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
+    -fx-text-fill: #F5E6D3;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
     -fx-font-weight: bold;
 }
 
 .dialog-button-confirm:hover {
-    -fx-background-color: #F5E6D3;
-    -fx-text-fill: rgba(56, 37, 14, 0.5);
+    -fx-background-color: white;
 }
 
 .dialog-button-cancel:hover {
