@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import com.example.App;
+import com.example.components.CustomButton;
 import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.model.VitalStats;
@@ -13,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
 
@@ -31,6 +34,9 @@ public class GameController {
 
 
     public Label playTimeLabel;
+    public StackPane exitDialog;
+    public CustomButton backButton;
+    public CustomButton saveButton;
     @FXML
     private StatBar energyBar;
     @FXML
@@ -286,21 +292,59 @@ public class GameController {
     @FXML
     private void goBack() {
         PlayButtonSound();
+        exitDialog.setVisible(true);
+
+        // Disable interaction with background UI
+        disableBackground();
+
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
         stopStatsDecay();
-        stopTimeTracker(); // Stop tracking playtime
+        stopTimeTracker();
         pet.setCurrentPlayTime(0);
+
         if (animation != null) {
             animation.stop();
         }
         if (scoreKeeper != null) {
             scoreKeeper.stop();
         }
-        // Print debug message
+
         System.out.println("Game paused. Returning to main menu.");
-        SceneController.getInstance().switchToMainMenu();
     }
+
+    // Helper method to disable background interactions
+    private void disableBackground() {
+        // Disable all UI elements behind the dialog
+        feedButton.setDisable(true);
+        playButton.setDisable(true);
+        giftButton.setDisable(true);
+        exerciseButton.setDisable(true);
+        vetButton.setDisable(true);
+        inventoryButton.setDisable(true);
+        backButton.setDisable(true);
+        saveButton.setDisable(true);
+        playPauseButton.setDisable(true);
+    }
+
+    // Enable background after canceling the dialog
+    @FXML
+    private void cancelExit() {
+        PlayButtonSound();
+        exitDialog.setVisible(false);
+
+        // Re-enable all background UI elements
+        feedButton.setDisable(false);
+        playButton.setDisable(false);
+        giftButton.setDisable(false);
+        exerciseButton.setDisable(false);
+        vetButton.setDisable(false);
+        inventoryButton.setDisable(false);
+        backButton.setDisable(false);
+        saveButton.setDisable(false);
+        playPauseButton.setDisable(false);
+    }
+
     @FXML
     private void feedPet() {
         PlayButtonSound();
@@ -562,41 +606,55 @@ public class GameController {
         moleSprite.requestFocus(); // Request focus on the moleSprite node
 
         moleSprite.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case F: // Feed the pet
-                    feedPet();
-                    break;
-                case P: // Play with the pet
-                    playPet();
-                    break;
-                case G: // Give a gift
-                    giveGift();
-                    break;
-                case E: // Exercise the pet
-                    exercisePet();
-                    break;
-                case V: // Take the pet to the vet
-                    takeVet();
-                    break;
-                case I: // Open inventory
-                    openInventory();
-                    break;
-                case S: // Save the game
-                    saveGame();
-                    break;
-                case Q: // Go back to the main menu
-                    goBack();
-                    break;
-                case SPACE: // Pause/Resume game
-                    togglePlayPause();
-                    break;
-                default:
-                    System.out.println("Unhandled key: " + event.getCode());
+            if (exitDialog.isVisible()) {
+                // Handle dialog-specific hotkeys
+                switch (event.getCode()) {
+                    case ESCAPE:
+                        cancelExit(); // Close the dialog
+                        break;
+                    case ENTER:
+                        confirmExit(); // Confirm exit
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                // Handle other hotkeys when the dialog is not visible
+                switch (event.getCode()) {
+                    case F:
+                        feedPet();
+                        break;
+                    case P:
+                        playPet();
+                        break;
+                    case G:
+                        giveGift();
+                        break;
+                    case E:
+                        exercisePet();
+                        break;
+                    case V:
+                        takeVet();
+                        break;
+                    case I:
+                        openInventory();
+                        break;
+                    case S:
+                        saveGame();
+                        break;
+                    case Q:
+                        goBack();
+                        break;
+                    case SPACE:
+                        togglePlayPause();
+                        break;
+                    default:
+                        System.out.println("Unhandled key: " + event.getCode());
+                }
             }
         });
-
-
     }
+
 
     private void setPetStateImage() {
         GameState gameState = GameState.getCurrentState();
@@ -677,4 +735,21 @@ public class GameController {
             inventoryButton.setDisable(false);
         }
     }
+    /**
+     * Handles the confirmation of exit.
+     * Closes the application.
+     */
+    @FXML
+    private void confirmExit() {
+        PlayButtonSound();
+
+        App.getButtonSound().stop();
+        App.getSoundPlayer().stop();
+        App.getButtonSound().close();
+        App.getSoundPlayer().close();
+
+        Platform.exit();
+    }
+
+
 }
