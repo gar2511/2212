@@ -21,6 +21,8 @@ import javafx.scene.layout.VBox;
 import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 
+import static com.example.App.PlayButtonSound;
+
 public class LoginController {
 
     @FXML
@@ -145,6 +147,7 @@ public class LoginController {
 
     @FXML
     private void goBack() {
+        PlayButtonSound();
         System.out.println("Returning to the previous screen...");
         SceneController.getInstance().switchToSettings();
         // Logic to switch to the previous screen
@@ -152,6 +155,7 @@ public class LoginController {
 
     @FXML
     private void handlePinButton(ActionEvent event) {
+        PlayButtonSound();
         if (isShaking || currentPin.length() >= 6) return;
         
         CustomButton button = (CustomButton) event.getSource();
@@ -166,6 +170,7 @@ public class LoginController {
 
     @FXML
     private void handleBackspace() {
+        PlayButtonSound();
         if (isShaking || currentPin.length() == 0) return;
         
         currentPin.setLength(currentPin.length() - 1);

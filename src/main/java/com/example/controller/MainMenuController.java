@@ -12,6 +12,8 @@ import com.example.components.CustomButton;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
 
+import static com.example.App.PlayButtonSound;
+
 /**
  * Controller class for the main menu interface.
  * Manages scene transitions and user interactions on the main menu screen.
@@ -33,6 +35,7 @@ public class MainMenuController {
      */
     @FXML
     private void startGame() {
+        PlayButtonSound();
         SceneController.getInstance().switchToSaveMenu();
     }
 
@@ -42,6 +45,7 @@ public class MainMenuController {
      */
     @FXML
     private void openSettings() {
+        PlayButtonSound();
         SceneController.getInstance().switchToSettings();
     }
 
@@ -51,6 +55,7 @@ public class MainMenuController {
      */
     @FXML
     private void exitGame() {
+        PlayButtonSound();
         exitDialog.setVisible(true);
     }
 
@@ -60,6 +65,7 @@ public class MainMenuController {
      */
     @FXML
     private void confirmExit() {
+        PlayButtonSound();
         Platform.exit();
     }
 
@@ -69,6 +75,8 @@ public class MainMenuController {
      */
     @FXML
     private void cancelExit() {
+        PlayButtonSound();
         exitDialog.setVisible(false);
     }
+
 }

@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.Random;
 import com.example.model.ScoreKeeper;
 
+import static com.example.App.PlayButtonSound;
+
 /**
  * Controller class responsible for managing the game scene/view.
  * This class handles the mole animation, sprite rendering, and navigation
@@ -301,6 +303,7 @@ public class GameController {
     }
     @FXML
     private void feedPet() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -328,7 +331,8 @@ public class GameController {
 
     }
     @FXML
-    private void playPet(){
+    private void playPet() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -346,7 +350,8 @@ public class GameController {
         }
     }
     @FXML
-    private void giveGift(){
+    private void giveGift() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -370,7 +375,8 @@ public class GameController {
         }
     }
     @FXML
-    private void exercisePet(){
+    private void exercisePet() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -386,7 +392,8 @@ public class GameController {
         }
     }
     @FXML
-    private void takeVet(){
+    private void takeVet() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -404,8 +411,9 @@ public class GameController {
         }
     }
     @FXML
-    private void openInventory(){
+    private void openInventory() {
         PlayButtonSound();
+        System.out.println("Inventory has not been made yet");
         stopStatsDecay();
         stopTimeTracker(); // Stop tracking playtime
         if (animation != null) {
@@ -424,6 +432,7 @@ public class GameController {
     }
     @FXML
     private void saveGame() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
         pet.setScore(scoreKeeper.getScore());

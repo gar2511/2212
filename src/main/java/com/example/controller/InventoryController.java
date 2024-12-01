@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import static com.example.App.PlayButtonSound;
+
 public class InventoryController {
 
     public Label pointsLabel;
@@ -186,6 +188,7 @@ public class InventoryController {
 
     @FXML
     private void goBack() {
+        PlayButtonSound();
         // Navigate back to the game screen
         SceneController.getInstance().switchToGame();
     }
