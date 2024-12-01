@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.App;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -66,6 +67,12 @@ public class MainMenuController {
     @FXML
     private void confirmExit() {
         PlayButtonSound();
+
+        App.getButtonSound().stop();
+        App.getSoundPlayer().stop();
+        App.getButtonSound().close();
+        App.getSoundPlayer().close();
+
         Platform.exit();
     }
 

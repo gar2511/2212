@@ -39,6 +39,10 @@ public class SoundPlayer {
         clip.stop();
     }
 
+    public void close() {
+        clip.close();
+    }
+
     public void flush() {
         clip.flush();
     }
