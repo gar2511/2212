@@ -84,6 +84,24 @@ public class Inventory {
     public void decreaseItem4() {
         setItem4(getItem4() - 1);
     }
+    public void addItem1() {
+        setItem1(getItem1() + 1);
+    }
+
+    // Method to decrease Item 2 by 1
+    public void addItem2() {
+        setItem2(getItem2() + 1);
+    }
+
+    // Method to decrease Item 3 by 1
+    public void addItem3() {
+        setItem3(getItem3() + 1);
+    }
+
+    // Method to decrease Item 4 by 1
+    public void addItem4() {
+        setItem4(getItem4() + 1);
+    }
 
     // Helper method to ensure item quantities stay within a valid range
     private int clampValue(int value) {
