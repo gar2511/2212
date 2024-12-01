@@ -135,15 +135,24 @@ public class GameController {
      * Updates the playtime label and handles logic for time spent and time limits.
      * If the time limit is reached, the game is saved and the user is sent back to the main menu.
      */
+    /**
+     * Starts the timeline to track the playtime of the game session.
+     * Updates the playtime label and handles logic for time spent and time limits.
+     * If the time limit is reached, the game is saved and the user is sent back to the main menu.
+     */
     private void startTimeTracker() {
+        // Check if the time tracker timeline is already running
         // Check if the time tracker timeline is already running
         if (timeTracker != null) {
             System.out.println("Time tracker is already running.");
             return; // If it is running, exit the method
+            return; // If it is running, exit the method
         }
 
         // Create a new timeline with a keyframe that triggers every 50 milliseconds
+        // Create a new timeline with a keyframe that triggers every 50 milliseconds
         timeTracker = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            // Get the current game state and pet instance
             // Get the current game state and pet instance
             GameState gameState = GameState.getCurrentState();
             Pet pet = gameState.getPet();
@@ -151,15 +160,26 @@ public class GameController {
             if (pet != null) {
                 // Increment playtime by 50 milliseconds
                 pet.setCurrentPlayTime(pet.getCurrentPlayTime()+50);
+                // Increment playtime by 50 milliseconds
+                pet.setCurrentPlayTime(pet.getCurrentPlayTime()+50);
 
+                // Convert the playtime to seconds for display purposes
+                long secondsElapsed = pet.getCurrentPlayTime() / 1000;
                 // Convert the playtime to seconds for display purposes
                 long secondsElapsed = pet.getCurrentPlayTime() / 1000;
 
                 // Update the playtime label on the UI thread
+                // Update the playtime label on the UI thread
                 Platform.runLater(() -> {
+                    playTimeLabel.setText("Current Session's Play Time: " + formatPlayTime(secondsElapsed));
                     playTimeLabel.setText("Current Session's Play Time: " + formatPlayTime(secondsElapsed));
                 });
 
+                // Add 1 second to the pet's total time spent every 1000 milliseconds
+                if (pet.getCurrentPlayTime() % 1000 == 0) {
+                    pet.addTimeSpent(1); // Increment the total playtime by 1 second
+
+                    // Log the current playtime to the console
                 // Add 1 second to the pet's total time spent every 1000 milliseconds
                 if (pet.getCurrentPlayTime() % 1000 == 0) {
                     pet.addTimeSpent(1); // Increment the total playtime by 1 second
@@ -171,9 +191,13 @@ public class GameController {
                 }
 
                 // Check if the pet's time limit is set and if the playtime exceeds it
+                // Check if the pet's time limit is set and if the playtime exceeds it
                 if (pet.getTimeLimit() > 0 && secondsElapsed >= pet.getTimeLimit()) {
                     // Log the time limit reached and save the game
+                    // Log the time limit reached and save the game
                     System.out.println("Time limit reached! Saving and exiting.");
+                    stopTimeTracker(); // Stop the time tracker timeline
+                    saveGame(); // Save the game state
                     stopTimeTracker(); // Stop the time tracker timeline
                     saveGame(); // Save the game state
                     goBack(); // Exit to the main menu
@@ -182,7 +206,9 @@ public class GameController {
         }));
 
         // Set the timeline to run indefinitely
+        // Set the timeline to run indefinitely
         timeTracker.setCycleCount(Timeline.INDEFINITE);
+        // Start the timeline
         // Start the timeline
         timeTracker.play();
     }
@@ -419,9 +445,18 @@ public class GameController {
         System.out.println("Inventory has not been made yet");
         stopStatsDecay();
         stopTimeTracker(); // Stop tracking playtime
+        stopTimeTracker(); // Stop tracking playtime
         if (animation != null) {
             animation.stop();
         }
+        // Save the current score to the Pet instance
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+        if (pet != null) {
+            pet.setScore(scoreKeeper.getScore()); // Save the score
+            pet.addTimeSpent(pet.getCurrentPlayTime() / 1000); // Save the playtime in seconds
+            System.out.println("Paused and Saved Score: " + pet.getScore());
+            System.out.println("Paused and Saved Time: " + pet.getCurrentPlayTime() / 1000 + " seconds");
         // Save the current score to the Pet instance
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
