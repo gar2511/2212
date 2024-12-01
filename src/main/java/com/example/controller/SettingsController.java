@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import com.example.model.UserPreferences;
 import com.example.util.FileHandler;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 /**
  * Controller class for managing game settings and preferences.
@@ -62,9 +63,6 @@ public class SettingsController {
         // Wrap all UI operations in Platform.runLater to ensure FXML elements are initialized
         Platform.runLater(() -> {
             updateParentalControlsUI(userPrefs.isParentControlsEnabled());
-
-            // Set initial value for volume
-            handleVolumeChange((int)userPrefs.getVolume());
 
             // Set initial values from preferences
             if (volumeSlider != null && volumeLabel != null) {
