@@ -12,11 +12,30 @@ import java.util.Objects;
 // Main application class that initializes and launches the JavaFX application
 public class App extends Application {
 
-    private static SoundPlayer music;
+    private static SoundPlayer music, buttonSound;
 
     // Allow the program to access the global instance of sound player
     public static SoundPlayer getSoundPlayer() {
         return music;
+    }
+
+    // Allow the program to access the global instance of button sound effect player
+    public static SoundPlayer getButtonSound() {
+        return buttonSound;
+    }
+
+    public static void PlayButtonSound() {
+        buttonSound.flush();
+        buttonSound.setZeroPosition();
+        buttonSound.play();
+    }
+
+    // Helper Function
+    private void initializeButtonSound() {
+        // Play and initialize background music
+        buttonSound = new SoundPlayer();
+        buttonSound.setFile(1);   // set to file 0 in the array, background music
+        buttonSound.setVolume(0.2f);
     }
 
     // Helper Function
@@ -50,6 +69,7 @@ public class App extends Application {
             stage.show();                   // Display the window
 
             initializeSound();
+            initializeButtonSound();
 
         } catch (IOException e) {
             // Log any errors that occur during startup

@@ -9,6 +9,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import static com.example.App.PlayButtonSound;
+
 public class InventoryController {
 
     @FXML
@@ -86,6 +88,7 @@ public class InventoryController {
 
     @FXML
     private void goBack() {
+        PlayButtonSound();
         // Navigate back to the game screen
         SceneController.getInstance().switchToGame();
     }
