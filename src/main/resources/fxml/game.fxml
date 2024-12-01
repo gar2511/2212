@@ -68,7 +68,7 @@
             <Label text="Exit Game?" styleClass="dialog-title"/>
             <Label text="Any unsaved progress will be lost!" styleClass="dialog-message"/>
             <HBox spacing="20" alignment="CENTER">
-                <CustomButton text="EXIT" onAction="#confirmExit" styleClass="dialog-button-confirm"/>
+                <CustomButton text="EXIT" onAction="#confirmBackToMain" styleClass="dialog-button-confirm"/>
                 <CustomButton text="BACK" onAction="#cancelExit" styleClass="dialog-button-cancel"/>
             </HBox>
         </VBox>
