@@ -7,7 +7,7 @@
     -fx-font-family: "Courier New", monospace;
     -fx-font-weight: 900;
     -fx-text-fill: white;
-    -fx-padding: 0 0 20 0;
+    -fx-padding: 0 0 0 0;
 }
 
 .login-container-background {
@@ -15,11 +15,11 @@
     -fx-background-radius: 25;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
     -fx-max-width: 400;
-    -fx-min-height: 300;
+    -fx-min-height: 470;
 }
 
 .login-container {
-    -fx-padding: 20 30 20 30;
+    -fx-padding: 30;
     -fx-spacing: 20;
 }
 
@@ -63,52 +63,18 @@
     -fx-opacity: 1;
 }
 
-.login-button {
-    -fx-background-color: rgba(245, 230, 211, 0.5);
-    -fx-background-radius: 10;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-font-family: "Courier New", monospace;
-    -fx-font-weight: bold;
-    -fx-padding: 5 10;
-    -fx-min-width: 70;
-}
-
-.login-button:hover {
-    -fx-cursor: hand;
-    -fx-background-color: rgba(245, 230, 211, 0.7);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
-}
-
 .back-button {
     -fx-background-color: transparent;
     -fx-text-fill: white;
     -fx-font-family: "Courier New", monospace;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-padding: 5 10;
-    -fx-min-width: 70;
 }
 
 .back-button:hover {
     -fx-cursor: hand;
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 10;
-}
-
-.login-button:disabled {
-    -fx-background-color: rgba(245, 230, 211, 0.25);
-    -fx-opacity: 0.3;
-    -fx-cursor: default;
-    -fx-effect: none;
-    -fx-text-fill: rgba(255, 255, 255, 0.5);
-}
-
-.login-button:disabled:hover {
-    -fx-background-color: rgba(245, 230, 211, 0.25);
-    -fx-cursor: default;
-    -fx-effect: none;
-    -fx-text-fill: rgba(255, 255, 255, 0.5);
 }
 
 .error-icon {
@@ -124,4 +90,65 @@
     -fx-fill: white;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
+}
+
+.pin-dot {
+    -fx-fill: rgba(255, 255, 255, 0.3);
+    -fx-radius: 6;
+    -fx-stroke: white;
+    -fx-stroke-width: 1;
+}
+
+.pin-dot.filled {
+    -fx-fill: white;
+    -fx-radius: 8;
+    -fx-stroke: white;
+    -fx-stroke-width: 0;
+}
+
+.pin-dot.error {
+    -fx-fill: rgba(231, 76, 60, 1);
+    -fx-stroke: rgba(231, 76, 60, 1);
+    -fx-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(231, 76, 60, 0.4), 10, 0, 0, 0);
+}
+
+.pin-button {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 50;
+    -fx-min-width: 75;
+    -fx-min-height: 75;
+    -fx-font-size: 24;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
+}
+
+.pin-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-cursor: hand;
+}
+
+.pin-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.35);
+}
+
+.pin-button-special {
+    -fx-font-size: 30;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+}
+
+.pin-button-special:hover {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+}
+
+.pin-dots-container {
+    -fx-padding: 10;
+}
+
+.pin-dots-container:disabled {
+    -fx-opacity: 0.7;
 }

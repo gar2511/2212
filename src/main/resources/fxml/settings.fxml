@@ -32,27 +32,27 @@
                 <Separator styleClass="settings-separator"/>
                 
                 <!-- Parental Controls -->
-                <VBox spacing="10" alignment="CENTER">
+                <VBox alignment="CENTER" spacing="10">
                     <Label text="Parental Controls" styleClass="settings-section-label"/>
-                    <VBox spacing="5" alignment="CENTER">
-                        <Label fx:id="parentalStatusLabel" text="Disabled" styleClass="parental-status-label"/>
+                    <Label fx:id="parentalStatusLabel" styleClass="parental-status-label"/>
+                    <StackPane>
                         <CustomButton fx:id="parentalControlsButton" 
-                                     text="Enable Parental Controls"
-                                     onAction="#handleParentalControls"
+                                     text="CREATE PROFILE" 
+                                     onAction="#goParent" 
                                      styleClass="secondary-button"/>
-                        <CustomButton text="Configure Parental Controls" 
-                                     onAction="#goParent"
-                                     styleClass="secondary-button"
-                                     fx:id="configureButton"/>
-                    </VBox>
+                        <CustomButton fx:id="configureButton" 
+                                     text="CONFIGURE" 
+                                     onAction="#goParent" 
+                                     styleClass="secondary-button"/>
+                    </StackPane>
                 </VBox>
                 
                 <Separator styleClass="settings-separator"/>
                 
                 <!-- Version Info -->
                 <VBox spacing="5" styleClass="version-info">
-                    <Label text="Version 2.0" styleClass="version-label"/>
-                    <Label text="© 2024 Team 17" styleClass="copyright-label"/>
+                    <Label text="NEOPETS Version 2.0" styleClass="version-label"/>
+                    <Label text="© 2024 Team17" styleClass="copyright-label"/>
                 </VBox>
             </VBox>
         </StackPane>
