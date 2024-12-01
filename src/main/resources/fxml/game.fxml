@@ -54,6 +54,7 @@
     <HBox spacing="20" alignment="CENTER">
         <Button fx:id="backButton" text="Back" onAction="#goBack" styleClass="back-button" />
         <Button fx:id="saveButton" text="Save Game" onAction="#saveGame" styleClass="save-button" />
+        <Button fx:id="playPauseButton" text="Pause" onAction="#togglePlayPause" styleClass="play-pause-button" />
     </HBox>
 
     <!-- Game Info -->
