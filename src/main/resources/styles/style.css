@@ -1,0 +1,153 @@
+/* Root container */
+.inventory-root {
+    -fx-alignment: center;
+    -fx-spacing: 20;
+    -fx-padding: 20;
+    -fx-background-color: #38250e; /* Use the same background as the main menu */
+}
+
+/* Title styling */
+.inventory-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white; /* White text for title */
+    -fx-padding: 10 0;
+    -fx-font-family: "Courier New", monospace;
+}
+/* Background for the inventory screen */
+.inventory-background {
+    -fx-background-color: #38250e; /* Use the main menu's warm brown color */
+    -fx-padding: 20;
+    -fx-spacing: 15;
+    -fx-alignment: center;
+    -fx-border-color: #F5E6D3; /* Light cream border for contrast */
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0, 0, 4); /* Subtle shadow effect */
+}
+
+/* Inventory grid */
+.inventory-grid {
+    -fx-hgap: 30;
+    -fx-vgap: 30;
+    -fx-alignment: center;
+}
+
+/* Inventory item container */
+.inventory-item {
+    -fx-alignment: center;
+    -fx-spacing: 10;
+    -fx-background-color: rgba(56, 37, 14, 0.2); /* Slightly transparent brown */
+    -fx-border-color: white;
+    -fx-border-radius: 10px;
+    -fx-padding: 10;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0, 0, 4); /* Subtle shadow effect */
+}
+
+/* Item image */
+.item-image {
+    -fx-fit-width: 120px;
+    -fx-fit-height: 120px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+}
+
+/* Item title */
+.item-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white; /* White text for item titles */
+    -fx-font-family: "Courier New", monospace;
+}
+
+/* Item quantity */
+.item-quantity {
+    -fx-font-size: 14px;
+    -fx-text-fill: #F5E6D3; /* Light cream text for quantity */
+    -fx-font-family: "Courier New", monospace;
+}
+
+/* Selection section */
+.selection-section {
+    -fx-spacing: 15;
+    -fx-alignment: center;
+}
+
+/* Selection title */
+.selection-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+}
+
+/* Selection buttons */
+.selection-buttons {
+    -fx-spacing: 40;
+}
+
+/* Selection group */
+.selection-group {
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}
+
+/* Selection group title */
+.selection-group-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+}
+
+/* Buttons for toggling selected items */
+.toggle-button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white; /* White text */
+    -fx-background-color: transparent; /* Transparent by default */
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-cursor: hand;
+}
+
+.toggle-button:hover {
+    -fx-background-color: rgba(245, 230, 211, 0.2); /* Light hover effect */
+}
+
+.toggle-button:selected {
+    -fx-background-color: #28a745; /* Green for selected state */
+    -fx-text-fill: white;
+    -fx-border-color: #28a745;
+}
+
+/* To visually show the toggle button state */
+.toggle-button:pressed {
+    -fx-background-color: #0069d9; /* Darker blue when pressed */
+}
+
+/* Go Back Button */
+.go-back-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #38250e; /* Brown text */
+    -fx-background-color: #F5E6D3; /* Light cream background */
+    -fx-padding: 10 20;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.go-back-button:hover {
+    -fx-background-color: rgba(245, 230, 211, 0.8); /* Slightly darker cream hover */
+}
+
+.selected-item-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-font-family: "Courier New", monospace;
+}
