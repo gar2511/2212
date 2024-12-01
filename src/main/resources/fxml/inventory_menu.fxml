@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import com.example.components.CustomButton?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
@@ -9,14 +10,15 @@
       xmlns:fx="http://javafx.com/fxml"
       alignment="TOP_CENTER"
       spacing="20"
-      style="-fx-padding: 20;"
-      fx:controller="com.example.controller.InventoryController">
+      styleClass="inventory-background"
+      fx:controller="com.example.controller.InventoryController"
+      stylesheets="@../styles/style.css">
 
     <!-- Title -->
-    <Label text="Inventory" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+    <Label text="Inventory" styleClass="inventory-title" />
 
     <!-- Inventory Grid -->
-    <GridPane hgap="50" vgap="20" alignment="CENTER" style="-fx-padding: 20;">
+    <GridPane hgap="30" vgap="30" alignment="CENTER" styleClass="inventory-grid">
         <!-- Define column constraints for even spacing -->
         <columnConstraints>
             <ColumnConstraints percentWidth="25" />
@@ -26,50 +28,58 @@
         </columnConstraints>
 
         <!-- Item 1 -->
-        <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="0">
-            <ImageView fx:id="item1Image" fitWidth="100" fitHeight="100" preserveRatio="true"
-                       style="-fx-border-color: black; -fx-border-width: 2;" />
-            <Label text="Item 1" style="-fx-font-size: 14px;" />
-            <Label fx:id="item1Quantity" text="x1" style="-fx-font-size: 14px;" />
+        <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="0" styleClass="inventory-item">
+            <ImageView fx:id="item1Image" fitWidth="120" fitHeight="120" preserveRatio="true"
+                       styleClass="item-image" />
+            <Label text="Item 1" styleClass="item-title" />
+            <Label fx:id="item1Quantity" text="99" styleClass="item-quantity" />
         </VBox>
         <!-- Item 2 -->
-        <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="1">
-            <ImageView fx:id="item2Image" fitWidth="100" fitHeight="100" preserveRatio="true"
-                       style="-fx-border-color: black; -fx-border-width: 2;" />
-            <Label text="Item 2" style="-fx-font-size: 14px;" />
-            <Label fx:id="item2Quantity" text="x1" style="-fx-font-size: 14px;" />
+        <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="1" styleClass="inventory-item">
+            <ImageView fx:id="item2Image" fitWidth="120" fitHeight="120" preserveRatio="true"
+                       styleClass="item-image" />
+            <Label text="Item 2" styleClass="item-title" />
+            <Label fx:id="item2Quantity" text="99" styleClass="item-quantity" />
         </VBox>
         <!-- Item 3 -->
-        <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="2">
-            <ImageView fx:id="item3Image" fitWidth="100" fitHeight="100" preserveRatio="true"
-                       style="-fx-border-color: black; -fx-border-width: 2;" />
-            <Label text="Item 3" style="-fx-font-size: 14px;" />
-            <Label fx:id="item3Quantity" text="x1" style="-fx-font-size: 14px;" />
+        <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="2" styleClass="inventory-item">
+            <ImageView fx:id="item3Image" fitWidth="120" fitHeight="120" preserveRatio="true"
+                       styleClass="item-image" />
+            <Label text="Item 3" styleClass="item-title" />
+            <Label fx:id="item3Quantity" text="99" styleClass="item-quantity" />
         </VBox>
         <!-- Item 4 -->
-        <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="3">
-            <ImageView fx:id="item4Image" fitWidth="100" fitHeight="100" preserveRatio="true"
-                       style="-fx-border-color: black; -fx-border-width: 2;" />
-            <Label text="Item 4" style="-fx-font-size: 14px;" />
-            <Label fx:id="item4Quantity" text="x1" style="-fx-font-size: 14px;" />
+        <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="3" styleClass="inventory-item">
+            <ImageView fx:id="item4Image" fitWidth="120" fitHeight="120" preserveRatio="true"
+                       styleClass="item-image" />
+            <Label text="Item 4" styleClass="item-title" />
+            <Label fx:id="item4Quantity" text="99" styleClass="item-quantity" />
         </VBox>
     </GridPane>
 
     <!-- Default Selection Section -->
-    <VBox spacing="10" alignment="CENTER">
-        <Label text="Select Default for Items 1 and 2" style="-fx-font-size: 16px;" />
-        <HBox spacing="20" alignment="CENTER">
-            <RadioButton fx:id="radioItem1" text="Item 1" toggleGroup="$item12ToggleGroup" style="-fx-font-size: 14px;" />
-            <RadioButton fx:id="radioItem2" text="Item 2" toggleGroup="$item12ToggleGroup" style="-fx-font-size: 14px;" />
-        </HBox>
+    <HBox spacing="50" alignment="CENTER" styleClass="selection-section">
+        <!-- Group 1 & 2 -->
+        <VBox spacing="10" alignment="CENTER">
+            <Label text="Item Group 1 &amp; 2" styleClass="selection-group-title" />
+            <HBox spacing="20" alignment="CENTER">
+                <Button fx:id="defaultItem1" text="Item 1" styleClass="toggle-button" onAction="#selectDefaultItem1" />
+                <Button fx:id="defaultItem2" text="Item 2" styleClass="toggle-button" onAction="#selectDefaultItem2" />
+            </HBox>
+            <Label fx:id="selectedItem12Label" text="Currently Selected: None" styleClass="selected-item-label" />
+        </VBox>
 
-        <Label text="Select Default for Items 3 and 4" style="-fx-font-size: 16px;" />
-        <HBox spacing="20" alignment="CENTER">
-            <RadioButton fx:id="radioItem3" text="Item 3" toggleGroup="$item34ToggleGroup" style="-fx-font-size: 14px;" />
-            <RadioButton fx:id="radioItem4" text="Item 4" toggleGroup="$item34ToggleGroup" style="-fx-font-size: 14px;" />
-        </HBox>
-    </VBox>
+        <!-- Group 3 & 4 -->
+        <VBox spacing="10" alignment="CENTER">
+            <Label text="Item Group 3 &amp; 4" styleClass="selection-group-title" />
+            <HBox spacing="20" alignment="CENTER">
+                <Button fx:id="defaultItem3" text="Item 3" styleClass="toggle-button" onAction="#selectDefaultItem3" />
+                <Button fx:id="defaultItem4" text="Item 4" styleClass="toggle-button" onAction="#selectDefaultItem4" />
+            </HBox>
+            <Label fx:id="selectedItem34Label" text="Currently Selected: None" styleClass="selected-item-label" />
+        </VBox>
+    </HBox>
 
     <!-- Go Back Button -->
-    <Button fx:id="goBackButton" text="Go Back" style="-fx-font-size: 14px;" onAction="#goBack" />
+    <CustomButton fx:id="goBackButton" text="Go Back" styleClass="go-back-button" onAction="#goBack" />
 </VBox>

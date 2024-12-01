@@ -29,6 +29,7 @@ import com.example.model.ScoreKeeper;
 public class GameController {
 
 
+    public Label playTimeLabel;
     @FXML
     private StatBar energyBar;
     @FXML
@@ -124,6 +125,11 @@ public class GameController {
         startTimeTracker();
     }
     private void startTimeTracker() {
+        if (timeTracker != null) {
+            System.out.println("Time tracker is already running.");
+            return;
+        }
+
         timeTracker = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             GameState gameState = GameState.getCurrentState();
             Pet pet = gameState.getPet();
@@ -134,6 +140,11 @@ public class GameController {
 
                 // Convert playtime to seconds
                 long secondsElapsed = currentPlayTime / 1000;
+
+                // Update the play time label dynamically
+                Platform.runLater(() -> {
+                    playTimeLabel.setText("Play Time: " + formatPlayTime(secondsElapsed));
+                });
 
                 // Only add to timeSpent and log every full second
                 if (currentPlayTime % 1000 == 0) {
@@ -152,17 +163,9 @@ public class GameController {
                 }
             }
         }));
+
         timeTracker.setCycleCount(Timeline.INDEFINITE);
         timeTracker.play();
-    }
-
-    /**
-     * Stops the time tracker.
-     */
-    private void stopTimeTracker() {
-        if (timeTracker != null) {
-            timeTracker.stop();
-        }
     }
 
     /**
@@ -259,6 +262,16 @@ public class GameController {
             statsDecayTimeline.stop();
         }
     }
+    /**
+     * Stops the time tracker.
+     */
+    private void stopTimeTracker() {
+        if (timeTracker != null) {
+            timeTracker.stop();
+            timeTracker = null;
+            System.out.println("Time tracker stopped.");
+        }
+    }
 
     /**
      * Event handler for the back button.
@@ -274,6 +287,8 @@ public class GameController {
         if (scoreKeeper != null) {
             scoreKeeper.stop(); // Stop the scorekeeper
         }
+        // Print debug message
+        System.out.println("Game paused. Returning to main menu.");
         SceneController.getInstance().switchToMainMenu();
     }
     @FXML
