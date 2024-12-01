@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import com.example.App;
+import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 //import javafx.scene.control.Slider;
@@ -48,7 +50,7 @@ public class SettingsController {
     @FXML
     public void initialize() {
         fileHandler = new FileHandler();
-        
+
         // Load preferences
         try {
             userPrefs = fileHandler.loadPreferences();
@@ -60,13 +62,16 @@ public class SettingsController {
         // Wrap all UI operations in Platform.runLater to ensure FXML elements are initialized
         Platform.runLater(() -> {
             updateParentalControlsUI(userPrefs.isParentControlsEnabled());
-            
+
+            // Set initial value for volume
+            handleVolumeChange((int)userPrefs.getVolume());
+
             // Set initial values from preferences
             if (volumeSlider != null && volumeLabel != null) {
                 volumeSlider.setValue(userPrefs.getVolume());
                 volumeLabel.setText((int)userPrefs.getVolume() + "%");
             }
-            
+
             if (parentalControlsToggle != null && parentalStatusLabel != null) {
                 parentalControlsToggle.setSelected(userPrefs.isParentControlsEnabled());
                 parentalStatusLabel.setText(userPrefs.isParentControlsEnabled() ? "Enabled" : "Disabled");
@@ -151,10 +156,6 @@ public class SettingsController {
      */
     private void handleParentalControlsToggle(boolean enabled) {
         if (parentalControlsToggle != null) {
-            // only update the enabled state, preserve the password
-            userPrefs.setParentControlsEnabled(enabled);
-            updateParentalControlsUI(enabled);
-            savePreferences();
             System.out.println("Parental controls " + (enabled ? "enabled" : "disabled"));
         }
     }
@@ -165,6 +166,8 @@ public class SettingsController {
      * @param volume The new volume level as an integer between the slider's minimum and maximum.
      */
     private void handleVolumeChange(int volume) {
+        float value = (float) volume / 100f;
+        App.getSoundPlayer().setVolume(value);
         System.out.println("Volume changed to: " + volume);
     }
 
@@ -177,7 +180,7 @@ public class SettingsController {
     }
 
     @FXML
-    private void goParent(){SceneController.getInstance().switchToLoginParent();}
+    private void goParent(){ SceneController.getInstance().switchToLoginParent(); }
 
     private void savePreferences() {
         try {
@@ -188,29 +191,9 @@ public class SettingsController {
     }
 
     private void updateParentalControlsUI(boolean enabled) {
-        if (enabled) {
-            parentalStatusLabel.setText("Enabled");
-            parentalControlsButton.setVisible(false);
-            parentalControlsButton.setManaged(false);
-            configureButton.setVisible(true);
-            configureButton.setManaged(true);
-        } else {
-            if (userPrefs.getParentPassword().isEmpty()) {
-                // No profile exists
-                parentalStatusLabel.setText("No active profile");
-                parentalControlsButton.setVisible(true);
-                parentalControlsButton.setManaged(true);
-                configureButton.setVisible(false);
-                configureButton.setManaged(false);
-            } else {
-                // Profile exists but disabled
-                parentalStatusLabel.setText("Disabled");
-                parentalControlsButton.setVisible(false);
-                parentalControlsButton.setManaged(false);
-                configureButton.setVisible(true);
-                configureButton.setManaged(true);
-            }
-        }
+        parentalStatusLabel.setText(enabled ? "Enabled" : "Disabled");
+        parentalControlsButton.setVisible(!enabled);
+        configureButton.setVisible(enabled);
     }
 
     @FXML
