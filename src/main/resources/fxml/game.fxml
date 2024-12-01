@@ -68,7 +68,7 @@
             <Label text="Return to Main Menu?" styleClass="dialog-title"/>
             <Label text="Any unsaved progress will be lost!" styleClass="dialog-message"/>
             <HBox spacing="20" alignment="CENTER">
-                <CustomButton text="RETURN" onAction="#confirmExit" styleClass="dialog-button-confirm"/>
+                <CustomButton text="RETURN" onAction="#confirmBackToMain" styleClass="dialog-button-confirm"/>
                 <CustomButton text="BACK" onAction="#cancelExit" styleClass="dialog-button-cancel"/>
             </HBox>
         </VBox>
