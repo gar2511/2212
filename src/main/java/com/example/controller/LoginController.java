@@ -73,10 +73,6 @@ public class LoginController {
             userPrefs = new UserPreferences();
         }
 
-        // Initialize button as disabled
-        loginButton.setDisable(true);
-        loginButton.setOpacity(0.5);
-
         // setup fade timeline
         fadeTimeline = new Timeline();
         fadeTimeline.setAutoReverse(false);
@@ -87,9 +83,6 @@ public class LoginController {
         if (isCreationMode) {
             confirmPasswordField.textProperty().addListener((obs, oldVal, newVal) -> validateInputs());
         }
-
-        // Initial validation
-        validateInputs();
     }
 
     private void updateUIForMode() {
@@ -115,7 +108,7 @@ public class LoginController {
         fadeTimeline.getKeyFrames().clear();
         KeyFrame keyFrame = new KeyFrame(
             Duration.millis(300),
-            new KeyValue(loginButton.opacityProperty(), isValid ? 1.0 : 0.5, Interpolator.EASE_BOTH)
+            new KeyValue(loginButton.opacityProperty(), isValid ? 1.0 : 0.7)
         );
         
         fadeTimeline.getKeyFrames().add(keyFrame);

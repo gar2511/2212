@@ -64,8 +64,8 @@
 }
 
 .login-button {
-    -fx-background-color: rgba(245, 230, 211, 0.5);
-    -fx-background-radius: 10;
+    -fx-background-color: #2a8df7;
+    -fx-background-radius: 15;
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-family: "Courier New", monospace;
@@ -76,7 +76,7 @@
 
 .login-button:hover {
     -fx-cursor: hand;
-    -fx-background-color: rgba(245, 230, 211, 0.7);
+    -fx-background-color: #1a7de7;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 2);
 }
 
@@ -93,22 +93,20 @@
 .back-button:hover {
     -fx-cursor: hand;
     -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 10;
+    -fx-background-radius: 15;
 }
 
 .login-button:disabled {
-    -fx-background-color: rgba(245, 230, 211, 0.25);
-    -fx-opacity: 0.3;
+    -fx-background-color: #cccccc;
+    -fx-opacity: 0.7;
     -fx-cursor: default;
     -fx-effect: none;
-    -fx-text-fill: rgba(255, 255, 255, 0.5);
 }
 
 .login-button:disabled:hover {
-    -fx-background-color: rgba(245, 230, 211, 0.25);
+    -fx-background-color: #cccccc;
     -fx-cursor: default;
     -fx-effect: none;
-    -fx-text-fill: rgba(255, 255, 255, 0.5);
 }
 
 .error-icon {
