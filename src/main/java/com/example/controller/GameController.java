@@ -283,6 +283,7 @@ public class GameController {
      */
     @FXML
     private void goBack() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
         stopStatsDecay();
@@ -404,7 +405,7 @@ public class GameController {
     }
     @FXML
     private void openInventory(){
-
+        PlayButtonSound();
         stopStatsDecay();
         stopTimeTracker(); // Stop tracking playtime
         if (animation != null) {
