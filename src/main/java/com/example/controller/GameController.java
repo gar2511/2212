@@ -746,5 +746,26 @@ public class GameController {
         SceneController.getInstance().switchToMainMenu();
     }
 
+    @FXML
+    private void confirmBackToMain() {
+        PlayButtonSound();
+        stopStatsDecay();
+        stopTimeTracker();
+        
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+        if (pet != null) {
+            pet.setCurrentPlayTime(0);
+        }
+        
+        if (animation != null) {
+            animation.stop();
+        }
+        if (scoreKeeper != null) {
+            scoreKeeper.stop();
+        }
+        
+        SceneController.getInstance().switchToMainMenu();
+    }
 
 }
