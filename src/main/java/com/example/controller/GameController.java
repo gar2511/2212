@@ -133,13 +133,7 @@ public class GameController {
      * Updates the playtime label and handles logic for time spent and time limits.
      * If the time limit is reached, the game is saved and the user is sent back to the main menu.
      */
-    /**
-     * Starts the timeline to track the playtime of the game session.
-     * Updates the playtime label and handles logic for time spent and time limits.
-     * If the time limit is reached, the game is saved and the user is sent back to the main menu.
-     */
     private void startTimeTracker() {
-        // Check if the time tracker timeline is already running
         // Check if the time tracker timeline is already running
         if (timeTracker != null) {
             System.out.println("Time tracker is already running.");
@@ -147,9 +141,7 @@ public class GameController {
         }
 
         // Create a new timeline with a keyframe that triggers every 50 milliseconds
-        // Create a new timeline with a keyframe that triggers every 50 milliseconds
         timeTracker = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            // Get the current game state and pet instance
             // Get the current game state and pet instance
             GameState gameState = GameState.getCurrentState();
             Pet pet = gameState.getPet();
@@ -171,21 +163,15 @@ public class GameController {
                     pet.addTimeSpent(1); // Increment the total playtime by 1 second
 
                     // Log the current playtime to the console
-
-                    // Log the current playtime to the console
                     Platform.runLater(() -> {
                         System.out.println("Current Playtime: " + formatPlayTime(secondsElapsed));
                     });
                 }
 
                 // Check if the pet's time limit is set and if the playtime exceeds it
-                // Check if the pet's time limit is set and if the playtime exceeds it
                 if (pet.getTimeLimit() > 0 && secondsElapsed >= pet.getTimeLimit()) {
                     // Log the time limit reached and save the game
-                    // Log the time limit reached and save the game
                     System.out.println("Time limit reached! Saving and exiting.");
-                    stopTimeTracker(); // Stop the time tracker timeline
-                    saveGame(); // Save the game state
                     stopTimeTracker(); // Stop the time tracker timeline
                     saveGame(); // Save the game state
                     goBack(); // Exit to the main menu
@@ -194,9 +180,7 @@ public class GameController {
         }));
 
         // Set the timeline to run indefinitely
-        // Set the timeline to run indefinitely
         timeTracker.setCycleCount(Timeline.INDEFINITE);
-        // Start the timeline
         // Start the timeline
         timeTracker.play();
     }
@@ -305,7 +289,7 @@ public class GameController {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
         stopStatsDecay();
-        stopTimeTracker();
+        stopTimeTracker(); // Stop tracking playtime
         pet.setCurrentPlayTime(0);
         if (animation != null) {
             animation.stop();
@@ -313,6 +297,7 @@ public class GameController {
         if (scoreKeeper != null) {
             scoreKeeper.stop();
         }
+        // Print debug message
         System.out.println("Game paused. Returning to main menu.");
         SceneController.getInstance().switchToMainMenu();
     }
@@ -426,19 +411,19 @@ public class GameController {
         }
     }
     @FXML
-    private void openInventory() {
+    private void openInventory(){
         PlayButtonSound();
-        System.out.println("Inventory has not been made yet");
         stopStatsDecay();
-        stopTimeTracker();
+        stopTimeTracker(); // Stop tracking playtime
         if (animation != null) {
             animation.stop();
         }
+        // Save the current score to the Pet instance
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
         if (pet != null) {
-            pet.setScore(scoreKeeper.getScore());
-            pet.addTimeSpent(pet.getCurrentPlayTime() / 1000);
+            pet.setScore(scoreKeeper.getScore()); // Save the score
+            pet.addTimeSpent(pet.getCurrentPlayTime() / 1000); // Save the playtime in seconds
             System.out.println("Paused and Saved Score: " + pet.getScore());
             System.out.println("Paused and Saved Time: " + pet.getCurrentPlayTime() / 1000 + " seconds");
         }
@@ -648,7 +633,7 @@ public class GameController {
     @FXML
     private void togglePlayPause() {
         isPaused = !isPaused;
-        
+
         if (isPaused) {
             // pause all timelines
             if (statsDecayTimeline != null) {
@@ -661,7 +646,7 @@ public class GameController {
                 scoreKeeper.stop();
             }
             playPauseButton.setText("Resume");
-            
+
             // disable all action buttons
             feedButton.setDisable(true);
             playButton.setDisable(true);
@@ -669,7 +654,7 @@ public class GameController {
             exerciseButton.setDisable(true);
             vetButton.setDisable(true);
             inventoryButton.setDisable(true);
-            
+
         } else {
             // resume all timelines
             if (statsDecayTimeline != null) {
@@ -682,7 +667,7 @@ public class GameController {
                 scoreKeeper.start();
             }
             playPauseButton.setText("Pause");
-            
+
             // re-enable all action buttons
             feedButton.setDisable(false);
             playButton.setDisable(false);

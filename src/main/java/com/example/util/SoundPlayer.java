@@ -11,7 +11,6 @@ public class SoundPlayer {
     public SoundPlayer() {
         soundURL[0] = getClass().getResource("/sounds/overture.wav");   // background music
         soundURL[1] = getClass().getResource("/sounds/water.wav");      // initialize with other .wav files for use in other settings
-        soundURL[1] = getClass().getResource("/sounds/water.wav");      // initialize with other .wav files for use in other settings
         soundURL[2] = getClass().getResource("/sounds/overture.wav");   // initialize with other .wav files for use in other settings
         soundURL[3] = getClass().getResource("/sounds/overture.wav");   // initialize with other .wav files for use in other settings
         soundURL[4] = getClass().getResource("/sounds/overture.wav");   // initialize with other .wav files for use in other settings
