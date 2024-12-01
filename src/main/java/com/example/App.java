@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.controller.SettingsController;
+import com.example.util.FileHandler;
 import com.example.util.SoundPlayer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
