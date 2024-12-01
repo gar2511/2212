@@ -22,8 +22,6 @@ import com.example.model.ScoreKeeper;
 
 import static com.example.App.PlayButtonSound;
 
-import static com.example.App.PlayButtonSound;
-
 /**
  * Controller class responsible for managing the game scene/view.
  * This class handles the mole animation, sprite rendering, and navigation
@@ -146,7 +144,6 @@ public class GameController {
         if (timeTracker != null) {
             System.out.println("Time tracker is already running.");
             return; // If it is running, exit the method
-            return; // If it is running, exit the method
         }
 
         // Create a new timeline with a keyframe that triggers every 50 milliseconds
@@ -160,18 +157,12 @@ public class GameController {
             if (pet != null) {
                 // Increment playtime by 50 milliseconds
                 pet.setCurrentPlayTime(pet.getCurrentPlayTime()+50);
-                // Increment playtime by 50 milliseconds
-                pet.setCurrentPlayTime(pet.getCurrentPlayTime()+50);
 
                 // Convert the playtime to seconds for display purposes
                 long secondsElapsed = pet.getCurrentPlayTime() / 1000;
-                // Convert the playtime to seconds for display purposes
-                long secondsElapsed = pet.getCurrentPlayTime() / 1000;
 
-                // Update the playtime label on the UI thread
                 // Update the playtime label on the UI thread
                 Platform.runLater(() -> {
-                    playTimeLabel.setText("Current Session's Play Time: " + formatPlayTime(secondsElapsed));
                     playTimeLabel.setText("Current Session's Play Time: " + formatPlayTime(secondsElapsed));
                 });
 
@@ -180,9 +171,6 @@ public class GameController {
                     pet.addTimeSpent(1); // Increment the total playtime by 1 second
 
                     // Log the current playtime to the console
-                // Add 1 second to the pet's total time spent every 1000 milliseconds
-                if (pet.getCurrentPlayTime() % 1000 == 0) {
-                    pet.addTimeSpent(1); // Increment the total playtime by 1 second
 
                     // Log the current playtime to the console
                     Platform.runLater(() -> {
@@ -317,16 +305,14 @@ public class GameController {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
         stopStatsDecay();
-        stopTimeTracker(); // Stop tracking playtime
-        pet.setCurrentPlayTime(0);
+        stopTimeTracker();
         pet.setCurrentPlayTime(0);
         if (animation != null) {
             animation.stop();
         }
         if (scoreKeeper != null) {
-            scoreKeeper.stop(); // Stop the scorekeeper
+            scoreKeeper.stop();
         }
-        // Print debug message
         System.out.println("Game paused. Returning to main menu.");
         SceneController.getInstance().switchToMainMenu();
     }
@@ -444,25 +430,15 @@ public class GameController {
         PlayButtonSound();
         System.out.println("Inventory has not been made yet");
         stopStatsDecay();
-        stopTimeTracker(); // Stop tracking playtime
-        stopTimeTracker(); // Stop tracking playtime
+        stopTimeTracker();
         if (animation != null) {
             animation.stop();
         }
-        // Save the current score to the Pet instance
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
         if (pet != null) {
-            pet.setScore(scoreKeeper.getScore()); // Save the score
-            pet.addTimeSpent(pet.getCurrentPlayTime() / 1000); // Save the playtime in seconds
-            System.out.println("Paused and Saved Score: " + pet.getScore());
-            System.out.println("Paused and Saved Time: " + pet.getCurrentPlayTime() / 1000 + " seconds");
-        // Save the current score to the Pet instance
-        GameState gameState = GameState.getCurrentState();
-        Pet pet = gameState.getPet();
-        if (pet != null) {
-            pet.setScore(scoreKeeper.getScore()); // Save the score
-            pet.addTimeSpent(pet.getCurrentPlayTime() / 1000); // Save the playtime in seconds
+            pet.setScore(scoreKeeper.getScore());
+            pet.addTimeSpent(pet.getCurrentPlayTime() / 1000);
             System.out.println("Paused and Saved Score: " + pet.getScore());
             System.out.println("Paused and Saved Time: " + pet.getCurrentPlayTime() / 1000 + " seconds");
         }
