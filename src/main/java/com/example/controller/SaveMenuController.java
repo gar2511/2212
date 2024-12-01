@@ -20,6 +20,8 @@ import javafx.scene.layout.StackPane;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 
+import static com.example.App.PlayButtonSound;
+
 /**
  * Controller for the save game menu interface.
  * Manages save slots, including creating new saves, editing existing saves, and deleting them.
@@ -84,6 +86,7 @@ public class SaveMenuController {
 
         // Handle user interaction with save slots
         saveSlotList.setOnMouseClicked(event -> {
+            PlayButtonSound();
             int index = saveSlotList.getSelectionModel().getSelectedIndex();
             if (index >= 0 && "CLICK TO CREATE NEW SAVE".equals(saveSlotList.getItems().get(index))) {
                 selectedSlotIndex = index;
@@ -124,16 +127,19 @@ public class SaveMenuController {
                 buttons.setAlignment(javafx.geometry.Pos.CENTER);
                 
                 playButton.setOnAction(e -> {
+                    PlayButtonSound();
                     e.consume();
                     handlePlay(getItem());
                 });
 
                 editButton.setOnAction(e -> {
+                    PlayButtonSound();
                     e.consume();
                     handleEdit(getItem());
                 });
 
                 deleteButton.setOnAction(e -> {
+                    PlayButtonSound();
                     e.consume();
                     handleDelete(getItem());
                 });
@@ -179,6 +185,7 @@ public class SaveMenuController {
      * Allows the user to input a pet name and confirm the action.
      */
     private void showNewSaveDialogue() {
+        PlayButtonSound();
         String petName = "PET " + (selectedSlotIndex + 1);
         saveSlotList.setDisable(true);
         newSaveDialogue.setVisible(true);
@@ -194,6 +201,7 @@ public class SaveMenuController {
      * @param petName the existing pet name
      */
     private void showNewSaveDialogue(String petName) {
+        PlayButtonSound();
         saveSlotList.setDisable(true);
         newSaveDialogue.setVisible(true);
         petNameField.setText(petName);
@@ -207,6 +215,7 @@ public class SaveMenuController {
      */
     @FXML
     private void confirmNewSave() {
+        PlayButtonSound();
         String petName = petNameField.getText().trim();
         String petType = petTypeComboBox.getSelectionModel().getSelectedItem();
         if (!petName.isEmpty() && petType != null) {
@@ -232,6 +241,7 @@ public class SaveMenuController {
      */
     @FXML
     private void cancelNewSave() {
+        PlayButtonSound();
         hideNewSaveDialogue();
     }
 
@@ -249,6 +259,7 @@ public class SaveMenuController {
      */
     @FXML
     private void goBack() {
+        PlayButtonSound();
         SceneController.getInstance().switchToMainMenu();
     }
 

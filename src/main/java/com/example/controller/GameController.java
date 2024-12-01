@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.Random;
 import com.example.model.ScoreKeeper;
 
+import static com.example.App.PlayButtonSound;
+
 /**
  * Controller class responsible for managing the game scene/view.
  * This class handles the mole animation, sprite rendering, and navigation
@@ -53,6 +55,10 @@ public class GameController {
     private Label scoreLabel; // Label to display the score
 
     private Timeline timeTracker; // Timeline to track playtime
+
+    @FXML
+    private Button playPauseButton;
+    private boolean isPaused = false;
 
     /**
      * Constructor for GameController.
@@ -308,6 +314,7 @@ public class GameController {
     }
     @FXML
     private void feedPet() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -335,7 +342,8 @@ public class GameController {
 
     }
     @FXML
-    private void playPet(){
+    private void playPet() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -353,7 +361,8 @@ public class GameController {
         }
     }
     @FXML
-    private void giveGift(){
+    private void giveGift() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -377,7 +386,8 @@ public class GameController {
         }
     }
     @FXML
-    private void exercisePet(){
+    private void exercisePet() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -393,7 +403,8 @@ public class GameController {
         }
     }
     @FXML
-    private void takeVet(){
+    private void takeVet() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -431,6 +442,7 @@ public class GameController {
     }
     @FXML
     private void saveGame() {
+        PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
         pet.setScore(scoreKeeper.getScore());
@@ -578,6 +590,9 @@ public class GameController {
                 case Q: // Go back to the main menu
                     goBack();
                     break;
+                case SPACE: // Pause/Resume game
+                    togglePlayPause();
+                    break;
                 default:
                     System.out.println("Unhandled key: " + event.getCode());
             }
@@ -615,6 +630,54 @@ public class GameController {
         else {
             Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + "_" + petState.toLowerCase() + ".png"));
             moleSprite.setImage(petImage);
+        }
+    }
+
+    @FXML
+    private void togglePlayPause() {
+        isPaused = !isPaused;
+
+        if (isPaused) {
+            // pause all timelines
+            if (statsDecayTimeline != null) {
+                statsDecayTimeline.pause();
+            }
+            if (timeTracker != null) {
+                timeTracker.pause();
+            }
+            if (scoreKeeper != null) {
+                scoreKeeper.stop();
+            }
+            playPauseButton.setText("Resume");
+
+            // disable all action buttons
+            feedButton.setDisable(true);
+            playButton.setDisable(true);
+            giftButton.setDisable(true);
+            exerciseButton.setDisable(true);
+            vetButton.setDisable(true);
+            inventoryButton.setDisable(true);
+
+        } else {
+            // resume all timelines
+            if (statsDecayTimeline != null) {
+                statsDecayTimeline.play();
+            }
+            if (timeTracker != null) {
+                timeTracker.play();
+            }
+            if (scoreKeeper != null) {
+                scoreKeeper.start();
+            }
+            playPauseButton.setText("Pause");
+
+            // re-enable all action buttons
+            feedButton.setDisable(false);
+            playButton.setDisable(false);
+            giftButton.setDisable(false);
+            exerciseButton.setDisable(false);
+            vetButton.setDisable(false);
+            inventoryButton.setDisable(false);
         }
     }
 }

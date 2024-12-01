@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static com.example.App.PlayButtonSound;
+
 public class ParentMenuController {
 
     public Label petScoreLabel;
@@ -204,6 +206,7 @@ public class ParentMenuController {
 
     @FXML
     private void handleToggleParentMode() {
+        PlayButtonSound();
         isParentModeEnabled = parentModeToggle.isSelected();
         
         // only update the enabled state, don't clear password
@@ -245,6 +248,7 @@ public class ParentMenuController {
 
     @FXML
     private void handleTimeLimitToggle() {
+        PlayButtonSound();
         boolean isTimeLimitEnabled = timeLimitToggle.isSelected();
         timeLimitSpinner.setDisable(!isTimeLimitEnabled);
         timeLimitSpinner.setOpacity(isTimeLimitEnabled ? 1.0 : 0.5);
@@ -258,6 +262,7 @@ public class ParentMenuController {
 
     @FXML
     private void handleUpdateTimeLimit() {
+        PlayButtonSound();
         if (currentGameState != null) {
             int timeLimit = timeLimitSpinner.getValue();
             currentGameState.getPet().setTimeLimit(timeLimit);
@@ -275,11 +280,13 @@ public class ParentMenuController {
 
     @FXML
     private void handleGoBack() {
+        PlayButtonSound();
         SceneController.getInstance().switchToSettings();
     }
 
     @FXML
     public void revivePet(ActionEvent actionEvent) {
+        PlayButtonSound();
         if (currentGameState != null && !currentGameState.getPet().getStats().isAlive()) {
             currentGameState.getPet().getStats().restoreAll();
             petStatusLabel.setText("Status: Alive");

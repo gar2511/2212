@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.App;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -11,6 +12,8 @@ import javafx.geometry.Pos;
 import com.example.components.CustomButton;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
+
+import static com.example.App.PlayButtonSound;
 
 /**
  * Controller class for the main menu interface.
@@ -33,6 +36,7 @@ public class MainMenuController {
      */
     @FXML
     private void startGame() {
+        PlayButtonSound();
         SceneController.getInstance().switchToSaveMenu();
     }
 
@@ -42,6 +46,7 @@ public class MainMenuController {
      */
     @FXML
     private void openSettings() {
+        PlayButtonSound();
         SceneController.getInstance().switchToSettings();
     }
 
@@ -51,6 +56,7 @@ public class MainMenuController {
      */
     @FXML
     private void exitGame() {
+        PlayButtonSound();
         exitDialog.setVisible(true);
     }
 
@@ -60,6 +66,13 @@ public class MainMenuController {
      */
     @FXML
     private void confirmExit() {
+        PlayButtonSound();
+
+        App.getButtonSound().stop();
+        App.getSoundPlayer().stop();
+        App.getButtonSound().close();
+        App.getSoundPlayer().close();
+
         Platform.exit();
     }
 
@@ -69,6 +82,8 @@ public class MainMenuController {
      */
     @FXML
     private void cancelExit() {
+        PlayButtonSound();
         exitDialog.setVisible(false);
     }
+
 }

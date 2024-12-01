@@ -18,6 +18,8 @@ import com.example.util.FileHandler;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+import static com.example.App.PlayButtonSound;
+
 /**
  * Controller class for managing game settings and preferences.
  * Handles parental controls, volume adjustments, and user interactions with the settings menu.
@@ -156,6 +158,7 @@ public class SettingsController {
      * @param enabled {@code true} if parental controls are enabled, {@code false} otherwise.
      */
     private void handleParentalControlsToggle(boolean enabled) {
+        PlayButtonSound();
         if (parentalControlsToggle != null) {
             // only update the enabled state, preserve the password
             userPrefs.setParentControlsEnabled(enabled);
@@ -181,11 +184,15 @@ public class SettingsController {
      */
     @FXML
     private void goBack() {
+        PlayButtonSound();
         SceneController.getInstance().switchToMainMenu();
     }
 
     @FXML
-    private void goParent(){ SceneController.getInstance().switchToLoginParent(); }
+    private void goParent() {
+        PlayButtonSound();
+        SceneController.getInstance().switchToLoginParent();
+    }
 
     private void savePreferences() {
         try {
