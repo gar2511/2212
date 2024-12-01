@@ -537,6 +537,7 @@ public class GameController {
                     stats.setHappinessMod(1);   // Being tired makes you unhappy
                     setPetStateImage("sleepy");
                     disableAllButtons();
+                    vetButton.setDisable(false);
                     break;
             }
         }
