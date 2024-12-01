@@ -64,6 +64,9 @@ public class SettingsController {
         Platform.runLater(() -> {
             updateParentalControlsUI(userPrefs.isParentControlsEnabled());
 
+            // Set initial value for volume
+            handleVolumeChange((int)userPrefs.getVolume());
+
             // Set initial values from preferences
             if (volumeSlider != null && volumeLabel != null) {
                 volumeSlider.setValue(userPrefs.getVolume());
