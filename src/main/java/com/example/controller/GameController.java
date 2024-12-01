@@ -460,53 +460,40 @@ public class GameController {
 
         if (index == 3) { // Health is critically low
             if (stats.getHealth() <= 0) {
-                System.out.println("Health has reached 0. Game over.");
-                stopStatsDecay();
-                
-                feedButton.setDisable(true);
-                playButton.setDisable(true);
-                giftButton.setDisable(true);
-                exerciseButton.setDisable(true);
-                vetButton.setDisable(true);
-                inventoryButton.setDisable(true);
-                
-                setPetStateImage("dead");
-                
-                if (gameOverLabel != null) {
-                    gameOverLabel.setVisible(true);
-                }
+                handleGameOver();
                 return;
             }
+            // When health is critical, it affects energy and happiness
+            stats.setEnergyMod(2);     // Tired more quickly when unhealthy
+            stats.setHappinessMod(1);   // Slightly unhappy when sick
         } else {
             switch (index) {
-                case 0: // Hunger
-                    System.out.println("Hunger is critically low! Consider feeding the pet.");
-                    stats.setHappinessMod(0);  // Changed from 1 to 0
-                    stats.setHealthMod(0);     // Changed from 1 to 0
+                case 0: // Hunger critical
+                    System.out.println("Hunger is critically low!");
+                    stats.setHealthMod(1);     // Being hungry affects health
+                    stats.setEnergyMod(1);     // Being hungry makes you tired
+                    stats.setHappinessMod(1);  // Being hungry makes you unhappy
                     setPetStateImage("hungry");
                     break;
-                case 1: // Happiness
-                    System.out.println("Happiness is critically low! Consider playing with the pet.");
+                    
+                case 1: // Happiness critical
+                    System.out.println("Happiness is critically low!");
+                    stats.setHealthMod(1);     // Being unhappy affects health
+                    stats.setEnergyMod(1);     // Being unhappy makes you tired
                     setPetStateImage("angry");
                     Platform.runLater(() -> {
                         exerciseButton.setDisable(true);
                         vetButton.setDisable(true);
                     });
-                    stats.setHappinessMod(0);  // Already 0
                     break;
-                case 2: // Energy
-                    System.out.println("Energy is critically low! Pet needs rest.");
+                    
+                case 2: // Energy critical
+                    System.out.println("Energy is critically low!");
+                    stats.setHealthMod(1);      // Being exhausted affects health
+                    stats.setHungerMod(1);      // Being tired makes you hungry
+                    stats.setHappinessMod(1);   // Being tired makes you unhappy
                     setPetStateImage("sleepy");
-                    feedButton.setDisable(true);
-                    playButton.setDisable(true);
-                    giftButton.setDisable(true);
-                    exerciseButton.setDisable(true);
-                    vetButton.setDisable(true);
-                    stats.setEnergyMod(0);     // Changed from -7 to 0
-                    break;
-                default:
-                    System.out.println("Unknown critical state detected.");
-                    setPetStateImage("sleepy");
+                    disableAllButtons();
                     break;
             }
         }
@@ -515,31 +502,59 @@ public class GameController {
     private void maintainState(int index) {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
-        if (pet == null) {
-            System.err.println("No pet found in maintainState.");
-            return;
-        }
+        if (pet == null) return;
+        
         VitalStats stats = pet.getStats();
         switch (index) {
-            case 0:
-                stats.setHappinessMod(0);  // Already 0
-                stats.setHealthMod(0);     // Already 0
+            case 0: // Hunger normal
+                stats.setHealthMod(0);
+                stats.setEnergyMod(0);
+                stats.setHappinessMod(0);
                 break;
-            case 1:
-                exerciseButton.setDisable(false);
-                vetButton.setDisable(false);
-                stats.setHappinessMod(0);  // Changed from 2 to 0
+                
+            case 1: // Happiness normal
+                stats.setHealthMod(0);
+                stats.setEnergyMod(0);
+                enableAllButtons();
                 break;
-            case 2:
-                feedButton.setDisable(false);
-                playButton.setDisable(false);
-                giftButton.setDisable(false);
-                exerciseButton.setDisable(false);
-                vetButton.setDisable(false);
-                stats.setEnergyMod(0);     // Already 0
+                
+            case 2: // Energy normal
+                stats.setHealthMod(0);
+                stats.setHungerMod(0);
+                stats.setHappinessMod(0);
+                enableAllButtons();
                 break;
-            default:
+                
+            case 3: // Health normal
+                stats.setEnergyMod(0);
+                stats.setHappinessMod(0);
                 break;
+        }
+    }
+
+    private void disableAllButtons() {
+        feedButton.setDisable(true);
+        playButton.setDisable(true);
+        giftButton.setDisable(true);
+        exerciseButton.setDisable(true);
+        vetButton.setDisable(true);
+    }
+
+    private void enableAllButtons() {
+        feedButton.setDisable(false);
+        playButton.setDisable(false);
+        giftButton.setDisable(false);
+        exerciseButton.setDisable(false);
+        vetButton.setDisable(false);
+    }
+
+    private void handleGameOver() {
+        System.out.println("Health has reached 0. Game over.");
+        stopStatsDecay();
+        disableAllButtons();
+        setPetStateImage("dead");
+        if (gameOverLabel != null) {
+            gameOverLabel.setVisible(true);
         }
     }
 
