@@ -157,10 +157,6 @@ public class SettingsController {
      */
     private void handleParentalControlsToggle(boolean enabled) {
         if (parentalControlsToggle != null) {
-            // only update the enabled state, preserve the password
-            userPrefs.setParentControlsEnabled(enabled);
-            updateParentalControlsUI(enabled);
-            savePreferences();
             System.out.println("Parental controls " + (enabled ? "enabled" : "disabled"));
         }
     }
@@ -196,29 +192,9 @@ public class SettingsController {
     }
 
     private void updateParentalControlsUI(boolean enabled) {
-        if (enabled) {
-            parentalStatusLabel.setText("Enabled");
-            parentalControlsButton.setVisible(false);
-            parentalControlsButton.setManaged(false);
-            configureButton.setVisible(true);
-            configureButton.setManaged(true);
-        } else {
-            if (userPrefs.getParentPassword().isEmpty()) {
-                // No profile exists
-                parentalStatusLabel.setText("No active profile");
-                parentalControlsButton.setVisible(true);
-                parentalControlsButton.setManaged(true);
-                configureButton.setVisible(false);
-                configureButton.setManaged(false);
-            } else {
-                // Profile exists but disabled
-                parentalStatusLabel.setText("Disabled");
-                parentalControlsButton.setVisible(false);
-                parentalControlsButton.setManaged(false);
-                configureButton.setVisible(true);
-                configureButton.setManaged(true);
-            }
-        }
+        parentalStatusLabel.setText(enabled ? "Enabled" : "Disabled");
+        parentalControlsButton.setVisible(!enabled);
+        configureButton.setVisible(enabled);
     }
 
     @FXML
