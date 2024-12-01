@@ -77,6 +77,7 @@ public class StatBar extends HBox {
     private void animateProgressAndColor(double oldValue, double newValue, Duration duration) {
         if (timeline != null && timeline.getStatus() == Animation.Status.RUNNING) {
             timeline.stop();
+            oldValue = progressBar.getProgress();
         }
         
         Color startColor = Color.rgb(
@@ -91,15 +92,14 @@ public class StatBar extends HBox {
             0
         );
         
+        KeyValue progressStart = new KeyValue(progressBar.progressProperty(), oldValue, Interpolator.EASE_BOTH);
+        KeyValue progressEnd = new KeyValue(progressBar.progressProperty(), newValue, Interpolator.EASE_BOTH);
+        KeyValue colorStart = new KeyValue(barColor, startColor, Interpolator.EASE_BOTH);
+        KeyValue colorEnd = new KeyValue(barColor, endColor, Interpolator.EASE_BOTH);
+        
         timeline = new Timeline(
-            new KeyFrame(Duration.ZERO, 
-                new KeyValue(progressBar.progressProperty(), oldValue, Interpolator.LINEAR),
-                new KeyValue(barColor, startColor, Interpolator.LINEAR)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(progressBar.progressProperty(), newValue, Interpolator.LINEAR),
-                new KeyValue(barColor, endColor, Interpolator.LINEAR)
-            )
+            new KeyFrame(Duration.ZERO, progressStart, colorStart),
+            new KeyFrame(duration, progressEnd, colorEnd)
         );
         
         timeline.play();

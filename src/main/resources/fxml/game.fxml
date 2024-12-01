@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
 <?import com.example.components.StatBar?>
+<?import com.example.components.CustomButton?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.controller.GameController"
@@ -39,22 +40,22 @@
         </StackPane>
 
         <!-- Actions Section -->
-        <VBox styleClass="actions-section" spacing="15">
+        <VBox styleClass="actions-section" spacing="15" alignment="CENTER">
             <Label text="Actions" styleClass="status-title" />
-            <Button fx:id="feedButton" text="Feed" onAction="#feedPet" styleClass="action-button" />
-            <Button fx:id="playButton" text="Play" onAction="#playPet" styleClass="action-button" />
-            <Button fx:id="giftButton" text="Give Gift" onAction="#giveGift" styleClass="action-button" />
-            <Button fx:id="exerciseButton" text="Exercise" onAction="#exercisePet" styleClass="action-button" />
-            <Button fx:id="vetButton" text="Take to Vet" onAction="#takeVet" styleClass="action-button" />
-            <Button fx:id="inventoryButton" text="Inventory" onAction="#openInventory" styleClass="action-button" />
+            <CustomButton fx:id="feedButton" text="Feed" onAction="#feedPet" styleClass="action-button" />
+            <CustomButton fx:id="playButton" text="Play" onAction="#playPet" styleClass="action-button" />
+            <CustomButton fx:id="giftButton" text="Give Gift" onAction="#giveGift" styleClass="action-button" />
+            <CustomButton fx:id="exerciseButton" text="Exercise" onAction="#exercisePet" styleClass="action-button" />
+            <CustomButton fx:id="vetButton" text="Take to Vet" onAction="#takeVet" styleClass="action-button" />
+            <CustomButton fx:id="inventoryButton" text="Inventory" onAction="#openInventory" styleClass="action-button" />
         </VBox>
     </HBox>
 
     <!-- Bottom Controls -->
     <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="backButton" text="Back" onAction="#goBack" styleClass="back-button" />
-        <Button fx:id="saveButton" text="Save Game" onAction="#saveGame" styleClass="save-button" />
-        <Button fx:id="playPauseButton" text="Pause" onAction="#togglePlayPause" styleClass="play-pause-button" />
+        <CustomButton fx:id="backButton" text="Back" onAction="#goBack" styleClass="back-button" />
+        <CustomButton fx:id="saveButton" text="Save Game" onAction="#saveGame" styleClass="save-button" />
+        <CustomButton fx:id="playPauseButton" text="Pause" onAction="#togglePlayPause" styleClass="play-pause-button" />
     </HBox>
 
     <!-- Game Info -->
