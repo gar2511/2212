@@ -20,6 +20,9 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.VBox;
 import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.Node;
 
 import static com.example.App.PlayButtonSound;
 
@@ -79,6 +82,13 @@ public class LoginController {
             dot.setStroke(Color.WHITE);
             dot.setStrokeWidth(1);
         }
+
+        // Add key event handler to the scene after it's loaded
+        pinDotsContainer.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.setOnKeyPressed(this::handleKeyPress);
+            }
+        });
     }
 
     private void updateUIForMode() {
@@ -234,5 +244,27 @@ public class LoginController {
         });
         
         timeline.play();
+    }
+
+    private void handleKeyPress(KeyEvent event) {
+        if (isShaking) return;
+        
+        String key = event.getText();
+        if (key.matches("[0-9]")) {
+            // Handle numeric keys
+            if (currentPin.length() < 6) {
+                currentPin.append(key);
+                updatePinDots();
+                if (currentPin.length() == 6) {
+                    validatePin();
+                }
+            }
+        } else if (event.getCode() == KeyCode.BACK_SPACE) {
+            // Handle backspace
+            if (currentPin.length() > 0) {
+                currentPin.setLength(currentPin.length() - 1);
+                updatePinDots();
+            }
+        }
     }
 }
