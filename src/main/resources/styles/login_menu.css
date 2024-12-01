@@ -14,7 +14,7 @@
 }
 
 .login-container-background {
-    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-background-color: rgba(245, 230, 211, 0.7);
     -fx-background-radius: 25;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
     -fx-max-width: 400;
@@ -122,7 +122,7 @@
     -fx-min-width: 75;
     -fx-min-height: 75;
     -fx-font-size: 24;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-family: "Courier New", monospace;
     -fx-font-weight: bold;
 }
@@ -141,6 +141,7 @@
     -fx-font-family: "Courier New", monospace;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
+    -fx-text-fill: white;
 }
 
 .pin-button-special:hover {
