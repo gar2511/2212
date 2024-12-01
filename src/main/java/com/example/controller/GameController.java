@@ -743,13 +743,7 @@ public class GameController {
     @FXML
     private void confirmExit() {
         PlayButtonSound();
-
-        App.getButtonSound().stop();
-        App.getSoundPlayer().stop();
-        App.getButtonSound().close();
-        App.getSoundPlayer().close();
-
-        Platform.exit();
+        SceneController.getInstance().switchToMainMenu();
     }
 
 
