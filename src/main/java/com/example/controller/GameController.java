@@ -129,27 +129,26 @@ public class GameController {
             Pet pet = gameState.getPet();
 
             if (pet != null) {
-                // increment by 50ms (0.05 seconds) since we're running every 50ms
-                currentPlayTime += 0.05;
-                // only add to timeSpent every full second
-                if (currentPlayTime % 1 < 0.05) {
+                // Increment by 50ms
+                currentPlayTime += 50;
+
+                // Convert playtime to seconds
+                long secondsElapsed = currentPlayTime / 1000;
+
+                // Only add to timeSpent and log every full second
+                if (currentPlayTime % 1000 == 0) {
                     pet.addTimeSpent(1);
+                    Platform.runLater(() -> {
+                        System.out.println("Current Playtime: " + formatPlayTime(secondsElapsed));
+                    });
                 }
-                
-                System.out.println("THIS IS YOUR TIME LIMIT BTW: " + pet.getTimeLimit());
-                // Check if the time limit is reached (convert currentPlayTime to seconds)
-                if (pet.getTimeLimit() > 0 && (int)currentPlayTime >= pet.getTimeLimit()) {
+
+                // Check if the time limit is reached
+                if (pet.getTimeLimit() > 0 && secondsElapsed >= pet.getTimeLimit()) {
                     System.out.println("Time limit reached! Saving and exiting.");
                     stopTimeTracker();
                     saveGame();
                     goBack(); // Exit to the main menu
-                }
-
-                // Update UI or log playtime if necessary (only log every second)
-                if (currentPlayTime % 1 < 0.05) {
-                    Platform.runLater(() -> {
-                        System.out.println("Current Playtime: " + formatPlayTime((long)currentPlayTime));
-                    });
                 }
             }
         }));
