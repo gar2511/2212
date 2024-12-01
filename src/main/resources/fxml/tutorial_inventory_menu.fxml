@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import com.example.components.CustomButton?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      alignment="TOP_CENTER"
+      spacing="20"
+      styleClass="inventory-background"
+      fx:controller="com.example.controller.TutorialInventoryController"
+      stylesheets="@../styles/style.css">
+
+    <!-- Tutorial Dialog -->
+    <StackPane fx:id="tutorialDialog" visible="false" styleClass="dialog-overlay">
+        <VBox styleClass="dialog-content" alignment="CENTER" spacing="20">
+            <Label fx:id="tutorialMessage" styleClass="dialog-message"/>
+            <CustomButton text="OK" onAction="#closeTutorialDialog" styleClass="dialog-button-cancel"/>
+        </VBox>
+    </StackPane>
+
+    <!-- Title -->
+    <Label text="Inventory" styleClass="inventory-title" />
+
+    <!-- Points Display -->
+    <Label fx:id="pointsLabel" text="Points: 100" styleClass="points-display" />
+
+    <!-- Inventory Grid -->
+    <GridPane hgap="30" vgap="30" alignment="CENTER" styleClass="inventory-grid">
+        <!-- Inventory items (unchanged) -->
+        <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="0" styleClass="inventory-item">
+            <ImageView fx:id="item1Image" fitWidth="120" fitHeight="120" preserveRatio="true" styleClass="item-image" />
+            <Label text="Item 1" styleClass="item-title" />
+            <Label fx:id="item1Quantity" text="99" styleClass="item-quantity" />
+            <CustomButton fx:id="buyItem1Button" text="Buy Item 1 (10 pts)" styleClass="buy-button"/>
+        </VBox>
+        <!-- Additional items (unchanged) -->
+    </GridPane>
+
+    <!-- Buttons for Tutorial -->
+    <HBox spacing="50" alignment="CENTER" styleClass="button-container">
+        <CustomButton fx:id="resourceButton" text="Learn About Resources" onAction="#showResourceInfo" styleClass="action-button"/>
+        <CustomButton fx:id="inventoryInfoButton" text="Learn About Inventory" onAction="#showInventoryInfo" styleClass="action-button"/>
+    </HBox>
+
+    <!-- Default Selection Section -->
+    <HBox spacing="50" alignment="CENTER" styleClass="selection-section">
+        <!-- Group 1 & 2 -->
+        <VBox spacing="10" alignment="CENTER">
+            <Label text="Item Group 1 &amp; 2" styleClass="selection-group-title" />
+            <HBox spacing="20" alignment="CENTER">
+                <CustomButton fx:id="defaultItem1" text="Item 1" styleClass="toggle-button" />
+                <CustomButton fx:id="defaultItem2" text="Item 2" styleClass="toggle-button" />
+            </HBox>
+            <Label fx:id="selectedItem12Label" text="Currently Selected: None" styleClass="selected-item-label" />
+        </VBox>
+    </HBox>
+
+    <!-- Go Back Button -->
+    <CustomButton fx:id="goBackButton" text="Go Back" styleClass="go-back-button" onAction="#goBackTutorial" />
+</VBox>

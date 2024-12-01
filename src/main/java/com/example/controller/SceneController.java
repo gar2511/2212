@@ -69,6 +69,8 @@ public class SceneController {
     public void switchToSettings() {
         loadFXML("settings.fxml");
     }
+    public void switchToTutorial() {loadFXML("tutorial_game_menu.fxml");}
+    public void switchToTutorialInventory() {loadFXML("tutorial_inventory_menu.fxml");}
 
     public void switchToInventory() {
         loadFXML("inventory_menu.fxml");
