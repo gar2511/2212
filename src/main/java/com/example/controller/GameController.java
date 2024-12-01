@@ -291,6 +291,7 @@ public class GameController {
         stopStatsDecay();
         stopTimeTracker(); // Stop tracking playtime
         pet.setCurrentPlayTime(0);
+        pet.setCurrentPlayTime(0);
         if (animation != null) {
             animation.stop();
         }
