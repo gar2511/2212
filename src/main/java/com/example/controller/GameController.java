@@ -22,6 +22,8 @@ import com.example.model.ScoreKeeper;
 
 import static com.example.App.PlayButtonSound;
 
+import static com.example.App.PlayButtonSound;
+
 /**
  * Controller class responsible for managing the game scene/view.
  * This class handles the mole animation, sprite rendering, and navigation
