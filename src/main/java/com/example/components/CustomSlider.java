@@ -16,6 +16,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.animation.Interpolator;
+import javafx.application.Platform;
 
 public class CustomSlider extends Region {
     private final Rectangle track;
@@ -82,6 +83,13 @@ public class CustomSlider extends Region {
         // initialize value transition timeline
         valueTransition = new Timeline();
         valueTransition.setOnFinished(e -> requestLayout());
+        
+        // Add a layout listener to ensure proper initial layout
+        sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                Platform.runLater(this::requestLayout);
+            }
+        });
     }
 
     private void setupEventHandlers() {
@@ -136,14 +144,18 @@ public class CustomSlider extends Region {
     }
 
     @Override
-    protected void layoutChildren() {
+    public void layoutChildren() {
+        if (!isVisible()) {
+            return;
+        }
+        
         super.layoutChildren();
         
         double trackHeight = 16;
         double trackY = (getHeight() - trackHeight) / 2;
         double thumbRadius = thumb.getRadius();
         
-        // layout track
+        // layout track first
         track.setWidth(getWidth() - (getPadding().getLeft() + getPadding().getRight()));
         track.setHeight(trackHeight);
         track.setX(getPadding().getLeft());
@@ -151,23 +163,21 @@ public class CustomSlider extends Region {
         track.setArcWidth(trackHeight);
         track.setArcHeight(trackHeight);
         
-        // calculate thumb position first
-        double rawProgressWidth = (getValue() - getMin()) / (getMax() - getMin()) * track.getWidth();
-        double minThumbX = progressTrack.getX() + thumbRadius;
-        double maxThumbX = progressTrack.getX() + track.getWidth() - thumbRadius;
-        double thumbX = Math.max(minThumbX, Math.min(maxThumbX, progressTrack.getX() + rawProgressWidth));
+        // calculate thumb position based on current value
+        double proportion = (getValue() - getMin()) / (getMax() - getMin());
+        double availableWidth = track.getWidth() - (thumbRadius * 2);
+        double thumbX = track.getX() + thumbRadius + (availableWidth * proportion);
         double thumbY = getHeight() / 2;
         
-        // layout progress track to match thumb position
-        double progressWidth = thumbX - progressTrack.getX();
-        progressTrack.setWidth(progressWidth + 8);
+        // layout progress track
         progressTrack.setHeight(trackHeight);
         progressTrack.setX(getPadding().getLeft());
         progressTrack.setY(trackY);
         progressTrack.setArcWidth(trackHeight);
         progressTrack.setArcHeight(trackHeight);
+        progressTrack.setWidth((thumbX - progressTrack.getX()) + 8); // Keep the +8 adjustment
         
-        // set thumb position
+        // position thumb
         thumb.setCenterX(thumbX);
         thumb.setCenterY(thumbY);
     }

@@ -18,7 +18,7 @@
     -fx-background-radius: 25;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
     -fx-max-width: 400;
-    -fx-min-height: 400;
+    -fx-min-height: 300;
 }
 
 .settings-container {
