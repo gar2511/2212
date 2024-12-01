@@ -14,79 +14,47 @@
            stylesheets="@../styles/login_menu.css">
            
     <VBox alignment="CENTER" spacing="20">
-        <!-- Title -->
-        <Label fx:id="titleLabel" text="Create Parent Account" styleClass="login-title-label"/>
-        
-        <!-- Main Container -->
-        <StackPane styleClass="login-container-background">
-            <VBox styleClass="login-container">
-                <!-- Username Section -->
-                <VBox spacing="5">
-                    <Label text="Username" styleClass="input-label"/>
-                    <StackPane>
-                        <TextField fx:id="usernameField" 
-                                 promptText="Enter username"
-                                 styleClass="input-field"/>
-                        <StackPane fx:id="userErrorIcon" 
-                                 styleClass="error-icon"
-                                 mouseTransparent="true"
-                                 StackPane.alignment="CENTER_RIGHT">
-                            <Region styleClass="error-circle" minWidth="16" minHeight="16"/>
-                            <Text text="!" styleClass="error-text"/>
-                        </StackPane>
-                    </StackPane>
+        <!-- Main Content -->
+        <VBox alignment="CENTER" spacing="20" VBox.vgrow="ALWAYS">
+            <Label fx:id="titleLabel" text="Create Parent PIN" styleClass="login-title-label"/>
+            
+            <StackPane styleClass="login-container-background">
+                <VBox styleClass="login-container" alignment="CENTER">
+                    <!-- PIN Dots -->
+                    <HBox fx:id="pinDotsContainer" spacing="15" alignment="CENTER" styleClass="pin-dots-container">
+                        <Circle fx:id="dot1" styleClass="pin-dot"/>
+                        <Circle fx:id="dot2" styleClass="pin-dot"/>
+                        <Circle fx:id="dot3" styleClass="pin-dot"/>
+                        <Circle fx:id="dot4" styleClass="pin-dot"/>
+                        <Circle fx:id="dot5" styleClass="pin-dot"/>
+                        <Circle fx:id="dot6" styleClass="pin-dot"/>
+                    </HBox>
+
+                    <!-- PIN Pad -->
+                    <GridPane hgap="20" vgap="20" alignment="CENTER">
+                        <CustomButton text="1" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <CustomButton text="2" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <CustomButton text="3" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                        <CustomButton text="4" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <CustomButton text="5" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <CustomButton text="6" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                        <CustomButton text="7" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <CustomButton text="8" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <CustomButton text="9" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                        <CustomButton text="0" styleClass="pin-button" onAction="#handlePinButton" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <CustomButton text="⌫" styleClass="pin-button, pin-button-special" onAction="#handleBackspace" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                    </GridPane>
                 </VBox>
+            </StackPane>
 
-                <!-- Password Section -->
-                <VBox spacing="5">
-                    <Label text="Password" styleClass="input-label"/>
-                    <StackPane>
-                        <PasswordField fx:id="passwordField" 
-                                     promptText="Enter password"
-                                     styleClass="input-field"/>
-                        <StackPane fx:id="passwordErrorIcon" 
-                                 styleClass="error-icon"
-                                 mouseTransparent="true"
-                                 StackPane.alignment="CENTER_RIGHT">
-                            <Region styleClass="error-circle" minWidth="16" minHeight="16"/>
-                            <Text text="!" styleClass="error-text"/>
-                        </StackPane>
-                    </StackPane>
-                </VBox>
-
-                <!-- Confirm Password Section -->
-                <VBox spacing="5">
-                    <Label text="Confirm Password" styleClass="input-label"/>
-                    <StackPane>
-                        <PasswordField fx:id="confirmPasswordField" 
-                                     promptText="Confirm password"
-                                     styleClass="input-field"/>
-                        <StackPane fx:id="confirmPasswordErrorIcon" 
-                                 styleClass="error-icon"
-                                 mouseTransparent="true"
-                                 StackPane.alignment="CENTER_RIGHT">
-                            <Region styleClass="error-circle" minWidth="16" minHeight="16"/>
-                            <Text text="!" styleClass="error-text"/>
-                        </StackPane>
-                    </StackPane>
-                </VBox>
-
-                <!-- Buttons Section -->
-                <HBox spacing="20" alignment="CENTER">
-                    <CustomButton fx:id="loginButton" 
-                            text="LOGIN" 
-                            onAction="#handleLogin"
-                            styleClass="login-button"/>
-                    <CustomButton fx:id="goBackButton" 
-                            text="BACK" 
-                            onAction="#goBack"
-                            styleClass="back-button"/>
-                </HBox>
-            </VBox>
-        </StackPane>
-
-        <padding>
-            <Insets top="30" right="30" bottom="30" left="30"/>
-        </padding>
+        <!-- Back Button at Bottom -->
+        <CustomButton text="BACK" 
+                     onAction="#goBack"
+                     styleClass="back-button"/>
+        </VBox>
     </VBox>
+    
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
 </StackPane>

@@ -4,13 +4,16 @@ import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.util.FileHandler;
 import com.example.components.CustomToggle;
+import com.example.components.CustomButton;
 import com.example.model.UserPreferences;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.geometry.Pos;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +60,13 @@ public class ParentMenuController {
     private Separator secondDivider;
 
     @FXML
+    private Separator inventoryDivider;
+    
+    @FXML
     private Label petStatusLabel;
+
+    @FXML
+    private CustomButton removeProfileButton;
 
     @FXML
     public void initialize() {
@@ -137,6 +146,10 @@ public class ParentMenuController {
                 revivePetButton.setManaged(false);
                 inventorySection.setVisible(false);
                 inventorySection.setManaged(false);
+                secondDivider.setVisible(false);
+                secondDivider.setManaged(false);
+                inventoryDivider.setVisible(false);
+                inventoryDivider.setManaged(false);
             }
         });
 
@@ -171,6 +184,8 @@ public class ParentMenuController {
                                 item4Spinner.getValueFactory().setValue(pet.getInventory().getItem4());
                                 secondDivider.setVisible(true);
                                 secondDivider.setManaged(true);
+                                inventoryDivider.setVisible(true);
+                                inventoryDivider.setManaged(true);
                                 boolean isAlive = pet.getStats().isAlive();
                                 petStatusLabel.setText("Status: " + (isAlive ? "Alive" : "Dead"));
                                 petStatusLabel.setVisible(true);
@@ -189,9 +204,9 @@ public class ParentMenuController {
 
     @FXML
     private void handleToggleParentMode() {
-        isParentModeEnabled = !isParentModeEnabled;
+        isParentModeEnabled = parentModeToggle.isSelected();
         
-        // update preferences
+        // only update the enabled state, don't clear password
         userPrefs.setParentControlsEnabled(isParentModeEnabled);
         try {
             fileHandler.savePreferences(userPrefs);
@@ -199,43 +214,35 @@ public class ParentMenuController {
             System.err.println("failed to save preferences: " + e.getMessage());
         }
         
-        if (isParentModeEnabled) {
-            // Only show the dropdown initially
-            selectSaveDropdown.setVisible(true);
-            selectSaveDropdown.setManaged(true);
-            selectSaveDropdown.setValue("Select a save file...");
-            
-            // Keep other sections hidden until a save is selected
-            divider.setVisible(false);
-            divider.setManaged(false);
-            timeLimitSection.setVisible(false);
-            timeLimitSection.setManaged(false);
-            viewStatsSection.setVisible(false);
-            viewStatsSection.setManaged(false);
-            revivePetButton.setVisible(false);
-            revivePetButton.setManaged(false);
-            inventorySection.setVisible(false);
-            inventorySection.setManaged(false);
-        } else {
-            // Hide all related controls
-            selectSaveDropdown.setVisible(false);
-            selectSaveDropdown.setManaged(false);
-            divider.setVisible(false);
-            divider.setManaged(false);
-            timeLimitSection.setVisible(false);
-            timeLimitSection.setManaged(false);
-            timeLimitInput.setVisible(false);
-            timeLimitInput.setManaged(false);
-            viewStatsSection.setVisible(false);
-            viewStatsSection.setManaged(false);
-            revivePetButton.setVisible(false);
-            revivePetButton.setManaged(false);
-            inventorySection.setVisible(false);
-            inventorySection.setManaged(false);
-            secondDivider.setVisible(false);
-            secondDivider.setManaged(false);
-        }
+        // update UI visibility
+        updateVisibility(isParentModeEnabled);
     }
+
+    private void updateVisibility(boolean enabled) {
+        selectSaveDropdown.setVisible(enabled);
+        selectSaveDropdown.setManaged(enabled);
+        
+        if (enabled) {
+            selectSaveDropdown.setValue("Select a save file...");
+        }
+        
+        // Hide all other sections
+        divider.setVisible(false);
+        divider.setManaged(false);
+        timeLimitSection.setVisible(false);
+        timeLimitSection.setManaged(false);
+        viewStatsSection.setVisible(false);
+        viewStatsSection.setManaged(false);
+        revivePetButton.setVisible(false);
+        revivePetButton.setManaged(false);
+        inventorySection.setVisible(false);
+        inventorySection.setManaged(false);
+        secondDivider.setVisible(false);
+        secondDivider.setManaged(false);
+        inventoryDivider.setVisible(false);
+        inventoryDivider.setManaged(false);
+    }
+
     @FXML
     private void handleTimeLimitToggle() {
         boolean isTimeLimitEnabled = timeLimitToggle.isSelected();
@@ -268,24 +275,7 @@ public class ParentMenuController {
 
     @FXML
     private void handleGoBack() {
-        if (isParentModeEnabled) {
-            // Show a confirmation dialog
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Warning");
-            alert.setHeaderText("Parent Mode is still active");
-            alert.setContentText("Are you sure you want to leave without disabling Parent Mode?");
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    // Go back to the previous scene
-                    Stage stage = (Stage) goBackButton.getScene().getWindow();
-                    SceneController.getInstance().switchToSettings();
-                }
-            });
-        } else {
-            // Go back immediately
-            Stage stage = (Stage) goBackButton.getScene().getWindow();
-            SceneController.getInstance().switchToSettings();
-        }
+        SceneController.getInstance().switchToSettings();
     }
 
     @FXML
@@ -343,5 +333,64 @@ public class ParentMenuController {
         } catch (IOException e) {
             System.out.println("Failed to save game state: " + e.getMessage());
         }
+    }
+
+    @FXML
+    private void handleRemoveProfile() {
+        // create custom dialog
+        StackPane dialogOverlay = new StackPane();
+        dialogOverlay.getStyleClass().add("dialog-overlay");
+        
+        VBox dialogContent = new VBox();
+        dialogContent.getStyleClass().add("dialog-content");
+        dialogContent.setAlignment(Pos.CENTER);
+        dialogContent.setSpacing(20);
+        
+        Label titleLabel = new Label("Remove Parent Profile?");
+        titleLabel.getStyleClass().add("dialog-title");
+        
+        Label messageLabel = new Label("This will remove the parent PIN and disable parental controls.");
+        messageLabel.getStyleClass().add("dialog-message");
+        
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(20);
+        buttonBox.setAlignment(Pos.CENTER);
+        
+        CustomButton confirmButton = new CustomButton("REMOVE");
+        confirmButton.getStyleClass().add("dialog-button-confirm");
+        
+        CustomButton cancelButton = new CustomButton("BACK");
+        cancelButton.getStyleClass().add("dialog-button-cancel");
+        
+        buttonBox.getChildren().addAll(confirmButton, cancelButton);
+        dialogContent.getChildren().addAll(titleLabel, messageLabel, buttonBox);
+        dialogOverlay.getChildren().add(dialogContent);
+        
+        // add dialog to the current scene
+        StackPane root = (StackPane) parentModeToggle.getScene().getRoot();
+        root.getChildren().add(dialogOverlay);
+        
+        // handle button actions
+        confirmButton.setOnAction(e -> {
+            root.getChildren().remove(dialogOverlay);
+            // clear password and disable controls
+            userPrefs.setParentPassword("");
+            userPrefs.setParentControlsEnabled(false);
+            
+            try {
+                fileHandler.savePreferences(userPrefs);
+                // update UI
+                parentModeToggle.setSelected(false);
+                handleToggleParentMode();
+                // go back to settings
+                SceneController.getInstance().switchToSettings();
+            } catch (IOException ex) {
+                System.err.println("failed to save preferences: " + ex.getMessage());
+            }
+        });
+        
+        cancelButton.setOnAction(e -> {
+            root.getChildren().remove(dialogOverlay);
+        });
     }
 }
