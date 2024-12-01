@@ -49,6 +49,11 @@ public class MainMenuController {
         PlayButtonSound();
         SceneController.getInstance().switchToSettings();
     }
+    @FXML
+    private void openTutorial() {
+        PlayButtonSound();
+        SceneController.getInstance().switchToTutorial();
+    }
 
     /**
      * Handles the "Exit" button action.

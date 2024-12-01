@@ -223,16 +223,16 @@ public class GameController {
                     // Apply species-specific modifiers based on pet type
                     switch (pet.getSpecies()) {
                         case "cat":
-                            speciesHungerMod = 0;
+                            speciesHungerMod = 1;
                             speciesHappinessMod = 0;
-                            speciesEnergyMod = 0;
+                            speciesEnergyMod = -1;
                             speciesHealthMod = 0;
                             break;
                         case "Bear":
-                            speciesHungerMod = 0;
-                            speciesHappinessMod = 0;
-                            speciesEnergyMod = 0;
-                            speciesHealthMod = 0;
+                            speciesHungerMod = 2;
+                            speciesHappinessMod = 2;
+                            speciesEnergyMod = 2;
+                            speciesHealthMod = -1;
                             break;
                         case "mole":
                             // Default values (all 0)
