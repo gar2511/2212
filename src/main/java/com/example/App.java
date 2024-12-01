@@ -1,12 +1,12 @@
 package com.example;
 
 import com.example.util.SoundPlayer;
-import com.example.util.FileHandler;
-import com.example.model.UserPreferences;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import com.example.util.FileHandler;
+import com.example.model.UserPreferences;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -14,30 +14,16 @@ import java.util.Objects;
 // Main application class that initializes and launches the JavaFX application
 public class App extends Application {
 
-    private static SoundPlayer music, buttonSound;
+    private static SoundPlayer music;
+    private static SoundPlayer buttonSound;
 
-    // Allow the program to access the global instance of sound player
+    // Allow the program to access the global instances of sound players
     public static SoundPlayer getSoundPlayer() {
         return music;
     }
 
-    // Allow the program to access the global instance of button sound effect player
     public static SoundPlayer getButtonSound() {
         return buttonSound;
-    }
-
-    public static void PlayButtonSound() {
-        buttonSound.flush();
-        buttonSound.setZeroPosition();
-        buttonSound.play();
-    }
-
-    // Helper Function
-    private void initializeButtonSound() {
-        // Play and initialize background music
-        buttonSound = new SoundPlayer();
-        buttonSound.setFile(1);   // set to file 0 in the array, background music
-        buttonSound.setVolume(0.2f);
     }
 
     // Helper Function
@@ -58,6 +44,11 @@ public class App extends Application {
             // Play and loop background music
             music.play();
             music.loop();
+            
+            // Initialize button sound
+            buttonSound = new SoundPlayer();
+            buttonSound.setFile(1);  // index 1 is water.wav
+            
         } catch (IOException e) {
             System.err.println("failed to load preferences: " + e.getMessage());
             // Initialize with default settings if preferences can't be loaded
@@ -66,6 +57,8 @@ public class App extends Application {
             music.setVolume(0.5f); // default 50% volume
             music.play();
             music.loop();
+            buttonSound = new SoundPlayer();
+            buttonSound.setFile(1);
         }
     }
 
@@ -76,7 +69,7 @@ public class App extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main_menu.fxml"));
 
             // Create the main scene with initial dimensions
-            Scene scene = new Scene(loader.load(), 1600, 900);
+            Scene scene = new Scene(loader.load(), 1000, 600);
 
             // Load and apply the CSS stylesheet for menu styling
             scene.getStylesheets().add(
@@ -91,7 +84,6 @@ public class App extends Application {
             stage.show();                   // Display the window
 
             initializeSound();
-            initializeButtonSound();
 
         } catch (IOException e) {
             // Log any errors that occur during startup
@@ -103,5 +95,14 @@ public class App extends Application {
     // Application entry point
     public static void main(String[] args) {
         launch();  // Launch the JavaFX application
+    }
+
+    public static void PlayButtonSound() {
+        buttonSound.flush();
+        buttonSound.setZeroPosition();
+        // Get the current volume from the music player and apply it to button sound
+        float currentVolume = music.getVolume();
+        buttonSound.setVolume(currentVolume);
+        buttonSound.play();
     }
 }
