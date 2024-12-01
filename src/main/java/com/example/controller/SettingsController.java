@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import com.example.App;
+import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 //import javafx.scene.control.Slider;
@@ -14,6 +16,7 @@ import javafx.scene.control.Label;
 import com.example.model.UserPreferences;
 import com.example.util.FileHandler;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 /**
  * Controller class for managing game settings and preferences.
@@ -48,7 +51,7 @@ public class SettingsController {
     @FXML
     public void initialize() {
         fileHandler = new FileHandler();
-        
+
         // Load preferences
         try {
             userPrefs = fileHandler.loadPreferences();
@@ -60,13 +63,16 @@ public class SettingsController {
         // Wrap all UI operations in Platform.runLater to ensure FXML elements are initialized
         Platform.runLater(() -> {
             updateParentalControlsUI(userPrefs.isParentControlsEnabled());
-            
+
+            // Set initial value for volume
+            handleVolumeChange((int)userPrefs.getVolume());
+
             // Set initial values from preferences
             if (volumeSlider != null && volumeLabel != null) {
                 volumeSlider.setValue(userPrefs.getVolume());
                 volumeLabel.setText((int)userPrefs.getVolume() + "%");
             }
-            
+
             if (parentalControlsToggle != null && parentalStatusLabel != null) {
                 parentalControlsToggle.setSelected(userPrefs.isParentControlsEnabled());
                 parentalStatusLabel.setText(userPrefs.isParentControlsEnabled() ? "Enabled" : "Disabled");
@@ -165,6 +171,8 @@ public class SettingsController {
      * @param volume The new volume level as an integer between the slider's minimum and maximum.
      */
     private void handleVolumeChange(int volume) {
+        float value = (float) volume / 100f;
+        App.getSoundPlayer().setVolume(value);
         System.out.println("Volume changed to: " + volume);
     }
 
@@ -177,7 +185,7 @@ public class SettingsController {
     }
 
     @FXML
-    private void goParent(){SceneController.getInstance().switchToLoginParent();}
+    private void goParent(){ SceneController.getInstance().switchToLoginParent(); }
 
     private void savePreferences() {
         try {
