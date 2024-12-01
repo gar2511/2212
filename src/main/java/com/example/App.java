@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.util.SoundPlayer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +11,22 @@ import java.util.Objects;
 
 // Main application class that initializes and launches the JavaFX application
 public class App extends Application {
+
+    private static SoundPlayer music;
+
+    // Allow the program to access the global instance of sound player
+    public static SoundPlayer getSoundPlayer() {
+        return music;
+    }
+
+    // Helper Function
+    private void initializeSound() {
+        // Play and initialize background music
+        music = new SoundPlayer();
+        music.setFile(0);   // set to file 0 in the array, background music
+        music.play();
+        music.loop();
+    }
 
     @Override
     public void start(Stage stage) {
@@ -31,6 +48,8 @@ public class App extends Application {
             stage.setTitle("NEOPETS 2.0");  // Set window title
             stage.setScene(scene);          // Set the main scene
             stage.show();                   // Display the window
+
+            initializeSound();
             
         } catch (IOException e) {
             // Log any errors that occur during startup
@@ -43,4 +62,4 @@ public class App extends Application {
     public static void main(String[] args) {
         launch();  // Launch the JavaFX application
     }
-} 
+}

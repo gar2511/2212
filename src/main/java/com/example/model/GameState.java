@@ -113,6 +113,6 @@ public class GameState {
     public void setStats(VitalStats stats) {
         this.stats = stats;
     }
-    public void setControlParent(boolean controlParent) {this.controlParent= controlParent;}
-    public boolean getControlParent(){return controlParent;}
+    public void setControlParent(boolean controlParent) { this.controlParent= controlParent; }
+    public boolean getControlParent(){ return controlParent; }
 }
