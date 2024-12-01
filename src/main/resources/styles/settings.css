@@ -1,5 +1,8 @@
 .settings-background {
-    -fx-background-color: #38250e;
+    -fx-background-image: url("../images/menu/BackGround-settings.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
 }
 
 .settings-title-label {

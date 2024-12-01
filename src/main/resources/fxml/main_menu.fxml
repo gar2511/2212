@@ -11,6 +11,7 @@
            styleClass="main-menu-background"
            stylesheets="@../styles/main_menu.css">
     <VBox alignment="CENTER" spacing="20">
+        <Label text="NEOPETS 2.0" styleClass="main-menu-title"/>
         <CustomButton fx:id="loadGameButton" text="Start Game" onAction="#startGame" styleClass="main-menu-button"/>
         <CustomButton fx:id="tutorialButton" text="Tutorial" onAction="#openTutorial" styleClass = "main-menu-button"/>
         <CustomButton fx:id="settingsButton" text="Settings" onAction="#openSettings" styleClass="main-menu-button"/>

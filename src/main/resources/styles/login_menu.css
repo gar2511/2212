@@ -1,5 +1,8 @@
 .login-background {
-    -fx-background-color: #38250e;
+    -fx-background-image: url("../images/menu/BackGround-settings.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
 }
 
 .login-title-label {
@@ -114,7 +117,7 @@
 }
 
 .pin-button {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-color: rgba(255, 255, 255, 0.5);
     -fx-background-radius: 50;
     -fx-min-width: 75;
     -fx-min-height: 75;
@@ -125,7 +128,7 @@
 }
 
 .pin-button:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-background-color: rgba(255, 255, 255, 0.4);
     -fx-cursor: hand;
 }
 

@@ -1,5 +1,16 @@
 .main-menu-background {
-    -fx-background-color: #38250e;
+    -fx-background-image: url("../images/menu/BackGround.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.main-menu-title {
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-weight: bold;
+    -fx-font-size: 80px;
+    -fx-text-fill: black;
+    -fx-padding: 20px 20px 200px 20px;
 }
 
 .main-menu-button {
@@ -20,15 +31,18 @@
 }
 
 .dialog-overlay {
-    -fx-background-color: rgba(0, 0, 0, 0.7);
+    -fx-background-image: url("../images/menu/BackGround-settings.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
 }
 
 .dialog-content {
-    -fx-background-color: rgba(56, 37, 14, 0.95);
-    -fx-padding: 30;
-    -fx-min-width: 300;
-    -fx-min-height: 200;
-    -fx-background-radius: 10;
+    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
+    -fx-max-width: 500;
+    -fx-max-height: 250;
+    -fx-background-radius: 25;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 4);
 }
 
