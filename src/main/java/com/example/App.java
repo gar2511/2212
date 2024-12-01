@@ -1,7 +1,5 @@
 package com.example;
 
-import com.example.controller.SettingsController;
-import com.example.util.FileHandler;
 import com.example.util.SoundPlayer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +8,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Set;
 
 // Main application class that initializes and launches the JavaFX application
 public class App extends Application {
