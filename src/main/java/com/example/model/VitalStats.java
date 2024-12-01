@@ -189,27 +189,77 @@ public class VitalStats {
 
     // Update petState array based on the stat value
     private void updatePetState(int index, int newValue) {
-
-        if (index == 2) { // Handle energy-specific logic
-            System.out.println(getStatName(index) + " is currently: " + newValue);
-            if (newValue == 0 && petState[index] == 0) {
-                petState[index] = 1; // Set to critical state when energy first drops to 0
-                System.out.println(getStatName(index) + " has dropped to 0! Entering critical state.");
-            } else if (newValue == 100 && petState[index] == 1) {
-                petState[index] = 0; // Exit critical state when energy fully restores to 100
-                System.out.println(getStatName(index) + " is fully restored to 100! Exiting critical state.");
-            }
-            return; // Exit after handling energy
-        }
-
-        // Handle other stats
+        // Handle critical state
         if (newValue <= CRITICAL_THRESHOLD[index]) {
-            petState[index] = 1; // Critical state
+            petState[index] = 1;
             System.out.println(getStatName(index) + " is critically low! Current value: " + newValue);
         } else {
-            petState[index] = 0; // Normal state
-            System.out.println(getStatName(index) + " is no longer critically low! Current value: " + newValue);
+            petState[index] = 0;
         }
+
+        // Reset all modifiers first
+        int totalHealthMod = 0;
+        int totalEnergyMod = 0;
+        int totalHungerMod = 0;
+        int totalHappinessMod = 0;
+
+        // Get current values
+        int currentHunger = hunger.get();
+        int currentHappiness = happiness.get();
+        int currentEnergy = energy.get();
+        int currentHealth = health.get();
+
+        // Hunger effects
+        if (currentHunger <= 50) {
+            // Hunger affects energy more when there's a big difference
+            if (currentHunger + 20 < currentEnergy) {
+                totalEnergyMod += 3;    // Significant energy drain when hungry
+            }
+            // Hunger affects happiness when there's a difference
+            if (currentHunger + 15 < currentHappiness) {
+                totalHappinessMod += 2; // Being hungry makes you unhappy
+            }
+            // Only affect health when critically low
+            if (currentHunger <= 20) {
+                totalHealthMod += 1;    // Malnutrition starts affecting health
+            }
+        }
+        
+        // Happiness effects
+        if (currentHappiness <= 50) {
+            // Happiness primarily affects energy when there's a big gap
+            if (currentHappiness + 25 < currentEnergy) {
+                totalEnergyMod += 2;    // Depression drains energy
+            }
+        }
+        
+        // Energy effects
+        if (currentEnergy <= 50) {
+            // Energy primarily affects happiness when there's a significant difference
+            if (currentEnergy + 20 < currentHappiness) {
+                totalHappinessMod += 2; // Being tired makes you grumpy
+            }
+        }
+        
+        // Health effects - affects everything when low
+        if (currentHealth <= 50) {
+            // Health affects all stats more severely when there's a big difference
+            if (currentHealth + 30 < currentEnergy) {
+                totalEnergyMod += 3;    // Poor health severely affects energy
+            }
+            if (currentHealth + 25 < currentHappiness) {
+                totalHappinessMod += 2; // Being sick makes you unhappy
+            }
+            if (currentHealth + 20 < currentHunger) {
+                totalHungerMod += 2;    // Sickness affects appetite
+            }
+        }
+
+        // Apply accumulated modifiers
+        setHealthMod(totalHealthMod);
+        setEnergyMod(totalEnergyMod);
+        setHungerMod(totalHungerMod);
+        setHappinessMod(totalHappinessMod);
     }
 
 
