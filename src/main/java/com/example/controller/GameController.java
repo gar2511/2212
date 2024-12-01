@@ -191,68 +191,57 @@ public class GameController {
 
             if (pet != null) {
                 VitalStats stats = pet.getStats();
-                // Initialize species-specific modifiers
-                int speciesHungerMod = 0;
-                int speciesHappinessMod = 0;
-                int speciesEnergyMod = 0;
-                int speciesHealthMod = 0;
+                Platform.runLater(() -> {
+                    // Initialize species-specific modifiers
+                    int speciesHungerMod = 0;
+                    int speciesHappinessMod = 0;
+                    int speciesEnergyMod = 0;
+                    int speciesHealthMod = 0;
 
-                // Apply species-specific modifiers
-                switch (pet.getSpecies()) {
-                    case "cat":
-                        speciesHungerMod = -1; // Eats less food
-                        speciesHappinessMod = 0; // Happiness decays normally
-                        speciesEnergyMod = 1; // Loses energy faster
-                        speciesHealthMod = 0;   // Health decays normally
-                        break;
-                        //TODO: why is B capitalized
-                    case "Bear":
-                        speciesHungerMod = 2; // Hunger decreases rapidly
-                        speciesHappinessMod = -1; // Happiness decays slower
-                        speciesEnergyMod = 1;  // Energy decays normally
-                        speciesHealthMod = 0; // Health decays slower
-                        break;
-                    case "mole":
-                        // Mole is the default (no modifiers)
-                        speciesHungerMod = 0;
-                        speciesHappinessMod = 0;
-                        speciesEnergyMod = 0;
-                        speciesHealthMod = 0;
-                        break;
-                    default:
-                        System.out.println("Unknown species: " + pet.getSpecies());
-                        break;
-                }
+                    // Apply species-specific modifiers based on pet type
+                    switch (pet.getSpecies()) {
+                        case "cat":
+                            speciesHungerMod = -1;
+                            speciesHappinessMod = 0;
+                            speciesEnergyMod = 1;
+                            speciesHealthMod = 0;
+                            break;
+                        case "Bear":
+                            speciesHungerMod = 2;
+                            speciesHappinessMod = -1;
+                            speciesEnergyMod = 1;
+                            speciesHealthMod = 0;
+                            break;
+                        case "mole":
+                            // Default values (all 0)
+                            break;
+                    }
 
-                // Decay the stats
-                stats.decreaseEnergy(2+ speciesEnergyMod+ pet.getStats().getEnergyMod());   // Decrease energy by 1 every second
-                stats.decreaseHealth(2+ speciesHealthMod+ pet.getStats().getHealthMod());  // Decrease health by 1 every second
-                stats.decreaseHunger(2+ speciesHungerMod+ pet.getStats().getHungerMod());   // Decrease hunger by 1 every second
-                stats.decreaseHappiness(2+ speciesHappinessMod+pet.getStats().getHappinessMod()); // Decrease happiness by 1 every second
-                System.out.println("Here is my Decay of Happiness " + 2+ speciesHungerMod+ pet.getStats().getHungerMod());
+                    // Batch update the stats
+                    stats.decreaseEnergy(2 + speciesEnergyMod + pet.getStats().getEnergyMod());
+                    stats.decreaseHealth(2 + speciesHealthMod + pet.getStats().getHealthMod());
+                    stats.decreaseHunger(2 + speciesHungerMod + pet.getStats().getHungerMod());
+                    stats.decreaseHappiness(2 + speciesHappinessMod + pet.getStats().getHappinessMod());
 
-                // Log the changes (for debugging)
-                System.out.println("Stats Decayed: Energy=" + stats.getEnergy() +
-                        ", Health=" + stats.getHealth() +
-                        ", Hunger=" + stats.getHunger() +
-                        ", Happiness=" + stats.getHappiness());
-
-                // Check the petState array for critical states
-                int[] petState = stats.getState();
-                if (petState[3] == 1) {
-                    handleCriticalState(3);
-                    return; // Ignore other states if Hunger is critical
-                }
-                for (int i = 0; i < petState.length-1; i++) {
-                    if (petState[i] == 1) {
-                        handleCriticalState(i); // Handle each critical state
-                    } else {maintainState(i);}
-                }
+                    // Check critical states after all updates are done
+                    int[] petState = stats.getState();
+                    if (petState[3] == 1) {
+                        handleCriticalState(3);
+                    } else {
+                        for (int i = 0; i < petState.length-1; i++) {
+                            if (petState[i] == 1) {
+                                handleCriticalState(i);
+                            } else {
+                                maintainState(i);
+                            }
+                        }
+                    }
+                });
             }
         }));
 
-        statsDecayTimeline.setCycleCount(Timeline.INDEFINITE); // Run indefinitely
-        statsDecayTimeline.play(); // Start the timeline
+        statsDecayTimeline.setCycleCount(Timeline.INDEFINITE);
+        statsDecayTimeline.play();
     }
 
     /**
