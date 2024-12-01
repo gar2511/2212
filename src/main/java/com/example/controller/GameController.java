@@ -217,15 +217,15 @@ public class GameController {
                     // Apply species-specific modifiers based on pet type
                     switch (pet.getSpecies()) {
                         case "cat":
-                            speciesHungerMod = -1;
+                            speciesHungerMod = 0;
                             speciesHappinessMod = 0;
-                            speciesEnergyMod = 1;
+                            speciesEnergyMod = 0;
                             speciesHealthMod = 0;
                             break;
                         case "Bear":
-                            speciesHungerMod = 2;
-                            speciesHappinessMod = -1;
-                            speciesEnergyMod = 1;
+                            speciesHungerMod = 0;
+                            speciesHappinessMod = 0;
+                            speciesEnergyMod = 0;
                             speciesHealthMod = 0;
                             break;
                         case "mole":
@@ -233,13 +233,13 @@ public class GameController {
                             break;
                     }
 
-                    // Batch update the stats
-                    stats.decreaseEnergy(2 + speciesEnergyMod + pet.getStats().getEnergyMod());
-                    stats.decreaseHealth(2 + speciesHealthMod + pet.getStats().getHealthMod());
-                    stats.decreaseHunger(2 + speciesHungerMod + pet.getStats().getHungerMod());
-                    stats.decreaseHappiness(2 + speciesHappinessMod + pet.getStats().getHappinessMod());
+                    // Decay each stat by 1 (plus any modifiers)
+                    stats.decreaseEnergy(1 + speciesEnergyMod + pet.getStats().getEnergyMod());
+                    stats.decreaseHealth(1 + speciesHealthMod + pet.getStats().getHealthMod());
+                    stats.decreaseHunger(1 + speciesHungerMod + pet.getStats().getHungerMod());
+                    stats.decreaseHappiness(1 + speciesHappinessMod + pet.getStats().getHappinessMod());
 
-                    // Check critical states after all updates are done
+                    // Check critical states
                     int[] petState = stats.getState();
                     if (petState[3] == 1) {
                         handleCriticalState(3);
@@ -459,37 +459,30 @@ public class GameController {
         VitalStats stats = pet.getStats();
 
         if (index == 3) { // Health is critically low
-            System.out.println("Checking health critical state...");
             if (stats.getHealth() <= 0) {
                 System.out.println("Health has reached 0. Game over.");
-                stopStatsDecay(); // Stop stat decay
-
-                // Disable all buttons except for "New Game" and "Load Game"
+                stopStatsDecay();
+                
                 feedButton.setDisable(true);
                 playButton.setDisable(true);
                 giftButton.setDisable(true);
                 exerciseButton.setDisable(true);
                 vetButton.setDisable(true);
                 inventoryButton.setDisable(true);
-
-                // Show dead pet image
+                
                 setPetStateImage("dead");
-
-                // Show "Game Over" message
-                if (gameOverLabel == null) {
-                    System.err.println("gameOverLabel is null. Check FXML binding.");
-                } else {
+                
+                if (gameOverLabel != null) {
                     gameOverLabel.setVisible(true);
-                    System.out.println("Game Over Label is now visible.");
                 }
-                return; // Exit after handling Game Over
+                return;
             }
         } else {
             switch (index) {
                 case 0: // Hunger
                     System.out.println("Hunger is critically low! Consider feeding the pet.");
-                    stats.setHappinessMod(5);
-                    stats.setHealthMod(5);
+                    stats.setHappinessMod(0);  // Changed from 1 to 0
+                    stats.setHealthMod(0);     // Changed from 1 to 0
                     setPetStateImage("hungry");
                     break;
                 case 1: // Happiness
@@ -499,7 +492,7 @@ public class GameController {
                         exerciseButton.setDisable(true);
                         vetButton.setDisable(true);
                     });
-                    stats.setHappinessMod(4);
+                    stats.setHappinessMod(0);  // Already 0
                     break;
                 case 2: // Energy
                     System.out.println("Energy is critically low! Pet needs rest.");
@@ -509,7 +502,7 @@ public class GameController {
                     giftButton.setDisable(true);
                     exerciseButton.setDisable(true);
                     vetButton.setDisable(true);
-                    stats.setEnergyMod(-7);
+                    stats.setEnergyMod(0);     // Changed from -7 to 0
                     break;
                 default:
                     System.out.println("Unknown critical state detected.");
@@ -529,13 +522,13 @@ public class GameController {
         VitalStats stats = pet.getStats();
         switch (index) {
             case 0:
-                stats.setHappinessMod(0);
-                stats.setHealthMod(0);
+                stats.setHappinessMod(0);  // Already 0
+                stats.setHealthMod(0);     // Already 0
                 break;
             case 1:
                 exerciseButton.setDisable(false);
                 vetButton.setDisable(false);
-                stats.setHappinessMod(2);
+                stats.setHappinessMod(0);  // Changed from 2 to 0
                 break;
             case 2:
                 feedButton.setDisable(false);
@@ -543,7 +536,7 @@ public class GameController {
                 giftButton.setDisable(false);
                 exerciseButton.setDisable(false);
                 vetButton.setDisable(false);
-                stats.setEnergyMod(0);
+                stats.setEnergyMod(0);     // Already 0
                 break;
             default:
                 break;
