@@ -1,7 +1,5 @@
 package com.example.controller;
 
-import com.example.App;
-import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 //import javafx.scene.control.Slider;
@@ -163,8 +161,6 @@ public class SettingsController {
      * @param volume The new volume level as an integer between the slider's minimum and maximum.
      */
     private void handleVolumeChange(int volume) {
-        float value = (float) volume / 100f;
-        App.getSoundPlayer().setVolume(value);
         System.out.println("Volume changed to: " + volume);
     }
 
@@ -177,7 +173,7 @@ public class SettingsController {
     }
 
     @FXML
-    private void goParent(){ SceneController.getInstance().switchToLoginParent(); }
+    private void goParent(){SceneController.getInstance().switchToLoginParent();}
 
     private void savePreferences() {
         try {
