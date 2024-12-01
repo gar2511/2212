@@ -10,15 +10,14 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
-
 import java.io.IOException;
-import java.util.Random;
+import java.util.Objects;
+//import java.util.Random;
 import com.example.model.ScoreKeeper;
 
 /**
@@ -42,7 +41,7 @@ public class GameController {
 
     private Timeline animation;
     private Timeline statsDecayTimeline;
-    private Random random = new Random();
+    //private final Random random = new Random();
     @FXML
     private Button feedButton, playButton, giftButton, exerciseButton, vetButton, inventoryButton;
 
@@ -76,26 +75,21 @@ public class GameController {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet(); // Retrieve the Pet object
         String species = pet.getSpecies();
-        if (pet != null) {
-            VitalStats stats = pet.getStats();
+        VitalStats stats = pet.getStats();
 
-            // Bind progress bars to stats
-            energyBar.progressProperty().bind(Bindings.divide(stats.energyProperty(), 100.0));
-            healthBar.progressProperty().bind(Bindings.divide(stats.healthProperty(), 100.0));
-            hungerBar.progressProperty().bind(Bindings.divide(stats.hungerProperty(), 100.0));
-            happinessBar.progressProperty().bind(Bindings.divide(stats.happinessProperty(), 100.0));
+        // Bind progress bars to stats
+        energyBar.progressProperty().bind(Bindings.divide(stats.energyProperty(), 100.0));
+        healthBar.progressProperty().bind(Bindings.divide(stats.healthProperty(), 100.0));
+        hungerBar.progressProperty().bind(Bindings.divide(stats.hungerProperty(), 100.0));
+        happinessBar.progressProperty().bind(Bindings.divide(stats.happinessProperty(), 100.0));
 
 
-            System.out.println("Loaded Pet: " + pet.getName() + ", Type: " + pet.getSpecies());
-            // Update UI or initialize game logic with the Pet's data
-            //setupPetData(pet);
-        } else {
-            System.out.println("No pet found. Please create or load a save.");
-        }
+        System.out.println("Loaded Pet: " + pet.getName() + ", Type: " + pet.getSpecies());
+        // Update UI or initialize game logic with the Pet's data
+        //setupPetData(pet);
         try {
-
             // Load image from resourcesSS
-            Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + ".png"));
+            Image petImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + species.toLowerCase() + ".png")));
             if (petImage.isError()) {
                 System.err.println("Error loading mole image: " + petImage.getException());
             } else {
@@ -124,7 +118,7 @@ public class GameController {
         startTimeTracker();
     }
     private void startTimeTracker() {
-        timeTracker = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+        timeTracker = new Timeline(new KeyFrame(Duration.millis(50), _ -> {
             GameState gameState = GameState.getCurrentState();
             Pet pet = gameState.getPet();
 
@@ -147,9 +141,7 @@ public class GameController {
 
                 // Update UI or log playtime if necessary (only log every second)
                 if (currentPlayTime % 1 < 0.05) {
-                    Platform.runLater(() -> {
-                        System.out.println("Current Playtime: " + formatPlayTime((long)currentPlayTime));
-                    });
+                    Platform.runLater(() -> System.out.println("Current Playtime: " + formatPlayTime(currentPlayTime)));
                 }
             }
         }));
@@ -182,7 +174,7 @@ public class GameController {
      * Starts the timeline for the constant decay of stats.
      */
     private void startStatsDecay() {
-        statsDecayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+        statsDecayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), _ -> {
             GameState gameState = GameState.getCurrentState();
             Pet pet = gameState.getPet();
 
@@ -198,23 +190,18 @@ public class GameController {
                 switch (pet.getSpecies()) {
                     case "cat":
                         speciesHungerMod = -1; // Eats less food
-                        speciesHappinessMod = 0; // Happiness decays normally
+                        // Happiness decays normally
                         speciesEnergyMod = 1; // Loses energy faster
-                        speciesHealthMod = 0;   // Health decays normally
+                        // Health decays normally
                         break;
-                        //TODO: why is B capitalized
-                    case "Bear":
+                    case "bear":
                         speciesHungerMod = 2; // Hunger decreases rapidly
                         speciesHappinessMod = -1; // Happiness decays slower
                         speciesEnergyMod = 1;  // Energy decays normally
-                        speciesHealthMod = 0; // Health decays slower
+                        // Health decays slower
                         break;
                     case "mole":
                         // Mole is the default (no modifiers)
-                        speciesHungerMod = 0;
-                        speciesHappinessMod = 0;
-                        speciesEnergyMod = 0;
-                        speciesHealthMod = 0;
                         break;
                     default:
                         System.out.println("Unknown species: " + pet.getSpecies());
@@ -444,7 +431,6 @@ public class GameController {
                     gameOverLabel.setVisible(true);
                     System.out.println("Game Over Label is now visible.");
                 }
-                return; // Exit after handling Game Over
             }
         } else {
             switch (index) {
@@ -555,13 +541,8 @@ public class GameController {
         Pet pet = gameState.getPet();
         String species = pet.getSpecies();
 
-        if (pet == null) {
-            System.err.println("No pet found in setPetImage.");
-        }
-        else {
-            Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + ".png"));
-            moleSprite.setImage(petImage);
-        }
+        Image petImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + species.toLowerCase() + ".png")));
+        moleSprite.setImage(petImage);
     }
 
     private void setPetStateImage(String petState) {
@@ -569,16 +550,13 @@ public class GameController {
         Pet pet = gameState.getPet();
         String species = pet.getSpecies();
 
-        if (pet == null) {
-            System.err.println("No pet found in setPetImage.");
-        }
-        else if ((pet != null && petState == null) || (pet != null && (petState.toLowerCase().equals("happy") || petState.toLowerCase().equals("normal")))) {
-            Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + ".png"));
-            moleSprite.setImage(petImage);
+        Image petImage;
+        if (petState == null || petState.equalsIgnoreCase("happy") || petState.equalsIgnoreCase("normal")) {
+            petImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + species.toLowerCase() + ".png")));
         }
         else {
-            Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + "_" + petState.toLowerCase() + ".png"));
-            moleSprite.setImage(petImage);
+            petImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + species.toLowerCase() + "_" + petState.toLowerCase() + ".png")));
         }
+        moleSprite.setImage(petImage);
     }
 }

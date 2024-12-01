@@ -6,45 +6,46 @@ import com.example.util.FileHandler;
 import com.example.components.CustomToggle;
 import com.example.components.CustomButton;
 import com.example.model.UserPreferences;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import javafx.geometry.Pos;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class ParentMenuController {
 
     public Label petScoreLabel;
+
     @FXML
     private ToggleButton parentModeToggle;
+
     @FXML
     private ComboBox<String> selectSaveDropdown;
+
     @FXML
     private VBox timeLimitSection;
-    @FXML
-    private TextField timeLimitInput;
+
     @FXML
     private CustomToggle timeLimitToggle;
+
     @FXML
     private HBox viewStatsSection;
+
     @FXML
     private Button revivePetButton;
+
     @FXML
     private HBox inventorySection;
+
     @FXML
     private Button goBackButton;
+
     @FXML
     private Button updateTimeLimitButton;
 
-    @FXML
-    private Label saveScoreLabel;
     private FileHandler fileHandler;
     private GameState currentGameState;
     private boolean isParentModeEnabled = false;
@@ -119,7 +120,7 @@ public class ParentMenuController {
         inventorySection.setManaged(false);
 
         // Add listener to dropdown for save selection
-        selectSaveDropdown.setOnAction(event -> {
+        selectSaveDropdown.setOnAction(_ -> {
             String selected = selectSaveDropdown.getValue();
             if (selected != null && !selected.equals("Select a save file...")) {
                 loadSelectedSave();
@@ -279,7 +280,7 @@ public class ParentMenuController {
     }
 
     @FXML
-    public void revivePet(ActionEvent actionEvent) {
+    public void revivePet() {
         if (currentGameState != null && !currentGameState.getPet().getStats().isAlive()) {
             currentGameState.getPet().getStats().restoreAll();
             petStatusLabel.setText("Status: Alive");
@@ -371,7 +372,7 @@ public class ParentMenuController {
         root.getChildren().add(dialogOverlay);
         
         // handle button actions
-        confirmButton.setOnAction(e -> {
+        confirmButton.setOnAction(_ -> {
             root.getChildren().remove(dialogOverlay);
             // clear password and disable controls
             userPrefs.setParentPassword("");
@@ -389,8 +390,6 @@ public class ParentMenuController {
             }
         });
         
-        cancelButton.setOnAction(e -> {
-            root.getChildren().remove(dialogOverlay);
-        });
+        cancelButton.setOnAction(_ -> root.getChildren().remove(dialogOverlay));
     }
 }

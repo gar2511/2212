@@ -20,20 +20,15 @@ public class InventoryController {
 
     @FXML
     private RadioButton radioItem1, radioItem2, radioItem3, radioItem4;
-    @FXML
-    private ToggleGroup item12ToggleGroup;
-
-    @FXML
-    private ToggleGroup item34ToggleGroup;
 
 
     @FXML
     public void initialize() {
-        item12ToggleGroup = new ToggleGroup();
+        ToggleGroup item12ToggleGroup = new ToggleGroup();
         radioItem1.setToggleGroup(item12ToggleGroup);
         radioItem2.setToggleGroup(item12ToggleGroup);
 
-        item34ToggleGroup = new ToggleGroup();
+        ToggleGroup item34ToggleGroup = new ToggleGroup();
         radioItem3.setToggleGroup(item34ToggleGroup);
         radioItem4.setToggleGroup(item34ToggleGroup);
         // Load game state and pet
@@ -67,7 +62,7 @@ public class InventoryController {
         }
 
         // Add listeners to update defaults
-        item12ToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+        item12ToggleGroup.selectedToggleProperty().addListener((_, _, newValue) -> {
             if (newValue == radioItem1) {
                 pet.setDefaultItem12(1);
             } else if (newValue == radioItem2) {
@@ -75,7 +70,7 @@ public class InventoryController {
             }
         });
 
-        item34ToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+        item34ToggleGroup.selectedToggleProperty().addListener((_, _, newValue) -> {
             if (newValue == radioItem3) {
                 pet.setDefaultItem34(3);
             } else if (newValue == radioItem4) {

@@ -1,8 +1,5 @@
 package com.example.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.scene.control.Label;
-
 /**
  * Model class representing a virtual pet in the game.
  * Encapsulates the pet's name and provides constructors for creation
@@ -12,17 +9,17 @@ public class Pet {
     // The name of the pet
     private String name;
     private String species;
-    private VitalStats stats;
-
-    private Inventory inventory;
+    private final VitalStats stats;
+    private final Inventory inventory;
     private int saveID;
-    private int[] states;
+    //private int[] states;
     private int defaultItem12 = 1; // Default to item 1
     private int defaultItem34 = 3; // Default to item 3
     private int score = 0; // Score of the Pet
 
     private long totalTimeSpent = 0; // Total time spent in seconds
     private long timeLimit = 0; // Time limit in seconds (0 = no limit)
+
     /**
      * Default no-arguments constructor.
      * Required for Jackson JSON serialization/deserialization.
@@ -38,7 +35,7 @@ public class Pet {
      *
      * @param name The name to assign to the pet.
      */
-    public Pet(String name, String species,int saveID) {
+    public Pet(String name, String species, int saveID) {
         this.name = name;
         this.species = species;
         this.stats = new VitalStats();
@@ -56,17 +53,10 @@ public class Pet {
         return name;
     }
 
-    /**
-     * Updates the name of the pet.
-     *
-     * @param name The new name to assign to the pet.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
     public String getSpecies() {
         return species;
     }
+
     public VitalStats getStats() {
         return stats;
     }
@@ -74,21 +64,16 @@ public class Pet {
     public int getSaveID() {
         return saveID;
     }
+
     /**
      * Retrieves the inventory of the pet.
      *
      * @return The {@link Inventory} object representing the pet's inventory.
      */
-    public Inventory getInventory() {return inventory;}
+    public Inventory getInventory() {
+        return inventory;
+    }
 
-    // Called when a stat threshold is reached
-    private void handleThreshold() {
-        System.out.println("Threshold reached for " + name + ". Consider taking action!");
-        // Add additional logic, e.g., changing pet mood or triggering events
-    }
-    public void performAction(PetAction action) {
-        action.execute(stats);
-    }
     public int getDefaultItem12() {
         return defaultItem12;
     }
@@ -108,17 +93,13 @@ public class Pet {
     public void setScore(int value) {
         this.score = value;
     }
-    public int getScore() { return this.score;}
-    public long getTotalTimeSpent() {
-        return totalTimeSpent;
+
+    public int getScore() {
+        return this.score;
     }
 
     public void addTimeSpent(long seconds) {
         this.totalTimeSpent += seconds;
-    }
-
-    public void resetTotalTimeSpent() {
-        this.totalTimeSpent = 0;
     }
 
     // Getter and setter for timeLimit
@@ -130,5 +111,12 @@ public class Pet {
         this.timeLimit = timeLimit;
     }
 
+    public long getTotalTimeSpent() {
+        return totalTimeSpent;
+    }
+
+    public void setTotalTimeSpent(long totalTimeSpent) {
+        this.totalTimeSpent = totalTimeSpent;
+    }
 }
 

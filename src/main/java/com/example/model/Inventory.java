@@ -92,11 +92,6 @@ public class Inventory {
 
     @Override
     public String toString() {
-        return "Inventory{" +
-                "item1=" + getItem1() +
-                ", item2=" + getItem2() +
-                ", item3=" + getItem3() +
-                ", item4=" + getItem4() +
-                '}';
+        return "Inventory{" + "item1=" + getItem1() + ", item2=" + getItem2() + ", item3=" + getItem3() + ", item4=" + getItem4() + '}';
     }
 }

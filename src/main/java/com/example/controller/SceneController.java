@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Singleton controller class responsible for managing scene transitions in the application.
@@ -73,9 +74,14 @@ public class SceneController {
     public void switchToInventory() {
         loadFXML("inventory_menu.fxml");
     }
-    public void switchToLoginParent() {loadFXML("login_menu.fxml");}
 
-    public void switchToParentMenu() {loadFXML("parent_menu.fxml");}
+    public void switchToLoginParent() {
+        loadFXML("login_menu.fxml");
+    }
+
+    public void switchToParentMenu() {
+        loadFXML("parent_menu.fxml");
+    }
 
     /**
      * Retrieves the current active scene.
@@ -86,14 +92,8 @@ public class SceneController {
     private Scene getCurrentScene() {
         if (currentScene == null) {
             // Find the first showing window in the application
-            Window window = Stage.getWindows().stream()
-                    .filter(Window::isShowing)
-                    .findFirst()
-                    .orElse(null);
+            Stage.getWindows().stream().filter(Window::isShowing).findFirst().ifPresent(window -> currentScene = window.getScene());
 
-            if (window != null) {
-                currentScene = ((Stage) window).getScene();
-            }
         }
         return currentScene;
     }
@@ -107,17 +107,14 @@ public class SceneController {
     private void loadFXML(String fxml) {
         try {
             // Load the FXML file from the "fxml/" directory
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/" + fxml));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/" + fxml)));
 
             // Retrieve the current scene and update its root and styles
             Scene scene = getCurrentScene();
             if (scene != null) {
                 scene.setRoot(root);
                 scene.getStylesheets().clear();
-                scene.getStylesheets().addAll(
-                        getClass().getClassLoader().getResource("styles/main.css").toExternalForm(),
-                        getClass().getClassLoader().getResource("styles/menu.css").toExternalForm()
-                );
+                scene.getStylesheets().addAll(Objects.requireNonNull(getClass().getClassLoader().getResource("styles/main.css")).toExternalForm(), Objects.requireNonNull(getClass().getClassLoader().getResource("styles/menu.css")).toExternalForm());
                 currentScene = scene;
             }
         } catch (IOException e) {

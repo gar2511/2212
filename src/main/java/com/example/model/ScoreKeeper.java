@@ -13,20 +13,17 @@ public class ScoreKeeper {
     private final IntegerProperty score = new SimpleIntegerProperty(0);
     private final Timeline timeline;
 
-    // Points gained per second
-    private final int pointsPerSecond;
-
     /**
      * Constructs a ScoreKeeper with the specified points gained per second.
      *
      * @param pointsPerSecond Number of points gained per second.
      */
     public ScoreKeeper(int pointsPerSecond) {
-        this.pointsPerSecond = pointsPerSecond;
+        // Points gained per second
 
         // Create a timeline that updates the score every second
         timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), event -> increaseScore(pointsPerSecond))
+                new KeyFrame(Duration.seconds(1), _ -> increaseScore(pointsPerSecond))
         );
         timeline.setCycleCount(Timeline.INDEFINITE); // Runs indefinitely
     }
@@ -43,14 +40,6 @@ public class ScoreKeeper {
      */
     public void stop() {
         timeline.stop();
-    }
-
-    /**
-     * Resets the score to zero.
-     */
-    public void reset() {
-        stop();
-        setScore(0);
     }
 
     /**

@@ -5,13 +5,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.application.Platform;
 import java.io.IOException;
 import java.io.File;
 import java.util.Arrays;
-
 import com.example.model.GameState;
 import com.example.model.Pet;
 import com.example.util.FileHandler;
@@ -34,6 +32,7 @@ public class SaveMenuController {
 
     @FXML
     private TextField petNameField;
+
     @FXML
     private ComboBox<String> petTypeComboBox; // ComboBox for pet type
 
@@ -50,12 +49,7 @@ public class SaveMenuController {
         FileHandler fileHandler = new FileHandler();
 
         // Initialize save slots with default placeholders
-        ObservableList<String> slots = FXCollections.observableArrayList(
-                "CLICK TO CREATE NEW SAVE",
-                "CLICK TO CREATE NEW SAVE",
-                "CLICK TO CREATE NEW SAVE",
-                "CLICK TO CREATE NEW SAVE"
-        );
+        ObservableList<String> slots = FXCollections.observableArrayList("CLICK TO CREATE NEW SAVE", "CLICK TO CREATE NEW SAVE", "CLICK TO CREATE NEW SAVE", "CLICK TO CREATE NEW SAVE");
 
         // Load existing save files and update slots with saved pet names
         File[] saveFiles = fileHandler.getSaveFiles();
@@ -83,7 +77,7 @@ public class SaveMenuController {
         saveSlotList.setFocusTraversable(false);
 
         // Handle user interaction with save slots
-        saveSlotList.setOnMouseClicked(event -> {
+        saveSlotList.setOnMouseClicked(_ -> {
             int index = saveSlotList.getSelectionModel().getSelectedIndex();
             if (index >= 0 && "CLICK TO CREATE NEW SAVE".equals(saveSlotList.getItems().get(index))) {
                 selectedSlotIndex = index;
@@ -101,7 +95,7 @@ public class SaveMenuController {
      * Adds mouse event handling for button visibility on hover.
      */
     private void setupCustomListCells() {
-        saveSlotList.setCellFactory(lv -> new ListCell<String>() {
+        saveSlotList.setCellFactory(_ -> new ListCell<>() {
             private final CustomButton playButton = new CustomButton("PLAY");
             private final CustomButton editButton = new CustomButton("EDIT");
             private final CustomButton deleteButton = new CustomButton("DELETE");
@@ -114,15 +108,15 @@ public class SaveMenuController {
                 playButton.getStyleClass().add("save-slot-button");
                 editButton.getStyleClass().add("save-slot-button");
                 deleteButton.getStyleClass().add("save-slot-button");
-                
+
                 buttons.setVisible(false);
                 buttons.getStyleClass().add("save-slot-buttons");
                 text.getStyleClass().add("save-slot-text");
-                
+
                 // Center the buttons in the StackPane
                 StackPane.setAlignment(buttons, javafx.geometry.Pos.CENTER);
                 buttons.setAlignment(javafx.geometry.Pos.CENTER);
-                
+
                 playButton.setOnAction(e -> {
                     e.consume();
                     handlePlay(getItem());
@@ -138,7 +132,7 @@ public class SaveMenuController {
                     handleDelete(getItem());
                 });
 
-                setOnMouseEntered(e -> {
+                setOnMouseEntered(_ -> {
                     if (getItem() != null && !"CLICK TO CREATE NEW SAVE".equals(getItem())) {
                         buttons.setVisible(true);
                         fadeTransition.setFromValue(1.0);
@@ -147,7 +141,7 @@ public class SaveMenuController {
                     }
                 });
 
-                setOnMouseExited(e -> {
+                setOnMouseExited(_ -> {
                     buttons.setVisible(false);
                     fadeTransition.setFromValue(0.3);
                     fadeTransition.setToValue(1.0);
@@ -165,7 +159,7 @@ public class SaveMenuController {
                     content.getChildren().setAll(text, buttons);
                     StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
                     setGraphic(content);
-                    
+
                     buttons.setVisible(false);
                     buttons.setManaged(!"CLICK TO CREATE NEW SAVE".equals(item));
                     text.setOpacity(1.0);
@@ -191,6 +185,7 @@ public class SaveMenuController {
      * Displays the dialogue for creating or editing a save.
      * Allows the user to input a pet name and confirm the action.
      * If editing an existing save with a name, display that.
+     *
      * @param petName the existing pet name
      */
     private void showNewSaveDialogue(String petName) {
@@ -221,7 +216,7 @@ public class SaveMenuController {
                 saveSlotList.getItems().set(selectedSlotIndex, petName + " " + petType);
                 hideNewSaveDialogue();
             } catch (IOException e) {
-                handleSaveError("save game", e);
+                handleSaveError(e);
             }
         }
     }
@@ -272,7 +267,6 @@ public class SaveMenuController {
             SceneController.getInstance().switchToGame();
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: Show error dialog to user
         }
     }
 
@@ -313,14 +307,13 @@ public class SaveMenuController {
             });
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: Show error dialog to user
         }
     }
 
-    private void handleSaveError(String operation, Exception e) {
+    private void handleSaveError(Exception e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Save Error");
-        alert.setHeaderText("Failed to " + operation);
+        alert.setHeaderText("Failed to " + "save game");
         alert.setContentText("An error occurred: " + e.getMessage());
         alert.showAndWait();
     }

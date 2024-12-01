@@ -2,17 +2,16 @@ package com.example.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
-//import javafx.scene.control.Slider;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.StackPane;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import com.example.components.CustomButton;
 import com.example.components.CustomSlider;
-import com.example.components.CustomToggle;
 import javafx.scene.control.Label;
 import com.example.model.UserPreferences;
 import com.example.util.FileHandler;
+
 import java.io.IOException;
 
 /**
@@ -31,8 +30,10 @@ public class SettingsController {
 
     @FXML
     private CustomButton parentalControlsButton;
+
     @FXML
     private CustomButton configureButton;
+
     @FXML
     private Label parentalStatusLabel;
 
@@ -48,7 +49,7 @@ public class SettingsController {
     @FXML
     public void initialize() {
         fileHandler = new FileHandler();
-        
+
         // Load preferences
         try {
             userPrefs = fileHandler.loadPreferences();
@@ -60,13 +61,13 @@ public class SettingsController {
         // Wrap all UI operations in Platform.runLater to ensure FXML elements are initialized
         Platform.runLater(() -> {
             updateParentalControlsUI(userPrefs.isParentControlsEnabled());
-            
+
             // Set initial values from preferences
             if (volumeSlider != null && volumeLabel != null) {
                 volumeSlider.setValue(userPrefs.getVolume());
-                volumeLabel.setText((int)userPrefs.getVolume() + "%");
+                volumeLabel.setText((int) userPrefs.getVolume() + "%");
             }
-            
+
             if (parentalControlsToggle != null && parentalStatusLabel != null) {
                 parentalControlsToggle.setSelected(userPrefs.isParentControlsEnabled());
                 parentalStatusLabel.setText(userPrefs.isParentControlsEnabled() ? "Enabled" : "Disabled");
@@ -74,7 +75,7 @@ public class SettingsController {
 
             // Add listeners for preferences changes
             if (parentalControlsToggle != null) {
-                parentalControlsToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                parentalControlsToggle.selectedProperty().addListener((_, _, newVal) -> {
                     handleParentalControlsToggle(newVal);
                     if (parentalStatusLabel != null) {
                         parentalStatusLabel.setText(newVal ? "Enabled" : "Disabled");
@@ -85,7 +86,7 @@ public class SettingsController {
             }
 
             if (volumeSlider != null) {
-                volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                volumeSlider.valueProperty().addListener((_, _, newVal) -> {
                     handleVolumeChange(newVal.intValue());
                     if (volumeLabel != null) {
                         volumeLabel.setText(newVal.intValue() + "%");
@@ -120,8 +121,8 @@ public class SettingsController {
             updateColoredTrack();
 
             // Add listeners to update the track when slider width or value changes
-            volumeSlider.widthProperty().addListener((obs, oldVal, newVal) -> updateColoredTrack());
-            volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            volumeSlider.widthProperty().addListener((_, _, _) -> updateColoredTrack());
+            volumeSlider.valueProperty().addListener((_, _, newVal) -> {
                 updateColoredTrack();
                 // Only update the label text, not the track text
                 if (volumeLabel != null) {
@@ -138,8 +139,7 @@ public class SettingsController {
     private void updateColoredTrack() {
         if (coloredTrack != null) {
             double width = volumeSlider.getWidth() - 16; // Account for slider padding
-            double percentage = (volumeSlider.getValue() - volumeSlider.getMin()) /
-                    (volumeSlider.getMax() - volumeSlider.getMin());
+            double percentage = (volumeSlider.getValue() - volumeSlider.getMin()) / (volumeSlider.getMax() - volumeSlider.getMin());
             coloredTrack.setWidth(Math.max(0, width * percentage));
         }
     }
@@ -177,7 +177,9 @@ public class SettingsController {
     }
 
     @FXML
-    private void goParent(){SceneController.getInstance().switchToLoginParent();}
+    private void goParent() {
+        SceneController.getInstance().switchToLoginParent();
+    }
 
     private void savePreferences() {
         try {
@@ -213,8 +215,4 @@ public class SettingsController {
         }
     }
 
-    @FXML
-    private void handleParentalControls() {
-        SceneController.getInstance().switchToLoginParent();
-    }
 }

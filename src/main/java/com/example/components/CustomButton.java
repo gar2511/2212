@@ -33,12 +33,12 @@ public class CustomButton extends Button {
         scaleUpBig.setToX(1.1);
         scaleUpBig.setToY(1.1);
         scaleUpBig.setInterpolator(Interpolator.EASE_OUT);
-        
+
         ScaleTransition scaleUpSmall = new ScaleTransition(Duration.millis(100));
         scaleUpSmall.setToX(1.05);
         scaleUpSmall.setToY(1.05);
         scaleUpSmall.setInterpolator(Interpolator.EASE_OUT);
-        
+
         hoverAnimation.getChildren().addAll(scaleUpBig, scaleUpSmall);
 
         // exit animation
@@ -47,12 +47,12 @@ public class CustomButton extends Button {
         scaleDownBig.setToX(0.95);
         scaleDownBig.setToY(0.95);
         scaleDownBig.setInterpolator(Interpolator.EASE_OUT);
-        
+
         ScaleTransition scaleDownSmall = new ScaleTransition(Duration.millis(100));
         scaleDownSmall.setToX(1.0);
         scaleDownSmall.setToY(1.0);
         scaleDownSmall.setInterpolator(Interpolator.EASE_OUT);
-        
+
         exitAnimation.getChildren().addAll(scaleDownBig, scaleDownSmall);
 
         // press/release animations
@@ -73,27 +73,27 @@ public class CustomButton extends Button {
 
         // initialize the timelines
         colorTimeline = new Timeline(
-            new KeyFrame(Duration.ZERO, new KeyValue(colorAdjust.brightnessProperty(), 0)),
-            new KeyFrame(Duration.millis(200), new KeyValue(colorAdjust.brightnessProperty(), -0.1))
+                new KeyFrame(Duration.ZERO, new KeyValue(colorAdjust.brightnessProperty(), 0)),
+                new KeyFrame(Duration.millis(200), new KeyValue(colorAdjust.brightnessProperty(), -0.1))
         );
 
         reverseColorTimeline = new Timeline(
-            new KeyFrame(Duration.ZERO, new KeyValue(colorAdjust.brightnessProperty(), -0.1)),
-            new KeyFrame(Duration.millis(200), new KeyValue(colorAdjust.brightnessProperty(), 0))
+                new KeyFrame(Duration.ZERO, new KeyValue(colorAdjust.brightnessProperty(), -0.1)),
+                new KeyFrame(Duration.millis(200), new KeyValue(colorAdjust.brightnessProperty(), 0))
         );
 
         // event handlers
-        setOnMouseEntered(e -> {
+        setOnMouseEntered(_ -> {
             hoverAnimation.play();
             colorTimeline.play();
         });
 
-        setOnMouseExited(e -> {
+        setOnMouseExited(_ -> {
             exitAnimation.play();
             reverseColorTimeline.play();
         });
 
-        setOnMousePressed(e -> pressTransition.play());
-        setOnMouseReleased(e -> releaseTransition.play());
+        setOnMousePressed(_ -> pressTransition.play());
+        setOnMouseReleased(_ -> releaseTransition.play());
     }
 }

@@ -1,14 +1,6 @@
 package com.example.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.scene.Scene;
-import javafx.geometry.Pos;
-import com.example.components.CustomButton;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
 
@@ -18,12 +10,6 @@ import javafx.scene.layout.StackPane;
  */
 public class MainMenuController {
 
-    @FXML
-    private CustomButton loadGameButton;
-    @FXML
-    private CustomButton settingsButton;
-    @FXML
-    private CustomButton exitButton;
     @FXML
     private StackPane exitDialog;
 

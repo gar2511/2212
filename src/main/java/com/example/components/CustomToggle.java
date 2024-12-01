@@ -1,6 +1,5 @@
 package com.example.components;
 
-import javafx.animation.TranslateTransition;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -36,7 +35,7 @@ public class CustomToggle extends ToggleButton {
         StackPane layout = new StackPane(background, thumb);
         layout.setMaxSize(39, 24);
         setGraphic(layout);
-        
+
         // prevent default handling
         setOnMouseClicked(event -> {
             if (!isAnimating) {
@@ -49,9 +48,7 @@ public class CustomToggle extends ToggleButton {
         setStyle("-fx-background-color: transparent; -fx-padding: 0;");
 
         // add listener for state changes
-        selectedProperty().addListener((obs, oldVal, newVal) -> {
-            animateToggle(newVal);
-        });
+        selectedProperty().addListener((_, _, newVal) -> animateToggle(newVal));
 
         // set initial state
         background.setFill(Color.valueOf("#e9e9eb"));
@@ -62,45 +59,45 @@ public class CustomToggle extends ToggleButton {
         // stop any running animations
         if (colorTimeline != null) colorTimeline.stop();
         if (translateTimeline != null) translateTimeline.stop();
-        
+
         isAnimating = true;
 
         // color transition
         Color startColor = (Color) background.getFill();
         Color endColor = selected ? Color.valueOf("#34c759") : Color.valueOf("#e9e9eb");
-        
+
         colorTimeline = new Timeline(
-            new KeyFrame(Duration.ZERO, new KeyValue(
-                background.fillProperty(), 
-                startColor,
-                Interpolator.SPLINE(0.25, 0.1, 0.25, 1)
-            )),
-            new KeyFrame(Duration.millis(300), new KeyValue(
-                background.fillProperty(), 
-                endColor,
-                Interpolator.SPLINE(0.25, 0.1, 0.25, 1)
-            ))
+                new KeyFrame(Duration.ZERO, new KeyValue(
+                        background.fillProperty(),
+                        startColor,
+                        Interpolator.SPLINE(0.25, 0.1, 0.25, 1)
+                )),
+                new KeyFrame(Duration.millis(300), new KeyValue(
+                        background.fillProperty(),
+                        endColor,
+                        Interpolator.SPLINE(0.25, 0.1, 0.25, 1)
+                ))
         );
 
         // thumb translation
         double endX = selected ? 7.5 : -7.5;
-        
+
         translateTimeline = new Timeline(
-            new KeyFrame(Duration.ZERO, new KeyValue(
-                thumb.translateXProperty(),
-                thumb.getTranslateX(),
-                Interpolator.SPLINE(0.25, 0.1, 0.25, 1)
-            )),
-            new KeyFrame(Duration.millis(300), new KeyValue(
-                thumb.translateXProperty(),
-                endX,
-                Interpolator.SPLINE(0.25, 0.1, 0.25, 1)
-            ))
+                new KeyFrame(Duration.ZERO, new KeyValue(
+                        thumb.translateXProperty(),
+                        thumb.getTranslateX(),
+                        Interpolator.SPLINE(0.25, 0.1, 0.25, 1)
+                )),
+                new KeyFrame(Duration.millis(300), new KeyValue(
+                        thumb.translateXProperty(),
+                        endX,
+                        Interpolator.SPLINE(0.25, 0.1, 0.25, 1)
+                ))
         );
 
         // play animations
         colorTimeline.play();
         translateTimeline.play();
-        translateTimeline.setOnFinished(e -> isAnimating = false);
+        translateTimeline.setOnFinished(_ -> isAnimating = false);
     }
 }

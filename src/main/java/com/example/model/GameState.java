@@ -1,6 +1,5 @@
 package com.example.model;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
@@ -12,29 +11,17 @@ public class GameState {
     // Static reference to the current game state (Singleton pattern)
     private static GameState currentState;
 
-    // Timestamp of when this game state was last saved
-    private LocalDateTime savedAt;
-
     // The player's pet instance
     private Pet pet;
-
-    // The pet's current vital statistics
-    private VitalStats stats;
-    private boolean controlParent;
-
-    private LocalDateTime sessionStartTime; // When the session started
-    private Duration totalPlayTime;        // Total time played
-
 
     /**
      * Constructor initializes a new game state with the current timestamp.
      * Sets the {@code savedAt} field to the current date and time.
      */
     public GameState() {
-        this.controlParent = false;
-        this.savedAt = LocalDateTime.now();
+        // Timestamp of when this game state was last saved
+        LocalDateTime.now();
     }
-
 
 
     /**
@@ -61,24 +48,6 @@ public class GameState {
     }
 
     /**
-     * Gets the timestamp of the last time this game state was saved.
-     *
-     * @return A {@link LocalDateTime} representing the save timestamp.
-     */
-    public LocalDateTime getSavedAt() {
-        return savedAt;
-    }
-
-    /**
-     * Sets the timestamp for when this game state was last saved.
-     *
-     * @param savedAt A {@link LocalDateTime} representing the new save timestamp.
-     */
-    public void setSavedAt(LocalDateTime savedAt) {
-        this.savedAt = savedAt;
-    }
-
-    /**
      * Gets the player's pet associated with this game state.
      *
      * @return The {@link Pet} instance representing the player's pet.
@@ -96,23 +65,4 @@ public class GameState {
         this.pet = pet;
     }
 
-    /**
-     * Gets the vital statistics of the player's pet.
-     *
-     * @return A {@link VitalStats} object representing the pet's current vital statistics.
-     */
-    public VitalStats getStats() {
-        return stats;
-    }
-
-    /**
-     * Sets the vital statistics for the player's pet.
-     *
-     * @param stats A {@link VitalStats} object containing the new statistics for the pet.
-     */
-    public void setStats(VitalStats stats) {
-        this.stats = stats;
-    }
-    public void setControlParent(boolean controlParent) {this.controlParent= controlParent;}
-    public boolean getControlParent(){return controlParent;}
 }
