@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import java.util.Arrays;
 
 public class VitalStats {
-    private int hungerMod = 0;
     private int happinessMod = 0;
     private int healthMod = 0;
     private int energyMod = 0;
@@ -25,32 +24,30 @@ public class VitalStats {
 
     private boolean suppressListeners = false;
 
-    private boolean alive = true;  // Add this field
-
     public VitalStats() {
         // Add listeners to enforce clamping and update state
-        hunger.addListener((observable, oldValue, newValue) -> {
+        hunger.addListener((_, _, newValue) -> {
             if (!suppressListeners) {
                 hunger.set(clampValue(newValue.intValue()));
                 updatePetState(0, hunger.get());
             }
         });
 
-        happiness.addListener((observable, oldValue, newValue) -> {
+        happiness.addListener((_, _, newValue) -> {
             if (!suppressListeners) {
                 happiness.set(clampValue(newValue.intValue()));
                 updatePetState(1, happiness.get());
             }
         });
 
-        energy.addListener((observable, oldValue, newValue) -> {
+        energy.addListener((_, _, newValue) -> {
             if (!suppressListeners) {
                 energy.set(clampValue(newValue.intValue()));
                 updatePetState(2, energy.get());
             }
         });
 
-        health.addListener((observable, oldValue, newValue) -> {
+        health.addListener((_, _, newValue) -> {
             if (!suppressListeners) {
                 health.set(clampValue(newValue.intValue()));
                 updatePetState(3, health.get());
@@ -143,7 +140,7 @@ public class VitalStats {
 
     // Modifier getters and setters
     public int getHungerMod() {
-        return hungerMod;
+        return 0;
     }
 
     public int getHealthMod() {
@@ -156,10 +153,6 @@ public class VitalStats {
 
     public int getEnergyMod() {
         return energyMod;
-    }
-
-    public void setHungerMod(int hungerMod) {
-        this.hungerMod = hungerMod;
     }
 
     public void setHealthMod(int healthMod) {
@@ -181,10 +174,6 @@ public class VitalStats {
     @JsonProperty("state")
     public void setState(int[] state) {
         System.arraycopy(state, 0, petState, 0, Math.min(state.length, petState.length));
-    }
-
-    public int getVitalState(int index) {
-        return petState[index];
     }
 
     // Update petState array based on the stat value
@@ -213,21 +202,15 @@ public class VitalStats {
     }
 
 
-
     // Helper to get the stat name from the index
     private String getStatName(int index) {
-        switch (index) {
-            case 0:
-                return "Hunger";
-            case 1:
-                return "Happiness";
-            case 2:
-                return "Energy";
-            case 3:
-                return "Health";
-            default:
-                return "Unknown";
-        }
+        return switch (index) {
+            case 0 -> "Hunger";
+            case 1 -> "Happiness";
+            case 2 -> "Energy";
+            case 3 -> "Health";
+            default -> "Unknown";
+        };
     }
 
     // Clamp method to ensure values stay within range
@@ -253,7 +236,7 @@ public class VitalStats {
 
     @JsonProperty("alive")
     public void setAlive(boolean alive) {
-        this.alive = alive;
+        // Add this field
         // If setting to true, ensure health is above 0
         if (alive && health.get() <= 0) {
             setHealth(1);

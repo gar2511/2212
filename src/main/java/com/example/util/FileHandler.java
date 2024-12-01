@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class FileHandler {
     // Directory where all save files will be stored
     private static final String SAVES_DIR = "saves";
-    
+
     // ObjectMapper instance for JSON serialization/deserialization
     private final ObjectMapper objectMapper;
 
@@ -72,12 +72,10 @@ public class FileHandler {
     // @return Array of File objects representing save files, or null if directory is empty
     public File[] getSaveFiles() {
         File savesDir = new File(SAVES_DIR);
-        File[] files = savesDir.listFiles((dir, name) -> name.endsWith(".json"));
+        File[] files = savesDir.listFiles((_, name) -> name.endsWith(".json"));
         System.out.println("Found save files: " + (files != null ? Arrays.toString(files) : "null"));
         return files;
     }
-
-    private static final String PREFS_FILE = "preferences.json";
 
     public void savePreferences(UserPreferences preferences) throws IOException {
         File savesDir = new File("saves");
