@@ -57,6 +57,10 @@ public class GameController {
     private Timeline timeTracker; // Timeline to track playtime
     private long currentPlayTime = 0; // Current session playtime in seconds
 
+    @FXML
+    private Button playPauseButton;
+    private boolean isPaused = false;
+
     /**
      * Constructor for GameController.
      * Initializes the controller when the game scene is created.
@@ -551,6 +555,9 @@ public class GameController {
                 case Q: // Go back to the main menu
                     goBack();
                     break;
+                case SPACE: // Pause/Resume game
+                    togglePlayPause();
+                    break;
                 default:
                     System.out.println("Unhandled key: " + event.getCode());
             }
@@ -588,6 +595,54 @@ public class GameController {
         else {
             Image petImage = new Image(getClass().getResourceAsStream("/images/" + species.toLowerCase() + "_" + petState.toLowerCase() + ".png"));
             moleSprite.setImage(petImage);
+        }
+    }
+
+    @FXML
+    private void togglePlayPause() {
+        isPaused = !isPaused;
+        
+        if (isPaused) {
+            // pause all timelines
+            if (statsDecayTimeline != null) {
+                statsDecayTimeline.pause();
+            }
+            if (timeTracker != null) {
+                timeTracker.pause();
+            }
+            if (scoreKeeper != null) {
+                scoreKeeper.stop();
+            }
+            playPauseButton.setText("Resume");
+            
+            // disable all action buttons
+            feedButton.setDisable(true);
+            playButton.setDisable(true);
+            giftButton.setDisable(true);
+            exerciseButton.setDisable(true);
+            vetButton.setDisable(true);
+            inventoryButton.setDisable(true);
+            
+        } else {
+            // resume all timelines
+            if (statsDecayTimeline != null) {
+                statsDecayTimeline.play();
+            }
+            if (timeTracker != null) {
+                timeTracker.play();
+            }
+            if (scoreKeeper != null) {
+                scoreKeeper.start();
+            }
+            playPauseButton.setText("Pause");
+            
+            // re-enable all action buttons
+            feedButton.setDisable(false);
+            playButton.setDisable(false);
+            giftButton.setDisable(false);
+            exerciseButton.setDisable(false);
+            vetButton.setDisable(false);
+            inventoryButton.setDisable(false);
         }
     }
 }

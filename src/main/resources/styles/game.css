@@ -114,3 +114,16 @@
     -fx-background-radius: 5;
     -fx-background-insets: 1;
 }
+
+.play-pause-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.play-pause-button:hover {
+    -fx-background-color: #2980b9;
+}
