@@ -69,7 +69,7 @@ public class App extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main_menu.fxml"));
 
             // Create the main scene with initial dimensions
-            Scene scene = new Scene(loader.load(), 1000, 600);
+            Scene scene = new Scene(loader.load(), 1600, 900);
 
             // Load and apply the CSS stylesheet for menu styling
             scene.getStylesheets().add(
