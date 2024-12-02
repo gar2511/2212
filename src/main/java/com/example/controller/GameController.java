@@ -172,62 +172,52 @@ public class GameController {
             imageFlipTimeline.stop();
         }
     }
+    public void restartTimeTracker() {
+        System.out.println("Restarting time tracker.");
+        stopTimeTracker(); // Ensure the old tracker is stopped
+        startTimeTracker(); // Start a new tracker
+    }
+
     /**
      * Starts the timeline to track the playtime of the game session.
      * Updates the playtime label and handles logic for time spent and time limits.
      * If the time limit is reached, the game is saved and the user is sent back to the main menu.
      */
     private void startTimeTracker() {
-        // Check if the time tracker timeline is already running
+        System.out.println("startTimeTracker called.");
+
+        // Stop and nullify any existing time tracker
         if (timeTracker != null) {
-            System.out.println("Time tracker is already running.");
-            return; // If it is running, exit the method
+            System.out.println("Stopping existing timeTracker.");
+            stopTimeTracker();
         }
 
-        // Create a new timeline with a keyframe that triggers every 50 milliseconds
-        timeTracker = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            // Get the current game state and pet instance
+        // Initialize a new time tracker
+        timeTracker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             GameState gameState = GameState.getCurrentState();
             Pet pet = gameState.getPet();
 
             if (pet != null) {
-                // Increment playtime by 50 milliseconds
-                pet.setCurrentPlayTime(pet.getCurrentPlayTime()+50);
+                pet.addTimeSpent(1); // Increment total and current playtime by 1 second
 
-                // Convert the playtime to seconds for display purposes
-                long secondsElapsed = pet.getCurrentPlayTime() / 1000;
+                long sessionPlaytime = pet.getCurrentPlayTime(); // Fetch current session playtime
 
-                // Update the playtime label on the UI thread
+                // Update the playtime label
                 Platform.runLater(() -> {
-                    playTimeLabel.setText("Current Session's Play Time: " + formatPlayTime(secondsElapsed));
+                    playTimeLabel.setText("Session Play Time: " + formatPlayTime(sessionPlaytime));
                 });
 
-                // Add 1 second to the pet's total time spent every 1000 milliseconds
-                if (pet.getCurrentPlayTime() % 1000 == 0) {
-                    pet.addTimeSpent(1); // Increment the total playtime by 1 second
-
-                    // Log the current playtime to the console
-                    Platform.runLater(() -> {
-                        System.out.println("Current Playtime: " + formatPlayTime(secondsElapsed));
-                    });
-                }
-
-                // Check if the pet's time limit is set and if the playtime exceeds it
-                if (pet.getTimeLimit() > 0 && secondsElapsed >= pet.getTimeLimit()) {
-                    // Log the time limit reached and save the game
-                    System.out.println("Time limit reached! Saving and exiting.");
-                    stopTimeTracker(); // Stop the time tracker timeline
-                    saveGame(); // Save the game state
-                    goBack(); // Exit to the main menu
-                }
+                System.out.println("Updated playtime: " + sessionPlaytime + " seconds");
+            } else {
+                System.out.println("No pet found for time tracking.");
             }
         }));
 
-        // Set the timeline to run indefinitely
         timeTracker.setCycleCount(Timeline.INDEFINITE);
-        // Start the timeline
         timeTracker.play();
+        System.out.println("Time tracker started.");
     }
+
 
     /**
      * Formats the playtime in HH:mm:ss format.
@@ -320,6 +310,8 @@ public class GameController {
             timeTracker.stop();
             timeTracker = null;
             System.out.println("Time tracker stopped.");
+        } else {
+            System.out.println("stopTimeTracker called, but timeTracker was already null.");
         }
     }
 
