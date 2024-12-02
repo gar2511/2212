@@ -1,14 +1,18 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
  * Model class representing the complete state of the game at any given moment.
  * Implements the Singleton pattern to ensure a single current game state is maintained throughout the application.
- * The game state includes the player's pet, vital statistics, parental control status, and the timestamp of the last save.
+ * The game state includes the player's pet, vital statistics, and the timestamp of the last save.
  */
+@JsonIgnoreProperties(ignoreUnknown = true) // Ignore unrecognized fields like "volume"
 public class GameState {
+    private boolean parentControlsEnabled;
     // Static reference to the current game state (Singleton pattern)
     private static GameState currentState;
 
@@ -24,11 +28,9 @@ public class GameState {
     // Indicates whether parental controls are active
     private boolean controlParent;
 
-    // When the session started
-    private LocalDateTime sessionStartTime;
+    private LocalDateTime sessionStartTime; // When the session started
+    private Duration totalPlayTime;        // Total time played
 
-    // Total time played
-    private Duration totalPlayTime;
 
     /**
      * Constructor initializes a new game state with the current timestamp.
@@ -37,6 +39,15 @@ public class GameState {
     public GameState() {
         this.controlParent = false;
         this.savedAt = LocalDateTime.now();
+    }
+
+    // Getters and Setters
+    public boolean isParentControlsEnabled() {
+        return parentControlsEnabled;
+    }
+
+    public void setParentControlsEnabled(boolean parentControlsEnabled) {
+        this.parentControlsEnabled = parentControlsEnabled;
     }
 
     /**
@@ -115,58 +126,21 @@ public class GameState {
     public void setStats(VitalStats stats) {
         this.stats = stats;
     }
-
     /**
      * Sets whether parental controls are active.
      *
      * @param controlParent {@code true} to enable parental controls, {@code false} to disable them.
      */
     public void setControlParent(boolean controlParent) {
-        this.controlParent = controlParent;
+        this.controlParent= controlParent;
     }
-
     /**
      * Checks whether parental controls are currently active.
      *
      * @return {@code true} if parental controls are enabled, {@code false} otherwise.
      */
-    public boolean getControlParent() {
+    public boolean getControlParent(){
         return controlParent;
     }
 
-    /**
-     * Gets the total playtime accumulated in this game state.
-     *
-     * @return A {@link Duration} object representing the total playtime.
-     */
-    public Duration getTotalPlayTime() {
-        return totalPlayTime;
-    }
-
-    /**
-     * Sets the total playtime for this game state.
-     *
-     * @param totalPlayTime A {@link Duration} object representing the new total playtime.
-     */
-    public void setTotalPlayTime(Duration totalPlayTime) {
-        this.totalPlayTime = totalPlayTime;
-    }
-
-    /**
-     * Gets the timestamp of when the current game session started.
-     *
-     * @return A {@link LocalDateTime} representing the session start time.
-     */
-    public LocalDateTime getSessionStartTime() {
-        return sessionStartTime;
-    }
-
-    /**
-     * Sets the timestamp for when the current game session started.
-     *
-     * @param sessionStartTime A {@link LocalDateTime} representing the session start time.
-     */
-    public void setSessionStartTime(LocalDateTime sessionStartTime) {
-        this.sessionStartTime = sessionStartTime;
-    }
 }

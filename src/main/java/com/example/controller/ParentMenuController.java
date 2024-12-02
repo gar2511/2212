@@ -17,6 +17,8 @@ import javafx.geometry.Pos;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
 import static com.example.App.PlayButtonSound;
@@ -27,41 +29,39 @@ import static com.example.App.PlayButtonSound;
  */
 public class ParentMenuController {
 
-    @FXML
-    private Label petScoreLabel;
-
+    public Label petScoreLabel;
+    public TextField endTimeField;
+    public TextField startTimeField;
+    public CustomButton setAllowedTimeButton;
+    public TextField endTimeTextField;
+    public TextField startTimeTextField;
     @FXML
     private ToggleButton parentModeToggle;
-
     @FXML
     private ComboBox<String> selectSaveDropdown;
-
     @FXML
     private VBox timeLimitSection;
-
     @FXML
     private TextField timeLimitInput;
-
     @FXML
     private CustomToggle timeLimitToggle;
-
     @FXML
     private HBox viewStatsSection;
-
     @FXML
     private Button revivePetButton;
-
     @FXML
     private HBox inventorySection;
-
     @FXML
     private Button goBackButton;
-
     @FXML
     private Button updateTimeLimitButton;
 
     @FXML
     private Label saveScoreLabel;
+    private FileHandler fileHandler;
+    private GameState currentGameState;
+    private boolean isParentModeEnabled = false;
+    private UserPreferences userPrefs;
 
     @FXML
     private Spinner<Integer> timeLimitSpinner;
@@ -74,18 +74,12 @@ public class ParentMenuController {
 
     @FXML
     private Separator inventoryDivider;
-
+    
     @FXML
     private Label petStatusLabel;
 
     @FXML
     private CustomButton removeProfileButton;
-
-    private FileHandler fileHandler;
-    private GameState currentGameState;
-    private boolean isParentModeEnabled = false;
-    private UserPreferences userPrefs;
-
     /**
      * Initializes the Parent Menu interface.
      * Loads user preferences, sets up dropdown options, and configures visibility based on parent mode.
@@ -93,12 +87,14 @@ public class ParentMenuController {
     @FXML
     public void initialize() {
         fileHandler = new FileHandler();
-
+        
+        // load preferences first
         try {
             userPrefs = fileHandler.loadPreferences();
             isParentModeEnabled = userPrefs.isParentControlsEnabled();
             parentModeToggle.setSelected(isParentModeEnabled);
-
+            
+            // Set initial visibility based on parent mode
             selectSaveDropdown.setVisible(isParentModeEnabled);
             selectSaveDropdown.setManaged(isParentModeEnabled);
         } catch (IOException e) {
@@ -106,6 +102,7 @@ public class ParentMenuController {
             userPrefs = new UserPreferences();
         }
 
+        // populate the dropdown with save files
         File[] saveFiles = fileHandler.getSaveFiles();
         if (saveFiles != null) {
             selectSaveDropdown.getItems().add("Select a save file...");
@@ -126,6 +123,8 @@ public class ParentMenuController {
             }
         }
         selectSaveDropdown.setValue("Select a save file...");
+        
+        // Make sure sections are hidden when "Select a save file..." is initially selected
         timeLimitSection.setVisible(false);
         timeLimitSection.setManaged(false);
         viewStatsSection.setVisible(false);
@@ -135,10 +134,12 @@ public class ParentMenuController {
         inventorySection.setVisible(false);
         inventorySection.setManaged(false);
 
+        // Add listener to dropdown for save selection
         selectSaveDropdown.setOnAction(event -> {
             String selected = selectSaveDropdown.getValue();
             if (selected != null && !selected.equals("Select a save file...")) {
                 loadSelectedSave();
+                // Show sections only when a valid save is selected
                 divider.setVisible(true);
                 divider.setManaged(true);
                 timeLimitSection.setVisible(true);
@@ -150,6 +151,7 @@ public class ParentMenuController {
                 inventorySection.setVisible(true);
                 inventorySection.setManaged(true);
             } else {
+                // Hide sections when no save is selected
                 divider.setVisible(false);
                 divider.setManaged(false);
                 timeLimitSection.setVisible(false);
@@ -167,6 +169,7 @@ public class ParentMenuController {
             }
         });
 
+        // Initialize spinners with default values
         item1Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
         item2Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
         item3Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
@@ -180,6 +183,7 @@ public class ParentMenuController {
         String selectedPetName = selectSaveDropdown.getValue();
         if (selectedPetName != null && !selectedPetName.equals("Select a save file...")) {
             try {
+                // Find the corresponding save file by iterating through saves
                 File[] saveFiles = fileHandler.getSaveFiles();
                 for (File file : saveFiles) {
                     String fileName = file.getName();
@@ -190,6 +194,8 @@ public class ParentMenuController {
                             if (petFullName.equals(selectedPetName)) {
                                 currentGameState = state;
                                 Pet pet = currentGameState.getPet();
+
+                                // Update UI components with the pet's current state
                                 petScoreLabel.setText("Score: " + pet.getScore());
                                 petScoreLabel.setVisible(true);
                                 item1Spinner.getValueFactory().setValue(pet.getInventory().getItem1());
@@ -227,7 +233,7 @@ public class ParentMenuController {
     private void handleToggleParentMode() {
         PlayButtonSound();
         isParentModeEnabled = parentModeToggle.isSelected();
-
+        
         // only update the enabled state, don't clear password
         userPrefs.setParentControlsEnabled(isParentModeEnabled);
         try {
@@ -235,7 +241,7 @@ public class ParentMenuController {
         } catch (IOException e) {
             System.err.println("failed to save preferences: " + e.getMessage());
         }
-
+        
         // update UI visibility
         updateVisibility(isParentModeEnabled);
     }
@@ -247,11 +253,11 @@ public class ParentMenuController {
     private void updateVisibility(boolean enabled) {
         selectSaveDropdown.setVisible(enabled);
         selectSaveDropdown.setManaged(enabled);
-
+        
         if (enabled) {
             selectSaveDropdown.setValue("Select a save file...");
         }
-
+        
         // Hide all other sections
         divider.setVisible(false);
         divider.setManaged(false);
@@ -397,43 +403,43 @@ public class ParentMenuController {
         // create custom dialog
         StackPane dialogOverlay = new StackPane();
         dialogOverlay.getStyleClass().add("dialog-overlay");
-
+        
         VBox dialogContent = new VBox();
         dialogContent.getStyleClass().add("dialog-content");
         dialogContent.setAlignment(Pos.CENTER);
         dialogContent.setSpacing(20);
-
+        
         Label titleLabel = new Label("Remove Parent Profile?");
         titleLabel.getStyleClass().add("dialog-title");
-
+        
         Label messageLabel = new Label("This will remove the parent PIN and disable parental controls.");
         messageLabel.getStyleClass().add("dialog-message");
-
+        
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(20);
         buttonBox.setAlignment(Pos.CENTER);
-
+        
         CustomButton confirmButton = new CustomButton("REMOVE");
         confirmButton.getStyleClass().add("dialog-button-confirm");
-
+        
         CustomButton cancelButton = new CustomButton("BACK");
         cancelButton.getStyleClass().add("dialog-button-cancel");
-
+        
         buttonBox.getChildren().addAll(confirmButton, cancelButton);
         dialogContent.getChildren().addAll(titleLabel, messageLabel, buttonBox);
         dialogOverlay.getChildren().add(dialogContent);
-
+        
         // add dialog to the current scene
         StackPane root = (StackPane) parentModeToggle.getScene().getRoot();
         root.getChildren().add(dialogOverlay);
-
+        
         // handle button actions
         confirmButton.setOnAction(e -> {
             root.getChildren().remove(dialogOverlay);
             // clear password and disable controls
             userPrefs.setParentPassword("");
             userPrefs.setParentControlsEnabled(false);
-
+            
             try {
                 fileHandler.savePreferences(userPrefs);
                 // update UI
@@ -445,9 +451,68 @@ public class ParentMenuController {
                 System.err.println("failed to save preferences: " + ex.getMessage());
             }
         });
-
+        
         cancelButton.setOnAction(e -> {
             root.getChildren().remove(dialogOverlay);
         });
+    }
+
+
+    public void saveTime(ActionEvent actionEvent) {
+    }
+
+    public void handleSetAllowedTime(ActionEvent actionEvent) {
+        PlayButtonSound();
+
+        if (currentGameState != null) {
+            String startTimeInput = startTimeTextField.getText().trim();
+            String endTimeInput = endTimeTextField.getText().trim();
+
+            try {
+                // Normalize the input to HH:mm format if necessary
+                LocalTime startTime = parseTime(startTimeInput);
+                LocalTime endTime = parseTime(endTimeInput);
+
+                // Save the allowed times to the pet object
+                Pet pet = currentGameState.getPet();
+                pet.saveStartTime(startTime);
+                pet.saveEndTime(endTime);
+
+                // Save the updated game state to file
+                saveCurrentGameState();
+
+                // Update UI or log success
+                System.out.println("Allowed playtime updated: " + startTime + " to " + endTime);
+            } catch (IllegalArgumentException | DateTimeParseException e) {
+                // Handle invalid time input or timeframe
+                System.err.println("Invalid time or timeframe: " + e.getMessage());
+
+                // Show an alert to the user
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Time");
+                alert.setHeaderText("Invalid Time or Timeframe");
+                alert.setContentText("Ensure the times are valid and use the format HH:mm (e.g., 00:00).");
+                alert.showAndWait();
+            }
+        } else {
+            System.err.println("No game state found to update allowed times.");
+        }
+    }
+
+    /**
+     * Parses a time string into LocalTime, allowing flexible input like "0:00".
+     *
+     * @param timeInput The time string to parse.
+     * @return The parsed LocalTime.
+     * @throws DateTimeParseException If the input is invalid.
+     */
+    private LocalTime parseTime(String timeInput) {
+        // Normalize single-digit hour inputs to HH:mm
+        if (!timeInput.matches("\\d{2}:\\d{2}")) {
+            if (timeInput.matches("\\d{1}:\\d{2}")) {
+                timeInput = "0" + timeInput; // Add leading zero for single-digit hour
+            }
+        }
+        return LocalTime.parse(timeInput); // Parse as LocalTime
     }
 }

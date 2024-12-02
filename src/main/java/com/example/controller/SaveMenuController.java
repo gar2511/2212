@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.application.Platform;
 import java.io.IOException;
 import java.io.File;
+import java.time.LocalTime;
 import java.util.Arrays;
 
 import com.example.model.GameState;
@@ -36,17 +37,16 @@ public class SaveMenuController {
 
     @FXML
     private TextField petNameField;
-
     @FXML
-    private ComboBox<String> petTypeComboBox;
+    private ComboBox<String> petTypeComboBox; // ComboBox for pet type
 
     private int selectedSlotIndex = -1;
 
     /**
      * Initializes the save menu interface.
      * This method is automatically called after the FXML file is loaded.
-     * Populates the save slot list with default values or saved game data.
-     * Sets up event handlers for interactive components.
+     * - Populates the save slot list with default values or saved game data.
+     * - Sets up event handlers for interactive components.
      */
     @FXML
     public void initialize() {
@@ -72,6 +72,7 @@ public class SaveMenuController {
                         GameState state = fileHandler.loadGame("slot" + slotIndex);
                         if (state != null && state.getPet() != null) {
                             Pet pet = state.getPet();
+                            // Update slot with both pet name and species
                             slots.set(slotIndex, pet.getName() + " " + pet.getSpecies());
                         }
                     } catch (IOException ignored) {
@@ -117,14 +118,15 @@ public class SaveMenuController {
                 playButton.getStyleClass().add("save-slot-button");
                 editButton.getStyleClass().add("save-slot-button");
                 deleteButton.getStyleClass().add("save-slot-button");
-
+                
                 buttons.setVisible(false);
                 buttons.getStyleClass().add("save-slot-buttons");
                 text.getStyleClass().add("save-slot-text");
-
+                
+                // Center the buttons in the StackPane
                 StackPane.setAlignment(buttons, javafx.geometry.Pos.CENTER);
                 buttons.setAlignment(javafx.geometry.Pos.CENTER);
-
+                
                 playButton.setOnAction(e -> {
                     PlayButtonSound();
                     e.consume();
@@ -170,7 +172,7 @@ public class SaveMenuController {
                     content.getChildren().setAll(text, buttons);
                     StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
                     setGraphic(content);
-
+                    
                     buttons.setVisible(false);
                     buttons.setManaged(!"CLICK TO CREATE NEW SAVE".equals(item));
                     text.setOpacity(1.0);
@@ -194,8 +196,10 @@ public class SaveMenuController {
     }
 
     /**
-     * Displays the dialogue for editing a save with a pre-filled pet name.
-     * @param petName The name of the existing pet to edit.
+     * Displays the dialogue for creating or editing a save.
+     * Allows the user to input a pet name and confirm the action.
+     * If editing an existing save with a name, display that.
+     * @param petName the existing pet name
      */
     private void showNewSaveDialogue(String petName) {
         PlayButtonSound();
@@ -262,7 +266,9 @@ public class SaveMenuController {
 
     /**
      * Handles the play button action for a save slot.
-     * Switches to the game scene with the selected save.
+     * Checks if the current time is within allowed playtime or both fields are null,
+     * Then switches to the game scene.
+     *
      * @param saveName The name of the save to load and play.
      */
     private void handlePlay(String saveName) {
@@ -271,17 +277,82 @@ public class SaveMenuController {
             System.out.println("Playing: " + saveName);
             FileHandler fileHandler = new FileHandler();
             GameState loadedState = fileHandler.loadGame("slot" + index);
-            GameState.loadState(loadedState);
+            Pet pet = loadedState.getPet();
 
-            SceneController.getInstance().switchToGame();
+            // Retrieve start and end times from the Pet object
+            LocalTime startTime = pet.getStartTime(); // Assumes getter for LocalTime
+            LocalTime endTime = pet.getEndTime();     // Assumes getter for LocalTime
+
+            // Validate the current time
+            if (isAllowedToPlay(startTime, endTime)) {
+                GameState.loadState(loadedState); // Set the loaded state as the current state
+                SceneController.getInstance().switchToGame();
+            } else {
+                showErrorDialog("Playtime Restricted",
+                        "You can only play between " +
+                                (startTime != null ? startTime.toString() : "any time") +
+                                " and " + (endTime != null ? endTime.toString() : "any time") + ".");
+            }
         } catch (IOException e) {
             e.printStackTrace();
+            handleSaveError("load game", e);
         }
+    }
+    /**
+     * Checks whether the current time is within the allowed playtime range.
+     *
+     * @param startTimeStr The start time as a string (null means no restriction).
+     * @param endTimeStr   The end time as a string (null means no restriction).
+     * @return true if the current time is within the range or no restrictions are set.
+     */
+    /**
+     * Checks whether the current time is within the allowed playtime range.
+     *
+     * @param startTime The start time as a LocalTime (null means no restriction).
+     * @param endTime   The end time as a LocalTime (null means no restriction).
+     * @return true if the current time is within the range or no restrictions are set.
+     */
+    private boolean isAllowedToPlay(LocalTime startTime, LocalTime endTime) {
+        LocalTime now = LocalTime.now();
+
+        if (startTime == null && endTime == null) {
+            return true; // No restrictions
+        }
+        if (startTime != null && endTime != null) {
+            if (startTime.isBefore(endTime)) {
+                return !now.isBefore(startTime) && !now.isAfter(endTime);
+            } else {
+                // Handles overnight ranges (e.g., 22:00 to 06:00)
+                return !now.isBefore(startTime) || !now.isAfter(endTime);
+            }
+        }
+        if (startTime != null) {
+            return !now.isBefore(startTime);
+        }
+        if (endTime != null) {
+            return !now.isAfter(endTime);
+        }
+        return false;
+    }
+
+    /**
+     * Displays an error dialog with the provided title and message.
+     *
+     * @param title   The title of the dialog.
+     * @param message The message of the dialog.
+     */
+    private void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
      * Handles the edit button action for a save slot.
      * Opens the dialogue to rename the save.
+     *
      * @param saveName The name of the save to edit.
      */
     private void handleEdit(String saveName) {
@@ -301,6 +372,7 @@ public class SaveMenuController {
     /**
      * Handles the delete button action for a save slot.
      * Deletes the save file and updates the save slot list.
+     *
      * @param saveName The name of the save to delete.
      */
     private void handleDelete(String saveName) {
@@ -314,6 +386,7 @@ public class SaveMenuController {
             });
         } catch (IOException e) {
             e.printStackTrace();
+            // TODO: Show error dialog to user
         }
     }
 

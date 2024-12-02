@@ -24,20 +24,21 @@ public class VitalStats {
     private final IntegerProperty energy = new SimpleIntegerProperty(100);
     private final IntegerProperty health = new SimpleIntegerProperty(100);
 
-    // Array representing the state of each stat: 0 = OK, 1 = Critical
-    private final int[] petState = {0, 0, 0, 0};
+    // petState array to represent the state of each stat: 0 = OK, 1 = Critical
+    private final int[] petState = {0, 0, 0, 0}; // Index 0 = Hunger, 1 = Happiness, 2 = Energy, 3 = Health
 
-    // Thresholds for stats to be considered in critical state
-    private static final int[] CRITICAL_THRESHOLD = {20, 25, 0, 0};
+    // Define thresholds for stats
+    private static final int[] CRITICAL_THRESHOLD = {20, 25, 0, 0}; // Critical threshold for warnings
 
     private boolean suppressListeners = false;
-    private boolean alive = true;
 
+    private boolean alive = true;  // Add this field
     /**
      * Constructor initializes vital stats with default values and attaches listeners
      * to automatically clamp values and update states when properties change.
      */
     public VitalStats() {
+        // Add listeners to enforce clamping and update state
         hunger.addListener((observable, oldValue, newValue) -> {
             if (!suppressListeners) {
                 hunger.set(clampValue(newValue.intValue()));
@@ -255,50 +256,21 @@ public class VitalStats {
         return hungerMod;
     }
     /**
-     * Sets the modifier affecting the pet's hunger stat.
+     * Sets the modifier affecting the pet's health stat.
      *
-     * @param hungerMod The new hunger modifier value.
-     */
-    public void setHungerMod(int hungerMod) {
-        this.hungerMod = hungerMod;
-    }
-
-    /**
-     * Gets the modifier affecting the pet's health stat.
-     *
-     * @return The health modifier.
+     * @return healthMod The new health modifier value.
      */
     public int getHealthMod() {
         return healthMod;
     }
-
     /**
-     * Sets the modifier affecting the pet's health stat.
+     * Sets the modifier affecting the pet's happiness stat.
      *
-     * @param healthMod The new health modifier value.
-     */
-    public void setHealthMod(int healthMod) {
-        this.healthMod = healthMod;
-    }
-
-    /**
-     * Gets the modifier affecting the pet's happiness stat.
-     *
-     * @return The happiness modifier.
+     * @return happinessMod The new happiness modifier value.
      */
     public int getHappinessMod() {
         return happinessMod;
     }
-
-    /**
-     * Sets the modifier affecting the pet's happiness stat.
-     *
-     * @param happinessMod The new happiness modifier value.
-     */
-    public void setHappinessMod(int happinessMod) {
-        this.happinessMod = happinessMod;
-    }
-
     /**
      * Gets the modifier affecting the pet's energy stat.
      *
@@ -307,7 +279,18 @@ public class VitalStats {
     public int getEnergyMod() {
         return energyMod;
     }
+    /**
+     * Sets the modifier affecting the pet's hunger stat.
+     *
+     * @param hungerMod The new hunger modifier value.
+     */
+    public void setHungerMod(int hungerMod) {
+        this.hungerMod = hungerMod;
+    }
 
+    public void setHealthMod(int healthMod) {
+        this.healthMod = healthMod;
+    }
     /**
      * Sets the modifier affecting the pet's energy stat.
      *
@@ -317,6 +300,9 @@ public class VitalStats {
         this.energyMod = energyMod;
     }
 
+    public void setHappinessMod(int happinessMod) {
+        this.happinessMod = happinessMod;
+    }
     // Methods to get and set pet states
     /**
      * Gets the current state of the pet's stats.
@@ -352,45 +338,99 @@ public class VitalStats {
         return petState[index];
     }
 
-
-    // Updates pet state and applies modifiers based on current stat values
+    // Update petState array based on the stat value
     private void updatePetState(int index, int newValue) {
-        if (newValue <= CRITICAL_THRESHOLD[index]) {
-            petState[index] = 1;
-            System.out.println(getStatName(index) + " is critically low! Current value: " + newValue);
-        } else {
-            petState[index] = 0;
+        // Handle critical state
+        if (index == 2) { // Handle energy-specific logic
+            System.out.println(getStatName(index) + " is currently: " + newValue);
+            if (newValue == 0 && petState[index] == 0) {
+                petState[index] = 1; // Set to critical state when energy first drops to 0
+                System.out.println(getStatName(index) + " has dropped to 0! Entering critical state.");
+            } else if (newValue == 100 && petState[index] == 1) {
+                petState[index] = 0; // Exit critical state when energy fully restores to 100
+                System.out.println(getStatName(index) + " is fully restored to 100! Exiting critical state.");
+            }
+            return; // Exit after handling energy
         }
 
-        applyModifiers();
+        // Handle other stats
+        if (newValue <= CRITICAL_THRESHOLD[index]) {
+            petState[index] = 1; // Critical state
+            System.out.println(getStatName(index) + " is critically low! Current value: " + newValue);
+        } else {
+            petState[index] = 0; // Normal state
+            System.out.println(getStatName(index) + " is no longer critically low! Current value: " + newValue);
+        }
+
+
+    // Reset all modifiers first
+        int totalHealthMod = 0;
+        int totalEnergyMod = 0;
+        int totalHungerMod = 0;
+        int totalHappinessMod = 0;
+
+        // Get current values
+        int currentHunger = hunger.get();
+        int currentHappiness = happiness.get();
+        int currentEnergy = energy.get();
+        int currentHealth = health.get();
+
+        // Hunger effects
+        if (currentHunger <= 50) {
+            // Hunger affects energy more when there's a big difference
+            if (currentHunger + 20 < currentEnergy) {
+                totalEnergyMod += 3;    // Significant energy drain when hungry
+            }
+            // Hunger affects happiness when there's a difference
+            if (currentHunger + 15 < currentHappiness) {
+                totalHappinessMod += 2; // Being hungry makes you unhappy
+            }
+            // Only affect health when critically low
+            if (currentHunger <= 20) {
+                totalHealthMod += 1;    // Malnutrition starts affecting health
+            }
+        }
+        
+        // Happiness effects
+        if (currentHappiness <= 50) {
+            // Happiness primarily affects energy when there's a big gap
+            if (currentHappiness + 25 < currentEnergy) {
+                totalEnergyMod += 2;    // Depression drains energy
+            }
+        }
+        
+        // Energy effects
+        if (currentEnergy <= 50) {
+            // Energy primarily affects happiness when there's a significant difference
+            if (currentEnergy + 20 < currentHappiness) {
+                totalHappinessMod += 2; // Being tired makes you grumpy
+            }
+        }
+        
+        // Health effects - affects everything when low
+        if (currentHealth <= 50) {
+            // Health affects all stats more severely when there's a big difference
+            if (currentHealth + 30 < currentEnergy) {
+                totalEnergyMod += 3;    // Poor health severely affects energy
+            }
+            if (currentHealth + 25 < currentHappiness) {
+                totalHappinessMod += 2; // Being sick makes you unhappy
+            }
+            if (currentHealth + 20 < currentHunger) {
+                totalHungerMod += 2;    // Sickness affects appetite
+            }
+        }
+
+        // Apply accumulated modifiers
+        setHealthMod(totalHealthMod);
+        setEnergyMod(totalEnergyMod);
+        setHungerMod(totalHungerMod);
+        setHappinessMod(totalHappinessMod);
     }
 
-    // Applies calculated modifiers to the stats
-    private void applyModifiers() {
-        setHealthMod(calculateHealthModifier());
-        setEnergyMod(calculateEnergyModifier());
-        setHungerMod(calculateHungerModifier());
-        setHappinessMod(calculateHappinessModifier());
-    }
 
-    // Helpers to calculate modifiers
-    private int calculateHealthModifier() {
-        return hunger.get() <= 20 ? 1 : 0;
-    }
 
-    private int calculateEnergyModifier() {
-        return happiness.get() <= 50 ? 2 : 0;
-    }
-
-    private int calculateHungerModifier() {
-        return energy.get() <= 50 ? 2 : 0;
-    }
-
-    private int calculateHappinessModifier() {
-        return health.get() <= 50 ? 2 : 0;
-    }
-
-    // Helper to get stat names
+    // Helper to get the stat name from the index
     private String getStatName(int index) {
         switch (index) {
             case 0:
@@ -406,7 +446,7 @@ public class VitalStats {
         }
     }
 
-    // Clamps a value to the range [0, 100]
+    // Clamp method to ensure values stay within range
     private int clampValue(int value) {
         return Math.max(0, Math.min(100, value));
     }
@@ -415,13 +455,13 @@ public class VitalStats {
      * Restores all stats to their maximum values and resets pet states.
      */
     public void restoreAll() {
-        suppressListeners = true;
+        suppressListeners = true; // Suppress listeners to avoid redundant updates
         setHealth(100);
         setEnergy(100);
         setHunger(100);
         setHappiness(100);
-        suppressListeners = false;
-        Arrays.fill(petState, 0);
+        suppressListeners = false; // Re-enable listeners
+        Arrays.fill(petState, 0); // Reset all states to normal
     }
 
     /**
@@ -442,6 +482,7 @@ public class VitalStats {
     @JsonProperty("alive")
     public void setAlive(boolean alive) {
         this.alive = alive;
+        // If setting to true, ensure health is above 0
         if (alive && health.get() <= 0) {
             setHealth(1);
         }
