@@ -36,33 +36,34 @@
     <!-- Time Limit -->
     <VBox alignment="CENTER" spacing="10" visible="false" fx:id="timeLimitSection">
         <HBox alignment="CENTER" spacing="10">
-            <!-- TextField for Start Time -->
-            <VBox alignment="CENTER" spacing="5">
-                <Label text="Start Time" styleClass="label-small"/>
-                <TextField fx:id="startTimeTextField"
-                           promptText="HH:MM (24-hour format)"
-                           styleClass="parent-menu-textfield"/>
+            <VBox alignment="CENTER" spacing="2">
+                <Label text="Time Limit" styleClass="parent-menu-section-label" />
+                <Label text="(minutes)" styleClass="parent-menu-sublabel" />
             </VBox>
-
-            <!-- TextField for End Time -->
-            <VBox alignment="CENTER" spacing="5">
-                <Label text="End Time" styleClass="label-small"/>
-                <TextField fx:id="endTimeTextField"
-                           promptText="HH:MM (24-hour format)"
-                           styleClass="parent-menu-textfield"/>
-            </VBox>
-
-            <!-- Button to update the time -->
-            <CustomButton fx:id="updateTimeFrameButton"
-                          text="UPDATE"
-                          onAction="#handleSetAllowedTime"
+            <CustomToggle fx:id="timeLimitToggle" onAction="#handleTimeLimitToggle" styleClass="toggle-label"/>
+        </HBox>
+        <HBox alignment="CENTER" spacing="10">
+            <Spinner fx:id="timeLimitSpinner" 
+                     disable="true"
+                     opacity="0.5"
+                     min="1"
+                     max="1440"
+                     initialValue="60"
+                     editable="true"
+                     styleClass="parent-menu-spinner">
+                <valueFactory>
+                    <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="1440" initialValue="60" amountToStepBy="1"/>
+                </valueFactory>
+            </Spinner>
+            <CustomButton fx:id="updateTimeLimitButton" 
+                          text="UPDATE" 
+                          disable="true"
+                          opacity="0.5"
+                          onAction="#handleUpdateTimeLimit" 
                           styleClass="parent-menu-button"/>
         </HBox>
-
     </VBox>
-
-
-                <!-- Second Divider -->
+    <!-- Second Divider -->
     <Separator fx:id="secondDivider" styleClass="parent-menu-divider" visible="false" managed="false"/>
 
     <!-- View Stats -->
