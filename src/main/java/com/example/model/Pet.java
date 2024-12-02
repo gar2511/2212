@@ -1,5 +1,7 @@
 package com.example.model;
 
+import java.time.LocalTime;
+
 /**
  * Model class representing a virtual pet in the game.
  * Encapsulates the pet's name and provides constructors for creation
@@ -7,6 +9,9 @@ package com.example.model;
  */
 public class Pet {
     // The name of the pet
+
+    private LocalTime startTime;
+    private LocalTime endTime;
     private String name;
     private String species;
     private VitalStats stats;
@@ -130,6 +135,21 @@ public class Pet {
     }
     public long getCurrentPlayTime() {return this.currentPlayTime;}
     public void setCurrentPlayTime(long playTime) {this.currentPlayTime = playTime;}
+    public void saveStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void saveEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
 
 }
 

@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.application.Platform;
 import java.io.IOException;
 import java.io.File;
+import java.time.LocalTime;
 import java.util.Arrays;
 
 import com.example.model.GameState;
@@ -265,26 +266,87 @@ public class SaveMenuController {
 
     /**
      * Handles the play button action for a save slot.
-     * Switches to the game scene with the selected save.
+     * Checks if the current time is within allowed playtime or both fields are null,
+     * then switches to the game scene.
      *
      * @param saveName The name of the save to load and play.
      */
     private void handlePlay(String saveName) {
-        int index = saveSlotList.getItems().indexOf(saveName); // This will grab either save slot 0,1,2,3
-        System.out.println(index);
+        int index = saveSlotList.getItems().indexOf(saveName);
         try {
             System.out.println("Playing: " + saveName);
-            // Load the game state from the file
             FileHandler fileHandler = new FileHandler();
             GameState loadedState = fileHandler.loadGame("slot" + index);
-            GameState.loadState(loadedState); // Set the loaded state as the current state
+            Pet pet = loadedState.getPet();
 
-            // Transition to the game scene
-            SceneController.getInstance().switchToGame();
+            // Retrieve start and end times from the Pet object
+            LocalTime startTime = pet.getStartTime(); // Assumes getter for LocalTime
+            LocalTime endTime = pet.getEndTime();     // Assumes getter for LocalTime
+
+            // Validate the current time
+            if (isAllowedToPlay(startTime, endTime)) {
+                GameState.loadState(loadedState); // Set the loaded state as the current state
+                SceneController.getInstance().switchToGame();
+            } else {
+                showErrorDialog("Playtime Restricted",
+                        "You can only play between " +
+                                (startTime != null ? startTime.toString() : "any time") +
+                                " and " + (endTime != null ? endTime.toString() : "any time") + ".");
+            }
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: Show error dialog to user
+            handleSaveError("load game", e);
         }
+    }
+    /**
+     * Checks whether the current time is within the allowed playtime range.
+     *
+     * @param startTimeStr The start time as a string (null means no restriction).
+     * @param endTimeStr   The end time as a string (null means no restriction).
+     * @return true if the current time is within the range or no restrictions are set.
+     */
+    /**
+     * Checks whether the current time is within the allowed playtime range.
+     *
+     * @param startTime The start time as a LocalTime (null means no restriction).
+     * @param endTime   The end time as a LocalTime (null means no restriction).
+     * @return true if the current time is within the range or no restrictions are set.
+     */
+    private boolean isAllowedToPlay(LocalTime startTime, LocalTime endTime) {
+        LocalTime now = LocalTime.now();
+
+        if (startTime == null && endTime == null) {
+            return true; // No restrictions
+        }
+        if (startTime != null && endTime != null) {
+            if (startTime.isBefore(endTime)) {
+                return !now.isBefore(startTime) && !now.isAfter(endTime);
+            } else {
+                // Handles overnight ranges (e.g., 22:00 to 06:00)
+                return !now.isBefore(startTime) || !now.isAfter(endTime);
+            }
+        }
+        if (startTime != null) {
+            return !now.isBefore(startTime);
+        }
+        if (endTime != null) {
+            return !now.isAfter(endTime);
+        }
+        return false;
+    }
+
+    /**
+     * Displays an error dialog with the provided title and message.
+     *
+     * @param title   The title of the dialog.
+     * @param message The message of the dialog.
+     */
+    private void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**

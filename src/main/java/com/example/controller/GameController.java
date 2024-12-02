@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -21,6 +22,7 @@ import javafx.util.Duration;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.Random;
 import com.example.model.ScoreKeeper;
 
@@ -49,6 +51,7 @@ public class GameController {
     private StatBar happinessBar;
     @FXML
     private ImageView moleSprite;
+    private Timeline timeTracker; // Timeline to track playtime and active timeframe
 
     private Timeline animation;
     private Timeline statsDecayTimeline;
@@ -62,7 +65,7 @@ public class GameController {
     @FXML
     private Label scoreLabel; // Label to display the score
 
-    private Timeline timeTracker; // Timeline to track playtime
+
 
     @FXML
     private Button playPauseButton;
@@ -91,6 +94,7 @@ public class GameController {
         String species = pet.getSpecies();
         if (pet != null) {
             VitalStats stats = pet.getStats();
+            startActiveTimeTracker(pet); // Start the active time tracker
 
             // Bind progress bars to stats
             energyBar.progressProperty().bind(Bindings.divide(stats.energyProperty(), 100.0));
@@ -294,6 +298,7 @@ public class GameController {
     @FXML
     private void goBack() {
         PlayButtonSound();
+        stopActiveTimeTracker();
         exitDialog.setVisible(true);
 
         // Disable interaction with background UI
@@ -765,6 +770,7 @@ public class GameController {
     @FXML
     private void confirmBackToMain() {
         PlayButtonSound();
+        stopActiveTimeTracker();
         stopStatsDecay();
         stopTimeTracker();
         
@@ -826,5 +832,72 @@ public class GameController {
             System.out.println("No pet available to sleep!");
         }
     }
+    /**
+     * Starts a tracker to monitor whether the current time is within the allowed active timeframe.
+     * If not, pauses the game or exits to the main menu.
+     */
+    private void startActiveTimeTracker(Pet pet) {
+        timeTracker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            LocalTime currentTime = LocalTime.now();
+            LocalTime startTime = pet.getStartTime();
+            LocalTime endTime = pet.getEndTime();
 
+            if (startTime != null && endTime != null) {
+                if (!isWithinTimeframe(currentTime, startTime, endTime)) {
+                    System.out.println("Current time " + currentTime + " is outside the allowed timeframe.");
+                    handleOutsideActiveTime();
+                }
+            }
+        }));
+
+        timeTracker.setCycleCount(Timeline.INDEFINITE);
+        timeTracker.play();
+    }
+
+    /**
+     * Checks if the current time is within the allowed timeframe.
+     *
+     * @param currentTime The current time.
+     * @param startTime   The start time of the allowed timeframe.
+     * @param endTime     The end time of the allowed timeframe.
+     * @return True if the current time is within the timeframe, false otherwise.
+     */
+    private boolean isWithinTimeframe(LocalTime currentTime, LocalTime startTime, LocalTime endTime) {
+        if (endTime.isAfter(startTime)) {
+            // Normal timeframe: Start < End (e.g., 08:00 to 18:00)
+            return !currentTime.isBefore(startTime) && !currentTime.isAfter(endTime);
+        } else {
+            // Overnight timeframe: End < Start (e.g., 22:00 to 06:00)
+            return !currentTime.isBefore(startTime) || !currentTime.isAfter(endTime);
+        }
+    }
+
+    /**
+     * Handles actions when the current time is outside the allowed active timeframe.
+     */
+    private void handleOutsideActiveTime() {
+        Platform.runLater(() -> {
+            // Pause all game activities
+            togglePlayPause(); // This pauses the game
+
+            // Display an alert or exit the game
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Inactive Time");
+            alert.setHeaderText("You are outside the allowed playtime!");
+            alert.setContentText("Please return during your allowed playtime.");
+            alert.showAndWait();
+
+            // Optionally exit to main menu
+            SceneController.getInstance().switchToMainMenu();
+        });
+    }
+
+    /**
+     * Stops the active time tracker.
+     */
+    private void stopActiveTimeTracker() {
+        if (timeTracker != null) {
+            timeTracker.stop();
+        }
+    }
 }
