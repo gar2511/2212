@@ -36,16 +36,17 @@ public class SaveMenuController {
 
     @FXML
     private TextField petNameField;
+
     @FXML
-    private ComboBox<String> petTypeComboBox; // ComboBox for pet type
+    private ComboBox<String> petTypeComboBox;
 
     private int selectedSlotIndex = -1;
 
     /**
      * Initializes the save menu interface.
      * This method is automatically called after the FXML file is loaded.
-     * - Populates the save slot list with default values or saved game data.
-     * - Sets up event handlers for interactive components.
+     * Populates the save slot list with default values or saved game data.
+     * Sets up event handlers for interactive components.
      */
     @FXML
     public void initialize() {
@@ -71,7 +72,6 @@ public class SaveMenuController {
                         GameState state = fileHandler.loadGame("slot" + slotIndex);
                         if (state != null && state.getPet() != null) {
                             Pet pet = state.getPet();
-                            // Update slot with both pet name and species
                             slots.set(slotIndex, pet.getName() + " " + pet.getSpecies());
                         }
                     } catch (IOException ignored) {
@@ -117,15 +117,14 @@ public class SaveMenuController {
                 playButton.getStyleClass().add("save-slot-button");
                 editButton.getStyleClass().add("save-slot-button");
                 deleteButton.getStyleClass().add("save-slot-button");
-                
+
                 buttons.setVisible(false);
                 buttons.getStyleClass().add("save-slot-buttons");
                 text.getStyleClass().add("save-slot-text");
-                
-                // Center the buttons in the StackPane
+
                 StackPane.setAlignment(buttons, javafx.geometry.Pos.CENTER);
                 buttons.setAlignment(javafx.geometry.Pos.CENTER);
-                
+
                 playButton.setOnAction(e -> {
                     PlayButtonSound();
                     e.consume();
@@ -171,7 +170,7 @@ public class SaveMenuController {
                     content.getChildren().setAll(text, buttons);
                     StackPane.setAlignment(text, javafx.geometry.Pos.CENTER);
                     setGraphic(content);
-                    
+
                     buttons.setVisible(false);
                     buttons.setManaged(!"CLICK TO CREATE NEW SAVE".equals(item));
                     text.setOpacity(1.0);
@@ -195,10 +194,8 @@ public class SaveMenuController {
     }
 
     /**
-     * Displays the dialogue for creating or editing a save.
-     * Allows the user to input a pet name and confirm the action.
-     * If editing an existing save with a name, display that.
-     * @param petName the existing pet name
+     * Displays the dialogue for editing a save with a pre-filled pet name.
+     * @param petName The name of the existing pet to edit.
      */
     private void showNewSaveDialogue(String petName) {
         PlayButtonSound();
@@ -266,31 +263,25 @@ public class SaveMenuController {
     /**
      * Handles the play button action for a save slot.
      * Switches to the game scene with the selected save.
-     *
      * @param saveName The name of the save to load and play.
      */
     private void handlePlay(String saveName) {
-        int index = saveSlotList.getItems().indexOf(saveName); // This will grab either save slot 0,1,2,3
-        System.out.println(index);
+        int index = saveSlotList.getItems().indexOf(saveName);
         try {
             System.out.println("Playing: " + saveName);
-            // Load the game state from the file
             FileHandler fileHandler = new FileHandler();
             GameState loadedState = fileHandler.loadGame("slot" + index);
-            GameState.loadState(loadedState); // Set the loaded state as the current state
+            GameState.loadState(loadedState);
 
-            // Transition to the game scene
             SceneController.getInstance().switchToGame();
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: Show error dialog to user
         }
     }
 
     /**
      * Handles the edit button action for a save slot.
      * Opens the dialogue to rename the save.
-     *
      * @param saveName The name of the save to edit.
      */
     private void handleEdit(String saveName) {
@@ -310,7 +301,6 @@ public class SaveMenuController {
     /**
      * Handles the delete button action for a save slot.
      * Deletes the save file and updates the save slot list.
-     *
      * @param saveName The name of the save to delete.
      */
     private void handleDelete(String saveName) {
@@ -324,10 +314,15 @@ public class SaveMenuController {
             });
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: Show error dialog to user
         }
     }
 
+    /**
+     * Handles errors encountered during save operations.
+     * Displays an alert dialog to notify the user.
+     * @param operation The type of operation that failed.
+     * @param e The exception that occurred.
+     */
     private void handleSaveError(String operation, Exception e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Save Error");

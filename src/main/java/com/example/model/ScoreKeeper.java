@@ -7,10 +7,15 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
 
 /**
- * A scorekeeper that increases the score over time.
+ * A utility class for managing a score that increases over time.
+ * The score is updated periodically based on a specified rate of points per second.
  */
 public class ScoreKeeper {
+
+    // Property to track the current score
     private final IntegerProperty score = new SimpleIntegerProperty(0);
+
+    // Timeline for periodically updating the score
     private final Timeline timeline;
 
     // Points gained per second
@@ -32,21 +37,21 @@ public class ScoreKeeper {
     }
 
     /**
-     * Starts the scorekeeper's timer.
+     * Starts the scorekeeper's timer, causing the score to increase over time.
      */
     public void start() {
         timeline.play();
     }
 
     /**
-     * Stops the scorekeeper's timer.
+     * Stops the scorekeeper's timer, halting the periodic score updates.
      */
     public void stop() {
         timeline.stop();
     }
 
     /**
-     * Resets the score to zero.
+     * Resets the score to zero and stops the scorekeeper's timer.
      */
     public void reset() {
         stop();
@@ -56,25 +61,44 @@ public class ScoreKeeper {
     /**
      * Increases the score by a specified amount.
      *
-     * @param points The amount of points to add.
+     * @param points The amount of points to add to the current score.
      */
     private void increaseScore(int points) {
         setScore(getScore() + points);
     }
 
-    // Getter and setter for the score
+    /**
+     * Retrieves the current score.
+     *
+     * @return The current score as an integer.
+     */
     public int getScore() {
         return score.get();
     }
 
+    /**
+     * Sets the score to a specified value.
+     *
+     * @param value The new score value.
+     */
     public void setScore(int value) {
         score.set(value);
     }
 
+    /**
+     * Retrieves the score property, allowing for binding and property listeners.
+     *
+     * @return An {@link IntegerProperty} representing the current score.
+     */
     public IntegerProperty scoreProperty() {
         return score;
     }
 
+    /**
+     * Returns a string representation of the ScoreKeeper, including the current score.
+     *
+     * @return A string describing the current state of the ScoreKeeper.
+     */
     @Override
     public String toString() {
         return "ScoreKeeper{score=" + getScore() + "}";

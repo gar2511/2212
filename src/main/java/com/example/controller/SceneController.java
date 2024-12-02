@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
 import java.io.IOException;
 
 /**
@@ -15,6 +16,7 @@ import java.io.IOException;
 public class SceneController {
     // Single instance of the controller (Singleton pattern)
     private static SceneController instance;
+
     // Reference to the current active scene
     private Scene currentScene;
 
@@ -69,15 +71,46 @@ public class SceneController {
     public void switchToSettings() {
         loadFXML("settings.fxml");
     }
-    public void switchToTutorial() {loadFXML("tutorial_game_menu.fxml");}
-    public void switchToTutorialInventory() {loadFXML("tutorial_inventory_menu.fxml");}
 
+    /**
+     * Switches to the tutorial game menu scene.
+     * Uses "tutorial_game_menu.fxml" as the scene definition.
+     */
+    public void switchToTutorial() {
+        loadFXML("tutorial_game_menu.fxml");
+    }
+
+    /**
+     * Switches to the tutorial inventory menu scene.
+     * Uses "tutorial_inventory_menu.fxml" as the scene definition.
+     */
+    public void switchToTutorialInventory() {
+        loadFXML("tutorial_inventory_menu.fxml");
+    }
+
+    /**
+     * Switches to the inventory scene.
+     * Uses "inventory_menu.fxml" as the scene definition.
+     */
     public void switchToInventory() {
         loadFXML("inventory_menu.fxml");
     }
-    public void switchToLoginParent() {loadFXML("login_menu.fxml");}
 
-    public void switchToParentMenu() {loadFXML("parent_menu.fxml");}
+    /**
+     * Switches to the login menu for parent controls.
+     * Uses "login_menu.fxml" as the scene definition.
+     */
+    public void switchToLoginParent() {
+        loadFXML("login_menu.fxml");
+    }
+
+    /**
+     * Switches to the parent menu scene.
+     * Uses "parent_menu.fxml" as the scene definition.
+     */
+    public void switchToParentMenu() {
+        loadFXML("parent_menu.fxml");
+    }
 
     /**
      * Retrieves the current active scene.
@@ -102,7 +135,7 @@ public class SceneController {
 
     /**
      * Loads a new scene from the specified FXML file and switches to it.
-     * Also updates the current scene's root and applies new stylesheets.
+     * Updates the current scene's root and applies new stylesheets.
      *
      * @param fxml The name of the FXML file to load (relative to the "fxml/" directory).
      */
@@ -128,6 +161,4 @@ public class SceneController {
             e.printStackTrace();
         }
     }
-
-
 }
