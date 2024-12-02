@@ -7,19 +7,24 @@ import com.example.model.Pet;
 import com.example.model.VitalStats;
 import com.example.util.FileHandler;
 import com.example.components.StatBar;
+import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.scene.layout.StackPane;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.Random;
 import com.example.model.ScoreKeeper;
 
@@ -31,12 +36,13 @@ import static com.example.App.PlayButtonSound;
  * to other scenes within the application.
  */
 public class GameController {
-
+    private Timeline imageFlipTimeline;
 
     public Label playTimeLabel;
     public StackPane exitDialog;
     public CustomButton backButton;
     public CustomButton saveButton;
+    public CustomButton sleepButton;
     @FXML
     private StatBar energyBar;
     @FXML
@@ -47,6 +53,7 @@ public class GameController {
     private StatBar happinessBar;
     @FXML
     private ImageView moleSprite;
+    private Timeline timeTracker; // Timeline to track playtime and active timeframe
 
     private Timeline animation;
     private Timeline statsDecayTimeline;
@@ -60,7 +67,7 @@ public class GameController {
     @FXML
     private Label scoreLabel; // Label to display the score
 
-    private Timeline timeTracker; // Timeline to track playtime
+
 
     @FXML
     private Button playPauseButton;
@@ -89,6 +96,8 @@ public class GameController {
         String species = pet.getSpecies();
         if (pet != null) {
             VitalStats stats = pet.getStats();
+            startActiveTimeTracker(pet); // Start the active time tracker
+            startImageFlip(); // Start the image flip animation
 
             // Bind progress bars to stats
             energyBar.progressProperty().bind(Bindings.divide(stats.energyProperty(), 100.0));
@@ -135,61 +144,80 @@ public class GameController {
         startTimeTracker();
     }
     /**
+     * Starts the image flipping animation. The image flips around every 15 seconds.
+     */
+    private void startImageFlip() {
+        imageFlipTimeline = new Timeline(new KeyFrame(Duration.seconds(15), event -> flipImage()));
+        imageFlipTimeline.setCycleCount(Timeline.INDEFINITE); // Repeat indefinitely
+        imageFlipTimeline.play();
+    }
+
+    /**
+     * Flips the mole image horizontally by rotating it 180 degrees around the Y-axis.
+     */
+    private void flipImage() {
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), moleSprite);
+        rotateTransition.setAxis(Rotate.Y_AXIS); // Rotate around the Y-axis
+        rotateTransition.setFromAngle(0); // Start from the default angle
+        rotateTransition.setToAngle(180); // Rotate to 180 degrees
+        rotateTransition.setAutoReverse(true); // Flip back to the original state
+        rotateTransition.play();
+    }
+
+    /**
+     * Stops the image flipping animation.
+     */
+    private void stopImageFlip() {
+        if (imageFlipTimeline != null) {
+            imageFlipTimeline.stop();
+        }
+    }
+    public void restartTimeTracker() {
+        System.out.println("Restarting time tracker.");
+        stopTimeTracker(); // Ensure the old tracker is stopped
+        startTimeTracker(); // Start a new tracker
+    }
+
+    /**
      * Starts the timeline to track the playtime of the game session.
      * Updates the playtime label and handles logic for time spent and time limits.
      * If the time limit is reached, the game is saved and the user is sent back to the main menu.
      */
     private void startTimeTracker() {
-        // Check if the time tracker timeline is already running
+        System.out.println("startTimeTracker called.");
+
+        // Stop and nullify any existing time tracker
         if (timeTracker != null) {
-            System.out.println("Time tracker is already running.");
-            return; // If it is running, exit the method
+            System.out.println("Stopping existing timeTracker.");
+            stopTimeTracker();
         }
 
-        // Create a new timeline with a keyframe that triggers every 50 milliseconds
-        timeTracker = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            // Get the current game state and pet instance
+        // Initialize a new time tracker
+        timeTracker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             GameState gameState = GameState.getCurrentState();
             Pet pet = gameState.getPet();
 
             if (pet != null) {
-                // Increment playtime by 50 milliseconds
-                pet.setCurrentPlayTime(pet.getCurrentPlayTime()+50);
+                pet.addTimeSpent(1); // Increment total and current playtime by 1 second
 
-                // Convert the playtime to seconds for display purposes
-                long secondsElapsed = pet.getCurrentPlayTime() / 1000;
+                long sessionPlaytime = pet.getCurrentPlayTime(); // Fetch current session playtime
 
-                // Update the playtime label on the UI thread
+                // Update the playtime label
                 Platform.runLater(() -> {
-                    playTimeLabel.setText("Current Session's Play Time: " + formatPlayTime(secondsElapsed));
+                    playTimeLabel.setText("Session Play Time: " + formatPlayTime(sessionPlaytime));
                 });
 
-                // Add 1 second to the pet's total time spent every 1000 milliseconds
-                if (pet.getCurrentPlayTime() % 1000 == 0) {
-                    pet.addTimeSpent(1); // Increment the total playtime by 1 second
-
-                    // Log the current playtime to the console
-                    Platform.runLater(() -> {
-                        System.out.println("Current Playtime: " + formatPlayTime(secondsElapsed));
-                    });
-                }
-
-                // Check if the pet's time limit is set and if the playtime exceeds it
-                if (pet.getTimeLimit() > 0 && secondsElapsed >= pet.getTimeLimit()) {
-                    // Log the time limit reached and save the game
-                    System.out.println("Time limit reached! Saving and exiting.");
-                    stopTimeTracker(); // Stop the time tracker timeline
-                    saveGame(); // Save the game state
-                    goBack(); // Exit to the main menu
-                }
+                System.out.println("Updated playtime: " + sessionPlaytime + " seconds");
+            } else {
+                System.out.println("No pet found for time tracking.");
             }
         }));
 
-        // Set the timeline to run indefinitely
         timeTracker.setCycleCount(Timeline.INDEFINITE);
-        // Start the timeline
         timeTracker.play();
+        System.out.println("Time tracker started.");
     }
+
 
     /**
      * Formats the playtime in HH:mm:ss format.
@@ -282,6 +310,8 @@ public class GameController {
             timeTracker.stop();
             timeTracker = null;
             System.out.println("Time tracker stopped.");
+        } else {
+            System.out.println("stopTimeTracker called, but timeTracker was already null.");
         }
     }
 
@@ -292,6 +322,8 @@ public class GameController {
     @FXML
     private void goBack() {
         PlayButtonSound();
+        stopActiveTimeTracker();
+        stopImageFlip();
         exitDialog.setVisible(true);
 
         // Disable interaction with background UI
@@ -518,7 +550,7 @@ public class GameController {
                     stats.setHappinessMod(1);  // Being hungry makes you unhappy
                     setPetStateImage("hungry");
                     break;
-                    
+
                 case 1: // Happiness critical
                     System.out.println("Happiness is critically low!");
                     stats.setHealthMod(1);     // Being unhappy affects health
@@ -529,15 +561,27 @@ public class GameController {
                         vetButton.setDisable(true);
                     });
                     break;
-                    
+
                 case 2: // Energy critical
                     System.out.println("Energy is critically low!");
                     stats.setHealthMod(1);      // Being exhausted affects health
                     stats.setHungerMod(1);      // Being tired makes you hungry
                     stats.setHappinessMod(1);   // Being tired makes you unhappy
+                    stats.setEnergyMod(-7);
                     setPetStateImage("sleepy");
+
+                    // Disable all buttons except for the sleep action
                     disableAllButtons();
-                    vetButton.setDisable(false);
+
+
+                    // Prevent exiting critical state until energy is restored to 100
+                    if (stats.getEnergy() < 100) {
+
+                        System.out.println("Pet remains in critical state until energy is restored to 100.");
+                    } else {
+                        System.out.println("Energy restored. Exiting critical state.");
+                        maintainState(2); // Restore normal state
+                    }
                     break;
             }
         }
@@ -582,6 +626,7 @@ public class GameController {
         giftButton.setDisable(true);
         exerciseButton.setDisable(true);
         vetButton.setDisable(true);
+        sleepButton.setDisable(true);
     }
 
     private void enableAllButtons() {
@@ -590,6 +635,7 @@ public class GameController {
         giftButton.setDisable(false);
         exerciseButton.setDisable(false);
         vetButton.setDisable(false);
+        sleepButton.setDisable(false);
     }
 
     private void handleGameOver() {
@@ -749,6 +795,8 @@ public class GameController {
     @FXML
     private void confirmBackToMain() {
         PlayButtonSound();
+        stopImageFlip();
+        stopActiveTimeTracker();
         stopStatsDecay();
         stopTimeTracker();
         
@@ -768,4 +816,114 @@ public class GameController {
         SceneController.getInstance().switchToMainMenu();
     }
 
+    public void sleepPet(ActionEvent actionEvent) {
+        PlayButtonSound();
+
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+
+        if (pet != null) {
+            VitalStats stats = pet.getStats();
+
+            // Set the pet image to "sleeping" state
+            setPetStateImage("sleeping");
+
+            // Disable all buttons except the sleep button
+            disableAllButtons();
+            sleepButton.setDisable(false);
+
+            // Restore energy incrementally
+            Timeline sleepTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                if (stats.getEnergy() < 100) {
+                    stats.increaseEnergy(10); // Increment energy by 10 every second
+                    System.out.println(pet.getName() + " is sleeping. Energy increased, hunger decreased.");
+                } else {
+                    System.out.println("Energy fully restored. Exiting sleep.");
+
+                    // Stop the sleep timeline
+                    ((Timeline) event.getSource()).stop();
+
+                    // Restore normal state for energy
+                    maintainState(2);
+
+                    // Re-enable all buttons
+                    enableAllButtons();
+                }
+            }));
+
+            // Set the timeline to run indefinitely until energy reaches 100
+            sleepTimeline.setCycleCount(Timeline.INDEFINITE);
+            sleepTimeline.play();
+        } else {
+            System.out.println("No pet available to sleep!");
+        }
+    }
+    /**
+     * Starts a tracker to monitor whether the current time is within the allowed active timeframe.
+     * If not, pauses the game or exits to the main menu.
+     */
+    private void startActiveTimeTracker(Pet pet) {
+        timeTracker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            LocalTime currentTime = LocalTime.now();
+            LocalTime startTime = pet.getStartTime();
+            LocalTime endTime = pet.getEndTime();
+
+            if (startTime != null && endTime != null) {
+                if (!isWithinTimeframe(currentTime, startTime, endTime)) {
+                    System.out.println("Current time " + currentTime + " is outside the allowed timeframe.");
+                    handleOutsideActiveTime();
+                }
+            }
+        }));
+
+        timeTracker.setCycleCount(Timeline.INDEFINITE);
+        timeTracker.play();
+    }
+
+    /**
+     * Checks if the current time is within the allowed timeframe.
+     *
+     * @param currentTime The current time.
+     * @param startTime   The start time of the allowed timeframe.
+     * @param endTime     The end time of the allowed timeframe.
+     * @return True if the current time is within the timeframe, false otherwise.
+     */
+    private boolean isWithinTimeframe(LocalTime currentTime, LocalTime startTime, LocalTime endTime) {
+        if (endTime.isAfter(startTime)) {
+            // Normal timeframe: Start < End (e.g., 08:00 to 18:00)
+            return !currentTime.isBefore(startTime) && !currentTime.isAfter(endTime);
+        } else {
+            // Overnight timeframe: End < Start (e.g., 22:00 to 06:00)
+            return !currentTime.isBefore(startTime) || !currentTime.isAfter(endTime);
+        }
+    }
+
+    /**
+     * Handles actions when the current time is outside the allowed active timeframe.
+     */
+    private void handleOutsideActiveTime() {
+        Platform.runLater(() -> {
+            // Pause all game activities
+            togglePlayPause(); // This pauses the game
+
+            // Display an alert or exit the game
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Inactive Time");
+            alert.setHeaderText("You are outside the allowed playtime!");
+            alert.setContentText("Please return during your allowed playtime.");
+            alert.showAndWait();
+
+            // Optionally exit to main menu
+            SceneController.getInstance().switchToMainMenu();
+        });
+    }
+
+    /**
+     * Stops the active time tracker.
+     */
+    private void stopActiveTimeTracker() {
+        if (timeTracker != null) {
+            timeTracker.stop();
+        }
+    }
 }

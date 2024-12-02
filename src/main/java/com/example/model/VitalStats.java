@@ -190,14 +190,29 @@ public class VitalStats {
     // Update petState array based on the stat value
     private void updatePetState(int index, int newValue) {
         // Handle critical state
-        if (newValue <= CRITICAL_THRESHOLD[index]) {
-            petState[index] = 1;
-            System.out.println(getStatName(index) + " is critically low! Current value: " + newValue);
-        } else {
-            petState[index] = 0;
+        if (index == 2) { // Handle energy-specific logic
+            System.out.println(getStatName(index) + " is currently: " + newValue);
+            if (newValue == 0 && petState[index] == 0) {
+                petState[index] = 1; // Set to critical state when energy first drops to 0
+                System.out.println(getStatName(index) + " has dropped to 0! Entering critical state.");
+            } else if (newValue == 100 && petState[index] == 1) {
+                petState[index] = 0; // Exit critical state when energy fully restores to 100
+                System.out.println(getStatName(index) + " is fully restored to 100! Exiting critical state.");
+            }
+            return; // Exit after handling energy
         }
 
-        // Reset all modifiers first
+        // Handle other stats
+        if (newValue <= CRITICAL_THRESHOLD[index]) {
+            petState[index] = 1; // Critical state
+            System.out.println(getStatName(index) + " is critically low! Current value: " + newValue);
+        } else {
+            petState[index] = 0; // Normal state
+            System.out.println(getStatName(index) + " is no longer critically low! Current value: " + newValue);
+        }
+
+
+    // Reset all modifiers first
         int totalHealthMod = 0;
         int totalEnergyMod = 0;
         int totalHungerMod = 0;
