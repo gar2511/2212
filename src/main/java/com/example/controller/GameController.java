@@ -7,6 +7,7 @@ import com.example.model.Pet;
 import com.example.model.VitalStats;
 import com.example.util.FileHandler;
 import com.example.components.StatBar;
+import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.scene.layout.StackPane;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
 
@@ -34,7 +36,7 @@ import static com.example.App.PlayButtonSound;
  * to other scenes within the application.
  */
 public class GameController {
-
+    private Timeline imageFlipTimeline;
 
     public Label playTimeLabel;
     public StackPane exitDialog;
@@ -95,6 +97,7 @@ public class GameController {
         if (pet != null) {
             VitalStats stats = pet.getStats();
             startActiveTimeTracker(pet); // Start the active time tracker
+            startImageFlip(); // Start the image flip animation
 
             // Bind progress bars to stats
             energyBar.progressProperty().bind(Bindings.divide(stats.energyProperty(), 100.0));
@@ -139,6 +142,35 @@ public class GameController {
         scoreKeeper.start();
         // Start tracking playtime
         startTimeTracker();
+    }
+    /**
+     * Starts the image flipping animation. The image flips around every 15 seconds.
+     */
+    private void startImageFlip() {
+        imageFlipTimeline = new Timeline(new KeyFrame(Duration.seconds(15), event -> flipImage()));
+        imageFlipTimeline.setCycleCount(Timeline.INDEFINITE); // Repeat indefinitely
+        imageFlipTimeline.play();
+    }
+
+    /**
+     * Flips the mole image horizontally by rotating it 180 degrees around the Y-axis.
+     */
+    private void flipImage() {
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), moleSprite);
+        rotateTransition.setAxis(Rotate.Y_AXIS); // Rotate around the Y-axis
+        rotateTransition.setFromAngle(0); // Start from the default angle
+        rotateTransition.setToAngle(180); // Rotate to 180 degrees
+        rotateTransition.setAutoReverse(true); // Flip back to the original state
+        rotateTransition.play();
+    }
+
+    /**
+     * Stops the image flipping animation.
+     */
+    private void stopImageFlip() {
+        if (imageFlipTimeline != null) {
+            imageFlipTimeline.stop();
+        }
     }
     /**
      * Starts the timeline to track the playtime of the game session.
@@ -299,6 +331,7 @@ public class GameController {
     private void goBack() {
         PlayButtonSound();
         stopActiveTimeTracker();
+        stopImageFlip();
         exitDialog.setVisible(true);
 
         // Disable interaction with background UI
@@ -770,6 +803,7 @@ public class GameController {
     @FXML
     private void confirmBackToMain() {
         PlayButtonSound();
+        stopImageFlip();
         stopActiveTimeTracker();
         stopStatsDecay();
         stopTimeTracker();
