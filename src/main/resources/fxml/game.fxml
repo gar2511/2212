@@ -42,6 +42,7 @@
         <!-- Actions Section -->
         <VBox styleClass="actions-section" spacing="15" alignment="CENTER">
             <Label text="Actions" styleClass="status-title" />
+            <CustomButton fx:id="sleepButton" text="Sleep" onAction="#sleepPet" styleClass="action-button" />
             <CustomButton fx:id="feedButton" text="Feed" onAction="#feedPet" styleClass="action-button" />
             <CustomButton fx:id="playButton" text="Play" onAction="#playPet" styleClass="action-button" />
             <CustomButton fx:id="giftButton" text="Give Gift" onAction="#giveGift" styleClass="action-button" />

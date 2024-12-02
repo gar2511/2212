@@ -17,6 +17,8 @@ import javafx.geometry.Pos;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
 import static com.example.App.PlayButtonSound;
@@ -24,6 +26,11 @@ import static com.example.App.PlayButtonSound;
 public class ParentMenuController {
 
     public Label petScoreLabel;
+    public TextField endTimeField;
+    public TextField startTimeField;
+    public CustomButton setAllowedTimeButton;
+    public TextField endTimeTextField;
+    public TextField startTimeTextField;
     @FXML
     private ToggleButton parentModeToggle;
     @FXML
@@ -176,7 +183,7 @@ public class ParentMenuController {
                             if (petFullName.equals(selectedPetName)) {
                                 currentGameState = state;
                                 Pet pet = currentGameState.getPet();
-                                
+
                                 // Update UI components with the pet's current state
                                 petScoreLabel.setText("Score: " + pet.getScore());
                                 petScoreLabel.setVisible(true);
@@ -254,7 +261,7 @@ public class ParentMenuController {
         timeLimitSpinner.setOpacity(isTimeLimitEnabled ? 1.0 : 0.5);
         updateTimeLimitButton.setDisable(!isTimeLimitEnabled);
         updateTimeLimitButton.setOpacity(isTimeLimitEnabled ? 1.0 : 0.5);
-        
+
         if (isTimeLimitEnabled && currentGameState != null) {
             timeLimitSpinner.getValueFactory().setValue((int) currentGameState.getPet().getTimeLimit());
         }
@@ -399,5 +406,64 @@ public class ParentMenuController {
         cancelButton.setOnAction(e -> {
             root.getChildren().remove(dialogOverlay);
         });
+    }
+
+
+    public void saveTime(ActionEvent actionEvent) {
+    }
+
+    public void handleSetAllowedTime(ActionEvent actionEvent) {
+        PlayButtonSound();
+
+        if (currentGameState != null) {
+            String startTimeInput = startTimeTextField.getText().trim();
+            String endTimeInput = endTimeTextField.getText().trim();
+
+            try {
+                // Normalize the input to HH:mm format if necessary
+                LocalTime startTime = parseTime(startTimeInput);
+                LocalTime endTime = parseTime(endTimeInput);
+
+                // Save the allowed times to the pet object
+                Pet pet = currentGameState.getPet();
+                pet.saveStartTime(startTime);
+                pet.saveEndTime(endTime);
+
+                // Save the updated game state to file
+                saveCurrentGameState();
+
+                // Update UI or log success
+                System.out.println("Allowed playtime updated: " + startTime + " to " + endTime);
+            } catch (IllegalArgumentException | DateTimeParseException e) {
+                // Handle invalid time input or timeframe
+                System.err.println("Invalid time or timeframe: " + e.getMessage());
+
+                // Show an alert to the user
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Time");
+                alert.setHeaderText("Invalid Time or Timeframe");
+                alert.setContentText("Ensure the times are valid and use the format HH:mm (e.g., 00:00).");
+                alert.showAndWait();
+            }
+        } else {
+            System.err.println("No game state found to update allowed times.");
+        }
+    }
+
+    /**
+     * Parses a time string into LocalTime, allowing flexible input like "0:00".
+     *
+     * @param timeInput The time string to parse.
+     * @return The parsed LocalTime.
+     * @throws DateTimeParseException If the input is invalid.
+     */
+    private LocalTime parseTime(String timeInput) {
+        // Normalize single-digit hour inputs to HH:mm
+        if (!timeInput.matches("\\d{2}:\\d{2}")) {
+            if (timeInput.matches("\\d{1}:\\d{2}")) {
+                timeInput = "0" + timeInput; // Add leading zero for single-digit hour
+            }
+        }
+        return LocalTime.parse(timeInput); // Parse as LocalTime
     }
 }
