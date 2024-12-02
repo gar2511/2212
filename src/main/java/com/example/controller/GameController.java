@@ -9,6 +9,7 @@ import com.example.util.FileHandler;
 import com.example.components.StatBar;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,6 +38,7 @@ public class GameController {
     public StackPane exitDialog;
     public CustomButton backButton;
     public CustomButton saveButton;
+    public CustomButton sleepButton;
     @FXML
     private StatBar energyBar;
     @FXML
@@ -518,7 +520,7 @@ public class GameController {
                     stats.setHappinessMod(1);  // Being hungry makes you unhappy
                     setPetStateImage("hungry");
                     break;
-                    
+
                 case 1: // Happiness critical
                     System.out.println("Happiness is critically low!");
                     stats.setHealthMod(1);     // Being unhappy affects health
@@ -529,15 +531,27 @@ public class GameController {
                         vetButton.setDisable(true);
                     });
                     break;
-                    
+
                 case 2: // Energy critical
                     System.out.println("Energy is critically low!");
                     stats.setHealthMod(1);      // Being exhausted affects health
                     stats.setHungerMod(1);      // Being tired makes you hungry
                     stats.setHappinessMod(1);   // Being tired makes you unhappy
+                    stats.setEnergyMod(-7);
                     setPetStateImage("sleepy");
+
+                    // Disable all buttons except for the sleep action
                     disableAllButtons();
-                    vetButton.setDisable(false);
+
+
+                    // Prevent exiting critical state until energy is restored to 100
+                    if (stats.getEnergy() < 100) {
+
+                        System.out.println("Pet remains in critical state until energy is restored to 100.");
+                    } else {
+                        System.out.println("Energy restored. Exiting critical state.");
+                        maintainState(2); // Restore normal state
+                    }
                     break;
             }
         }
@@ -582,6 +596,7 @@ public class GameController {
         giftButton.setDisable(true);
         exerciseButton.setDisable(true);
         vetButton.setDisable(true);
+        sleepButton.setDisable(true);
     }
 
     private void enableAllButtons() {
@@ -590,6 +605,7 @@ public class GameController {
         giftButton.setDisable(false);
         exerciseButton.setDisable(false);
         vetButton.setDisable(false);
+        sleepButton.setDisable(false);
     }
 
     private void handleGameOver() {
@@ -766,6 +782,49 @@ public class GameController {
         }
         
         SceneController.getInstance().switchToMainMenu();
+    }
+
+    public void sleepPet(ActionEvent actionEvent) {
+        PlayButtonSound();
+
+        GameState gameState = GameState.getCurrentState();
+        Pet pet = gameState.getPet();
+
+        if (pet != null) {
+            VitalStats stats = pet.getStats();
+
+            // Set the pet image to "sleeping" state
+            setPetStateImage("sleeping");
+
+            // Disable all buttons except the sleep button
+            disableAllButtons();
+            sleepButton.setDisable(false);
+
+            // Restore energy incrementally
+            Timeline sleepTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                if (stats.getEnergy() < 100) {
+                    stats.increaseEnergy(10); // Increment energy by 10 every second
+                    System.out.println(pet.getName() + " is sleeping. Energy increased, hunger decreased.");
+                } else {
+                    System.out.println("Energy fully restored. Exiting sleep.");
+
+                    // Stop the sleep timeline
+                    ((Timeline) event.getSource()).stop();
+
+                    // Restore normal state for energy
+                    maintainState(2);
+
+                    // Re-enable all buttons
+                    enableAllButtons();
+                }
+            }));
+
+            // Set the timeline to run indefinitely until energy reaches 100
+            sleepTimeline.setCycleCount(Timeline.INDEFINITE);
+            sleepTimeline.play();
+        } else {
+            System.out.println("No pet available to sleep!");
+        }
     }
 
 }
