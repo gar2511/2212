@@ -267,7 +267,7 @@ public class SaveMenuController {
     /**
      * Handles the play button action for a save slot.
      * Checks if the current time is within allowed playtime or both fields are null,
-     * then switches to the game scene.
+     * Then switches to the game scene.
      *
      * @param saveName The name of the save to load and play.
      */
@@ -390,6 +390,12 @@ public class SaveMenuController {
         }
     }
 
+    /**
+     * Handles errors encountered during save operations.
+     * Displays an alert dialog to notify the user.
+     * @param operation The type of operation that failed.
+     * @param e The exception that occurred.
+     */
     private void handleSaveError(String operation, Exception e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Save Error");
