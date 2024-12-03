@@ -23,6 +23,10 @@ import java.util.Arrays;
 
 import static com.example.App.PlayButtonSound;
 
+/**
+ * Controller for the Parent Menu interface.
+ * Manages parental controls, save game options, and pet revival functionality.
+ */
 public class ParentMenuController {
 
     public Label petScoreLabel;
@@ -76,7 +80,10 @@ public class ParentMenuController {
 
     @FXML
     private CustomButton removeProfileButton;
-
+    /**
+     * Initializes the Parent Menu interface.
+     * Loads user preferences, sets up dropdown options, and configures visibility based on parent mode.
+     */
     @FXML
     public void initialize() {
         fileHandler = new FileHandler();
@@ -91,7 +98,7 @@ public class ParentMenuController {
             selectSaveDropdown.setVisible(isParentModeEnabled);
             selectSaveDropdown.setManaged(isParentModeEnabled);
         } catch (IOException e) {
-            System.err.println("failed to load preferences: " + e.getMessage());
+            System.err.println("Failed to load preferences: " + e.getMessage());
             userPrefs = new UserPreferences();
         }
 
@@ -168,6 +175,10 @@ public class ParentMenuController {
         item3Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
         item4Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
     }
+
+    /**
+     * Loads the selected save file and updates the UI components accordingly.
+     */
     private void loadSelectedSave() {
         String selectedPetName = selectSaveDropdown.getValue();
         if (selectedPetName != null && !selectedPetName.equals("Select a save file...")) {
@@ -211,6 +222,13 @@ public class ParentMenuController {
     }
 
 
+
+
+    /**
+     * Toggles the parental controls mode.
+     * Saves the updated state and adjusts the UI accordingly.
+     */
+
     @FXML
     private void handleToggleParentMode() {
         PlayButtonSound();
@@ -227,7 +245,11 @@ public class ParentMenuController {
         // update UI visibility
         updateVisibility(isParentModeEnabled);
     }
-
+    /**
+     * Updates the visibility of UI sections based on the parent mode status.
+     *
+     * @param enabled True if parent mode is enabled, false otherwise.
+     */
     private void updateVisibility(boolean enabled) {
         selectSaveDropdown.setVisible(enabled);
         selectSaveDropdown.setManaged(enabled);
@@ -252,7 +274,10 @@ public class ParentMenuController {
         inventoryDivider.setVisible(false);
         inventoryDivider.setManaged(false);
     }
-
+    /**
+     * Handles the toggling of the time limit feature.
+     * Enables or disables the spinner and update button based on the toggle state.
+     */
     @FXML
     private void handleTimeLimitToggle() {
         PlayButtonSound();
@@ -266,7 +291,10 @@ public class ParentMenuController {
             timeLimitSpinner.getValueFactory().setValue((int) currentGameState.getPet().getTimeLimit());
         }
     }
-
+    /**
+     * Updates the time limit for the selected save slot.
+     * Saves the updated time limit to the save file.
+     */
     @FXML
     private void handleUpdateTimeLimit() {
         PlayButtonSound();
@@ -284,13 +312,20 @@ public class ParentMenuController {
         }
     }
 
-
+    /**
+     * Navigates back to the settings screen.
+     */
     @FXML
     private void handleGoBack() {
         PlayButtonSound();
         SceneController.getInstance().switchToSettings();
     }
-
+    /**
+     * Revives the pet associated with the current game state.
+     * Restores all pet stats and updates the save file.
+     *
+     * @param actionEvent The action event triggered by the revive button.
+     */
     @FXML
     public void revivePet(ActionEvent actionEvent) {
         PlayButtonSound();
@@ -304,6 +339,9 @@ public class ParentMenuController {
     @FXML
     private Spinner<Integer> item1Spinner, item2Spinner, item3Spinner, item4Spinner;
 
+    /**
+     * Updates the quantity of Item 1 in the inventory.
+     */
     @FXML
     private void updateItem1() {
         if (currentGameState != null) {
@@ -311,7 +349,9 @@ public class ParentMenuController {
             saveCurrentGameState();
         }
     }
-
+    /**
+     * Updates the quantity of Item 2 in the inventory.
+     */
     @FXML
     private void updateItem2() {
         if (currentGameState != null) {
@@ -319,7 +359,9 @@ public class ParentMenuController {
             saveCurrentGameState();
         }
     }
-
+    /**
+     * Updates the quantity of Item 3 in the inventory.
+     */
     @FXML
     private void updateItem3() {
         if (currentGameState != null) {
@@ -327,7 +369,9 @@ public class ParentMenuController {
             saveCurrentGameState();
         }
     }
-
+    /**
+     * Updates the quantity of Item 4 in the inventory.
+     */
     @FXML
     private void updateItem4() {
         if (currentGameState != null) {
@@ -335,7 +379,9 @@ public class ParentMenuController {
             saveCurrentGameState();
         }
     }
-
+    /**
+     * Saves the current game state to the corresponding save file.
+     */
     private void saveCurrentGameState() {
         try {
             if (currentGameState != null) {
@@ -348,7 +394,10 @@ public class ParentMenuController {
             System.out.println("Failed to save game state: " + e.getMessage());
         }
     }
-
+    /**
+     * Handles the removal of the parent profile.
+     * Shows a confirmation dialog and deletes the profile if confirmed.
+     */
     @FXML
     private void handleRemoveProfile() {
         // create custom dialog

@@ -38,9 +38,21 @@ import static com.example.App.PlayButtonSound;
 public class GameController {
     private Timeline imageFlipTimeline;
 
+    /**
+     * Label to display the playtime of the current game session.
+     */
     public Label playTimeLabel;
+    /**
+     * StackPane representing the exit dialog shown when the user attempts to exit the game.
+     */
     public StackPane exitDialog;
+    /**
+     * Custom button used for navigating back to the main menu or previous scene.
+     */
     public CustomButton backButton;
+    /**
+     * Custom button used for saving the current game state.
+     */
     public CustomButton saveButton;
     public CustomButton sleepButton;
     @FXML
@@ -346,6 +358,9 @@ public class GameController {
     }
 
     // Helper method to disable background interactions
+    /**
+     * Disables all interactive buttons in the game scene while showing a dialog.
+     */
     private void disableBackground() {
         // Disable all UI elements behind the dialog
         feedButton.setDisable(true);
@@ -360,6 +375,9 @@ public class GameController {
     }
 
     // Enable background after canceling the dialog
+    /**
+     * Cancels the exit dialog and re-enables the background buttons.
+     */
     @FXML
     private void cancelExit() {
         PlayButtonSound();
@@ -377,6 +395,10 @@ public class GameController {
         playPauseButton.setDisable(false);
     }
 
+    /**
+     * Feeds the pet, increasing hunger and happiness stats.
+     * Decreases the corresponding item count in the pet's inventory.
+     */
     @FXML
     private void feedPet() {
         PlayButtonSound();
@@ -406,6 +428,10 @@ public class GameController {
         }
 
     }
+
+    /**
+     * Plays with the pet, increasing happiness but decreasing energy and hunger.
+     */
     @FXML
     private void playPet() {
         PlayButtonSound();
@@ -425,6 +451,11 @@ public class GameController {
             System.out.println("No pet to play with!");
         }
     }
+
+    /**
+     * Gives a gift to the pet, modifying stats based on the selected item.
+     * Decreases the corresponding item count in the pet's inventory.
+     */
     @FXML
     private void giveGift() {
         PlayButtonSound();
@@ -450,6 +481,10 @@ public class GameController {
             System.out.println(pet.getName() + " has been fed Item 4! Hunger and happiness increased.");
         }
     }
+
+    /**
+     * Exercises the pet, increasing energy but decreasing hunger and happiness.
+     */
     @FXML
     private void exercisePet() {
         PlayButtonSound();
@@ -467,6 +502,10 @@ public class GameController {
             System.out.println("No pet to exercise!");
         }
     }
+
+    /**
+     * Takes the pet to the vet, increasing health and energy but decreasing happiness.
+     */
     @FXML
     private void takeVet() {
         PlayButtonSound();
@@ -486,6 +525,10 @@ public class GameController {
             System.out.println("No pet to take to the vet!");
         }
     }
+
+    /**
+     * Opens the inventory menu and pauses the game state.
+     */
     @FXML
     private void openInventory(){
         PlayButtonSound();
@@ -505,6 +548,10 @@ public class GameController {
         }
         SceneController.getInstance().switchToInventory();
     }
+
+    /**
+     * Saves the current game state to a file.
+     */
     @FXML
     private void saveGame() {
         PlayButtonSound();
@@ -522,6 +569,13 @@ public class GameController {
     }
 
 
+
+    /**
+     * Handles critical state logic for a specific stat index.
+     * Updates modifiers and displays warnings based on the pet's current stat state.
+     *
+     * @param index The index of the stat to handle (0 = Hunger, 1 = Happiness, 2 = Energy, 3 = Health).
+     */
     private void handleCriticalState(int index) {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
@@ -587,6 +641,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Restores a stat's normal state, resetting modifiers and enabling interactions.
+     *
+     * @param index The index of the stat to maintain (0 = Hunger, 1 = Happiness, 2 = Energy, 3 = Health).
+     */
     private void maintainState(int index) {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
@@ -620,6 +679,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Disables all game interaction buttons.
+     */
     private void disableAllButtons() {
         feedButton.setDisable(true);
         playButton.setDisable(true);
@@ -629,6 +691,9 @@ public class GameController {
         sleepButton.setDisable(true);
     }
 
+    /**
+     * Enables all game interaction buttons.
+     */
     private void enableAllButtons() {
         feedButton.setDisable(false);
         playButton.setDisable(false);
@@ -638,6 +703,9 @@ public class GameController {
         sleepButton.setDisable(false);
     }
 
+    /**
+     * Handles the game over state, stopping the game and displaying the game over message.
+     */
     private void handleGameOver() {
         System.out.println("Health has reached 0. Game over.");
         stopStatsDecay();
@@ -648,6 +716,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Sets up keyboard hotkeys for game actions.
+     */
     private void setupHotkeys() {
         moleSprite.setFocusTraversable(true); // Ensure moleSprite can receive key events
         moleSprite.requestFocus(); // Request focus on the moleSprite node
@@ -702,7 +773,9 @@ public class GameController {
         });
     }
 
-
+    /**
+     * Sets the pet's image to its default state based on its species.
+     */
     private void setPetStateImage() {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
@@ -717,6 +790,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Sets the pet's image to a specific state based on its species and state.
+     *
+     * @param petState The state of the pet (e.g., "happy", "angry").
+     */
     private void setPetStateImage(String petState) {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
@@ -735,6 +813,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Toggles between play and pause states, affecting game timelines and UI buttons.
+     */
     @FXML
     private void togglePlayPause() {
         isPaused = !isPaused;
@@ -792,6 +873,9 @@ public class GameController {
         SceneController.getInstance().switchToMainMenu();
     }
 
+    /**
+     * Confirms returning to the main menu and stops game timelines.
+     */
     @FXML
     private void confirmBackToMain() {
         PlayButtonSound();

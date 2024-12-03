@@ -23,16 +23,19 @@ public class MainMenuController {
 
     @FXML
     private CustomButton loadGameButton;
+
     @FXML
     private CustomButton settingsButton;
+
     @FXML
     private CustomButton exitButton;
+
     @FXML
     private StackPane exitDialog;
 
     /**
      * Handles the "Load Game" button action.
-     * Switches to the save menu scene.
+     * Plays a button sound and switches to the save menu scene.
      */
     @FXML
     private void startGame() {
@@ -42,13 +45,18 @@ public class MainMenuController {
 
     /**
      * Handles the "Settings" button action.
-     * Switches to the settings menu scene.
+     * Plays a button sound and switches to the settings menu scene.
      */
     @FXML
     private void openSettings() {
         PlayButtonSound();
         SceneController.getInstance().switchToSettings();
     }
+
+    /**
+     * Handles the "Tutorial" button action.
+     * Plays a button sound and switches to the tutorial scene.
+     */
     @FXML
     private void openTutorial() {
         PlayButtonSound();
@@ -57,7 +65,7 @@ public class MainMenuController {
 
     /**
      * Handles the "Exit" button action.
-     * Shows the exit confirmation dialog.
+     * Plays a button sound and displays the exit confirmation dialog.
      */
     @FXML
     private void exitGame() {
@@ -67,28 +75,29 @@ public class MainMenuController {
 
     /**
      * Handles the confirmation of exit.
-     * Closes the application.
+     * Stops all audio players and closes the application.
      */
     @FXML
     private void confirmExit() {
         PlayButtonSound();
 
+        // Stop and close audio resources
         App.getButtonSound().stop();
         App.getSoundPlayer().stop();
         App.getButtonSound().close();
         App.getSoundPlayer().close();
 
+        // Exit the application
         Platform.exit();
     }
 
     /**
-     * Handles the cancellation of exit.
-     * Hides the exit confirmation dialog.
+     * Handles the cancellation of the exit process.
+     * Plays a button sound and hides the exit confirmation dialog.
      */
     @FXML
     private void cancelExit() {
         PlayButtonSound();
         exitDialog.setVisible(false);
     }
-
 }

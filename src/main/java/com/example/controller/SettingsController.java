@@ -1,22 +1,19 @@
 package com.example.controller;
 
 import com.example.App;
-import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.scene.control.ToggleButton;
-//import javafx.scene.control.Slider;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.layout.StackPane;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import com.example.components.CustomButton;
 import com.example.components.CustomSlider;
-import com.example.components.CustomToggle;
-import javafx.scene.control.Label;
 import com.example.model.UserPreferences;
 import com.example.util.FileHandler;
+
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import static com.example.App.PlayButtonSound;
 
@@ -25,6 +22,7 @@ import static com.example.App.PlayButtonSound;
  * Handles parental controls, volume adjustments, and user interactions with the settings menu.
  */
 public class SettingsController {
+
     @FXML
     private ToggleButton parentalControlsToggle;
 
@@ -36,8 +34,10 @@ public class SettingsController {
 
     @FXML
     private CustomButton parentalControlsButton;
+
     @FXML
     private CustomButton configureButton;
+
     @FXML
     private Label parentalStatusLabel;
 
@@ -62,17 +62,13 @@ public class SettingsController {
             userPrefs = new UserPreferences();
         }
 
-        // Wrap all UI operations in Platform.runLater to ensure FXML elements are initialized
         Platform.runLater(() -> {
             updateParentalControlsUI(userPrefs.isParentControlsEnabled());
+            handleVolumeChange((int) userPrefs.getVolume());
 
-            // Set initial value for volume
-            handleVolumeChange((int)userPrefs.getVolume());
-
-            // Set initial values from preferences
             if (volumeSlider != null && volumeLabel != null) {
                 volumeSlider.setValue(userPrefs.getVolume());
-                volumeLabel.setText((int)userPrefs.getVolume() + "%");
+                volumeLabel.setText((int) userPrefs.getVolume() + "%");
             }
 
             if (parentalControlsToggle != null && parentalStatusLabel != null) {
@@ -80,13 +76,10 @@ public class SettingsController {
                 parentalStatusLabel.setText(userPrefs.isParentControlsEnabled() ? "Enabled" : "Disabled");
             }
 
-            // Add listeners for preferences changes
             if (parentalControlsToggle != null) {
                 parentalControlsToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
                     handleParentalControlsToggle(newVal);
-                    if (parentalStatusLabel != null) {
-                        parentalStatusLabel.setText(newVal ? "Enabled" : "Disabled");
-                    }
+                    parentalStatusLabel.setText(newVal ? "Enabled" : "Disabled");
                     userPrefs.setParentControlsEnabled(newVal);
                     savePreferences();
                 });
@@ -95,9 +88,7 @@ public class SettingsController {
             if (volumeSlider != null) {
                 volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
                     handleVolumeChange(newVal.intValue());
-                    if (volumeLabel != null) {
-                        volumeLabel.setText(newVal.intValue() + "%");
-                    }
+                    volumeLabel.setText(newVal.intValue() + "%");
                     userPrefs.setVolume(newVal.doubleValue());
                     savePreferences();
                 });
@@ -112,26 +103,19 @@ public class SettingsController {
      * The track visually represents the current volume level and updates dynamically.
      */
     private void setupVolumeSlider() {
-        // Create a colored rectangle to represent the filled portion of the track
         coloredTrack = new Rectangle();
         coloredTrack.getStyleClass().add("colored-track");
         coloredTrack.setHeight(8);
         coloredTrack.setY(4);
 
-        // Locate the track node within the slider
         Node track = volumeSlider.lookup(".track");
         if (track instanceof StackPane) {
-            // Add the colored track as a child of the track node
             ((StackPane) track).getChildren().add(coloredTrack);
-
-            // Perform the initial update of the colored track
             updateColoredTrack();
 
-            // Add listeners to update the track when slider width or value changes
             volumeSlider.widthProperty().addListener((obs, oldVal, newVal) -> updateColoredTrack());
             volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
                 updateColoredTrack();
-                // Only update the label text, not the track text
                 if (volumeLabel != null) {
                     volumeLabel.setText(newVal.intValue() + "%");
                 }
@@ -141,11 +125,10 @@ public class SettingsController {
 
     /**
      * Updates the width of the colored track based on the current volume slider value.
-     * The track dynamically reflects the percentage of the slider's value.
      */
     private void updateColoredTrack() {
         if (coloredTrack != null) {
-            double width = volumeSlider.getWidth() - 16; // Account for slider padding
+            double width = volumeSlider.getWidth() - 16;
             double percentage = (volumeSlider.getValue() - volumeSlider.getMin()) /
                     (volumeSlider.getMax() - volumeSlider.getMin());
             coloredTrack.setWidth(Math.max(0, width * percentage));
@@ -159,13 +142,10 @@ public class SettingsController {
      */
     private void handleParentalControlsToggle(boolean enabled) {
         PlayButtonSound();
-        if (parentalControlsToggle != null) {
-            // only update the enabled state, preserve the password
-            userPrefs.setParentControlsEnabled(enabled);
-            updateParentalControlsUI(enabled);
-            savePreferences();
-            System.out.println("Parental controls " + (enabled ? "enabled" : "disabled"));
-        }
+        userPrefs.setParentControlsEnabled(enabled);
+        updateParentalControlsUI(enabled);
+        savePreferences();
+        System.out.println("Parental controls " + (enabled ? "enabled" : "disabled"));
     }
 
     /**
@@ -180,20 +160,8 @@ public class SettingsController {
     }
 
     /**
-     * Returns the user to the main menu.
+     * Saves the user preferences to the file.
      */
-    @FXML
-    private void goBack() {
-        PlayButtonSound();
-        SceneController.getInstance().switchToMainMenu();
-    }
-
-    @FXML
-    private void goParent() {
-        PlayButtonSound();
-        SceneController.getInstance().switchToLoginParent();
-    }
-
     private void savePreferences() {
         try {
             fileHandler.savePreferences(userPrefs);
@@ -202,6 +170,11 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Updates the UI based on the state of parental controls.
+     *
+     * @param enabled {@code true} if parental controls are enabled, {@code false} otherwise.
+     */
     private void updateParentalControlsUI(boolean enabled) {
         if (enabled) {
             parentalStatusLabel.setText("Enabled");
@@ -211,14 +184,12 @@ public class SettingsController {
             configureButton.setManaged(true);
         } else {
             if (userPrefs.getParentPassword().isEmpty()) {
-                // No profile exists
                 parentalStatusLabel.setText("No active profile");
                 parentalControlsButton.setVisible(true);
                 parentalControlsButton.setManaged(true);
                 configureButton.setVisible(false);
                 configureButton.setManaged(false);
             } else {
-                // Profile exists but disabled
                 parentalStatusLabel.setText("Disabled");
                 parentalControlsButton.setVisible(false);
                 parentalControlsButton.setManaged(false);
@@ -228,6 +199,28 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Navigates back to the main menu.
+     */
+    @FXML
+    private void goBack() {
+        PlayButtonSound();
+        SceneController.getInstance().switchToMainMenu();
+    }
+
+    /**
+     * Navigates to the parental controls login screen.
+     */
+    @FXML
+    private void goParent() {
+        PlayButtonSound();
+        SceneController.getInstance().switchToLoginParent();
+    }
+
+    /**
+     * Handles the parental controls button action.
+     * Navigates to the parental controls login screen.
+     */
     @FXML
     private void handleParentalControls() {
         SceneController.getInstance().switchToLoginParent();

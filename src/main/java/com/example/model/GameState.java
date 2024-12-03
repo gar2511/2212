@@ -24,6 +24,8 @@ public class GameState {
 
     // The pet's current vital statistics
     private VitalStats stats;
+
+    // Indicates whether parental controls are active
     private boolean controlParent;
 
     private LocalDateTime sessionStartTime; // When the session started
@@ -124,7 +126,21 @@ public class GameState {
     public void setStats(VitalStats stats) {
         this.stats = stats;
     }
-    public void setControlParent(boolean controlParent) { this.controlParent= controlParent; }
-    public boolean getControlParent(){ return controlParent; }
+    /**
+     * Sets whether parental controls are active.
+     *
+     * @param controlParent {@code true} to enable parental controls, {@code false} to disable them.
+     */
+    public void setControlParent(boolean controlParent) {
+        this.controlParent= controlParent;
+    }
+    /**
+     * Checks whether parental controls are currently active.
+     *
+     * @return {@code true} if parental controls are enabled, {@code false} otherwise.
+     */
+    public boolean getControlParent(){
+        return controlParent;
+    }
 
 }
