@@ -50,8 +50,8 @@
         <!-- Actions Section -->
         <VBox styleClass="actions-section" spacing="15" alignment="CENTER">
             <Label text="Actions" styleClass="status-title" />
+            <CustomButton fx:id="sleepButton" text="Sleep" onAction="#showSleepTutorial" styleClass="action-button" />
             <CustomButton fx:id="feedButton" text="Feed" onAction="#showFeedTutorial" styleClass="action-button" />
-
             <CustomButton fx:id="playButton" text="Play" onAction="#showPlayTutorial" styleClass="action-button" />
             <CustomButton fx:id="giftButton" text="Give Gift" onAction="#showGiftTutorial" styleClass="action-button" />
             <CustomButton fx:id="exerciseButton" text="Exercise" onAction="#showExerciseTutorial" styleClass="action-button" />

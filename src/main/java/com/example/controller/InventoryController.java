@@ -214,15 +214,15 @@ public class InventoryController {
         updateItemQuantities();
 
         if (pet.getDefaultItem12() == 1) {
-            setSelected(defaultItem1, selectedItem12Label, "Item 1");
+            setSelected(defaultItem1, selectedItem12Label, "Cake");
         } else {
-            setSelected(defaultItem2, selectedItem12Label, "Item 2");
+            setSelected(defaultItem2, selectedItem12Label, "Apple");
         }
 
         if (pet.getDefaultItem34() == 3) {
-            setSelected(defaultItem3, selectedItem34Label, "Item 3");
+            setSelected(defaultItem3, selectedItem34Label, "Ball");
         } else {
-            setSelected(defaultItem4, selectedItem34Label, "Item 4");
+            setSelected(defaultItem4, selectedItem34Label, "Plushy");
         }
     }
 
