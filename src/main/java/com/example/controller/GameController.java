@@ -455,7 +455,7 @@ public class GameController {
     }
 
     /**
-     * Gives a gift to the pet, modifying stats based on the selected item.
+     * Gives a gift to the pet, modifying stats based on the gelected item.
      * Decreases the corresponding item count in the pet's inventory.
      */
     @FXML
@@ -465,7 +465,7 @@ public class GameController {
         Pet pet = gameState.getPet();
 
         // setting pet image to eating
-        setPetStateImage("eating");
+        setPetStateImage("gift");
 
         if (pet.getDefaultItem34()==3) {
             VitalStats stats = pet.getStats();
@@ -515,7 +515,7 @@ public class GameController {
         Pet pet = gameState.getPet();
 
         // setting pet image to eating
-        setPetStateImage("sleeping");
+        setPetStateImage("vet");
 
         if (pet != null) {
             VitalStats stats = pet.getStats();
