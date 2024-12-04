@@ -1,86 +1,73 @@
-## IMPORTANT INSTRUCTIONS
-The program can only be run using terminal commands.
+# PET HAVEN
 
-For regular use: `mvn clean javafx:run`
+A virtual pet game built with JavaFX where you can adopt and care for digital pets. Features include feeding, playing, exercising, and monitoring your pet's vital stats. The game includes parental controls for managing playtime and content access.
 
-For development mode (hot reloading): 
-- Windows: `dev.bat`
-- macOS: `./dev.sh`
+## System Requirements
+#### Required
+- Java Development Kit (JDK) 23
+- JavaFX SDK 23.0.1
+- Apache Maven 3.9.9
 
-**Note:** You must set up the development environment before using development mode. Instructions below.
+#### Development Mode
+- Node.js
+- pnpm (highly recommended over npm)
 
-## Setup Instructions for Maven and JavaFX
+## Installation Instructions
 
-**You must complete this setup regardless of whether you want to use development mode or not.**
+### Windows Setup
 
-### Windows
+1. **Install Java Development Kit (JDK) 23**
+   - Download and install from Oracle's website
 
-Install JavaFX: https://www.tutorialspoint.com/javafx/javafx_environment.htm
+2. **Install JavaFX SDK**
+   - Download JavaFX SDK 23.0.1 from: https://gluonhq.com/products/javafx/
+   - Create folder: `C:\Program Files\JavaFX`
+   - Extract to: `C:\Program Files\JavaFX\javafx-sdk-23.0.1`
+   - Add system environment variable:
+     - Name: `PATH_TO_FX`
+     - Value: `C:\Program Files\JavaFX\javafx-sdk-23.0.1\lib`
 
-Download:
-https://gluonhq.com/products/javafx/
-(Windows 23.0.1 x64 SDK)
+3. **Install Maven**
+   - Download Apache Maven 3.9.9 from: https://maven.apache.org/download.cgi
+   - Create folder: `C:\Program Files\Maven`
+   - Extract to: `C:\Program Files\Maven\apache-maven-3.9.9`
+   - Add to system PATH: `C:\Program Files\Maven\apache-maven-3.9.9\bin`
 
-1. Create a folder in your C drive and name it "JavaFX"
-    - C:\Program Files\JavaFX
-2. Extract the downloaded folder into JavaFX
-   - C:\Program Files\JavaFX\javafx-sdk-23.0.1
-3. Search "Edit the system environment variables" on the search bar and click on it
-4. Click on "Environment Variables..." located in the bottom left
-5. Under "System variables" (Lower Rectangle), click "New..."
-6. Enter:
-   - Variable name: PATH_TO_FX
-   - Variable value: C:\Program Files\JavaFX\javafx-sdk-23.0.1\lib
-7. Click "OK" on every window to exit
+### macOS Setup
+Paste and run in macOS Terminal
+```bash
+# Install Homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-Install Maven by following this guide: https://phoenixnap.com/kb/install-maven-windows#step-4-verify-maven-installation
+# Install JDK 23
+brew install openjdk@23
 
-Download:
-https://maven.apache.org/download.cgi
-(Binary zip archive apache-maven-3.9.9-bin.zip)
+# Add Java to PATH
+export PATH="/opt/homebrew/opt/openjdk@23/bin:$PATH"
 
-1. Create a folder in your C drive and name it "Maven"
-   - C:\Program Files\Maven
-2. Extract the downloaded folder into Maven
-   - C:\Program Files\Maven\apache-maven-3.9.9
-3. Search "Edit the system environment variables" on the search bar and click on it
-4. Click on "Environment Variables..." located in the bottom left
-5. Under "System variables" (Lower Rectangle), Scroll though and find "Path"
-6. After selecting "Path" click "Edit..."
-7. Click "New" on the top right
-8. Enter:
-   - C:\Program Files\Maven\apache-maven-3.9.9\bin
-9. Click "OK" on every window to exit
+# Install Maven
+brew install maven
+```
 
-### macOS (in terminal)
+## Running the Game
 
-1. Install Homebrew: 
-   ```bash
-   sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
-2. Install Java 23: 
-   ```bash
-   brew install openjdk@23
-   ```
-3. Add Java to PATH: 
-   ```bash
-   export PATH="/opt/homebrew/opt/openjdk@23/bin:$PATH"
-   ```
-4. Install Maven: 
-   ```bash
-   brew install maven
-   ```
-And that's it! You can now run the program using `mvn clean javafx:run`
+### Standard Mode
+Open Terminal/Command Prompt in the project directory and run:
 
-## Development Mode (Hot Reloading)
-1. Install Node and pnpm:
+```bash
+mvn clean javafx:run
+```
+
+### Development Mode (Hot Reloading)
+
+1. Install Node.js and pnpm:
    ```bash
    # macOS
    brew install node
    brew install pnpm
    
    # Windows
-   Download Node.js from https://nodejs.org/
+   # Download Node.js from https://nodejs.org/
    npm install -g pnpm
    ```
 
@@ -97,3 +84,54 @@ And that's it! You can now run the program using `mvn clean javafx:run`
    # Windows
    dev.bat
    ```
+
+## User Guide
+
+### Basic Controls
+- Use mouse clicks to interact with buttons and menus
+- Volume can be adjusted in the settings menu
+- Game automatically saves progress when exiting properly
+
+### Pet Care
+- Feed your pet to maintain hunger levels
+- Play with your pet to increase happiness
+- Exercise to maintain health
+- Take to vet when health is low
+- Give gifts to increase affection
+
+### Inventory System
+- Purchase items using earned points
+- Access inventory through the main menu
+- Items can be used to care for your pet
+
+## Parental Controls
+
+### Setting Up Parental Controls
+1. Access Settings from the main menu
+2. Click "CREATE PROFILE" under Parental Controls
+3. Create a 6-digit PIN
+4. Confirm the PIN
+
+### Features
+- Time limit settings
+- Play time restrictions
+- Pet revival options
+- Inventory management
+
+Default Parent PIN: None (must be created on first use)
+
+## Additional Information
+
+- Save files are stored in the `saves` directory
+- Game settings are saved in `preferences.json`
+- The game uses autosave when exiting properly
+- Development mode enables hot reloading for faster development
+
+## Troubleshooting
+
+If you encounter "JavaFX runtime components are missing" error:
+1. Verify JavaFX SDK installation
+2. Check environment variables
+3. Ensure Maven is properly configured
+
+For any other issues, verify all environment variables are set correctly and required dependencies are installed.
