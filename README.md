@@ -8,7 +8,7 @@ A virtual pet game built with JavaFX where you can adopt and care for digital pe
 - JavaFX SDK 23.0.1
 - Apache Maven 3.9.9
 
-#### Development Mode
+#### Development Mode (Optional for hot reloading of FXML and CSS files)
 - Node.js
 - pnpm (highly recommended over npm)
 
@@ -20,18 +20,34 @@ A virtual pet game built with JavaFX where you can adopt and care for digital pe
    - Download and install from Oracle's website
 
 2. **Install JavaFX SDK**
-   - Download JavaFX SDK 23.0.1 from: https://gluonhq.com/products/javafx/
+   - Visit: https://www.tutorialspoint.com/javafx/javafx_environment.htm
+   - Download from: https://gluonhq.com/products/javafx/
+   - Select: Windows 23.0.1 x64 SDK
    - Create folder: `C:\Program Files\JavaFX`
-   - Extract to: `C:\Program Files\JavaFX\javafx-sdk-23.0.1`
-   - Add system environment variable:
-     - Name: `PATH_TO_FX`
-     - Value: `C:\Program Files\JavaFX\javafx-sdk-23.0.1\lib`
+   - Extract downloaded folder to: `C:\Program Files\JavaFX\javafx-sdk-23.0.1`
+   - Set up environment variable:
+     1. Search "Edit the system environment variables" in Windows search
+     2. Click "Environment Variables..." (bottom left)
+     3. Under "System variables" (lower rectangle), click "New..."
+     4. Enter:
+        - Variable name: `PATH_TO_FX`
+        - Variable value: `C:\Program Files\JavaFX\javafx-sdk-23.0.1\lib`
+     5. Click "OK" on all windows to exit
 
 3. **Install Maven**
-   - Download Apache Maven 3.9.9 from: https://maven.apache.org/download.cgi
+   - Visit: https://phoenixnap.com/kb/install-maven-windows
+   - Download from: https://maven.apache.org/download.cgi
+   - Select: Binary zip archive (apache-maven-3.9.9-bin.zip)
    - Create folder: `C:\Program Files\Maven`
-   - Extract to: `C:\Program Files\Maven\apache-maven-3.9.9`
-   - Add to system PATH: `C:\Program Files\Maven\apache-maven-3.9.9\bin`
+   - Extract downloaded folder to: `C:\Program Files\Maven\apache-maven-3.9.9`
+   - Add to system PATH:
+     1. Search "Edit the system environment variables" in Windows search
+     2. Click "Environment Variables..." (bottom left)
+     3. Under "System variables", find and select "Path"
+     4. Click "Edit..."
+     5. Click "New" (top right)
+     6. Enter: `C:\Program Files\Maven\apache-maven-3.9.9\bin`
+     7. Click "OK" on all windows to exit
 
 ### macOS Setup
 Paste and run in macOS Terminal
@@ -58,39 +74,43 @@ Open Terminal/Command Prompt in the project directory and run:
 mvn clean javafx:run
 ```
 
-### Development Mode (Hot Reloading)
+### Development Mode (Optional)
 
-1. Install Node.js and pnpm:
-   ```bash
-   # macOS
-   brew install node
-   brew install pnpm
-   
-   # Windows
-   # Download Node.js from https://nodejs.org/
-   npm install -g pnpm
-   ```
+#### Windows Setup
 
-2. Install development dependencies:
+1. Download Node.js from https://nodejs.org/
+2. Install pnpm (recommended)
+    ```bash
+    npm install -g pnpm
+    ```
+3. Install development dependencies:
    ```bash
    pnpm install
    ```
+4. Start development mode:
+    ```bash
+    dev.sh
+    ```
 
-3. Start development mode:
-   ```bash
-   # macOS
-   ./dev.sh
-   
-   # Windows
-   dev.bat
-   ```
+#### macOS Setup
+```bash
+# Install Node.js and pnpm (recommended)
+brew install node
+brew install pnpm
+
+# Install development dependencies
+pnpm install
+
+# Start development mode
+./dev.sh
+```
 
 ## User Guide
 
 ### Basic Controls
 - Use mouse clicks to interact with buttons and menus
 - Volume can be adjusted in the settings menu
-- Game automatically saves progress when exiting properly
+- Save progress regularly
 
 ### Pet Care
 - Feed your pet to maintain hunger levels
@@ -98,10 +118,11 @@ mvn clean javafx:run
 - Exercise to maintain health
 - Take to vet when health is low
 - Give gifts to increase affection
+- Your pet will die if health reaches zero
 
 ### Inventory System
 - Purchase items using earned points
-- Access inventory through the main menu
+- Access inventory through the game menu
 - Items can be used to care for your pet
 
 ## Parental Controls
@@ -125,7 +146,7 @@ Default Parent PIN: None (must be created on first use)
 - Save files are stored in the `saves` directory
 - Game settings are saved in `preferences.json`
 - The game uses autosave when exiting properly
-- Development mode enables hot reloading for faster development
+- Development mode enables hot reloading of FXML and CSS files for faster development
 
 ## Troubleshooting
 
