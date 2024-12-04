@@ -123,6 +123,8 @@ public class Pet {
     public void resetTotalTimeSpent() {
         this.totalTimeSpent = 0;
     }
+    public void resetCurrentPlayTime() {this.currentPlayTime = 0;}
+
 
     // Getter and setter for timeLimit
     public long getTimeLimit() {

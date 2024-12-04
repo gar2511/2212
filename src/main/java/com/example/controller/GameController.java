@@ -212,14 +212,15 @@ public class GameController {
             if (pet != null) {
                 pet.addTimeSpent(1); // Increment total and current playtime by 1 second
 
-                long sessionPlaytime = pet.getCurrentPlayTime(); // Fetch current session playtime
+                long sessionPlaytime = pet.getTotalTimeSpent(); // Fetch current session playtime
 
                 // Update the playtime label
                 Platform.runLater(() -> {
-                    playTimeLabel.setText("Session Play Time: " + formatPlayTime(sessionPlaytime));
+                    playTimeLabel.setText("Play Time: " + formatPlayTime(sessionPlaytime));
                 });
 
-                System.out.println("Updated playtime: " + sessionPlaytime + " seconds");
+                // Print seconds elapsed in the terminal
+                System.out.println("Seconds elapsed: " + sessionPlaytime);
             } else {
                 System.out.println("No pet found for time tracking.");
             }
@@ -229,6 +230,7 @@ public class GameController {
         timeTracker.play();
         System.out.println("Time tracker started.");
     }
+
 
 
     /**
