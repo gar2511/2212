@@ -161,4 +161,9 @@ public class TutorialGameController {
         PlayButtonSound();
         showTutorialDialog("If your pet's resources drop too low, consequences occur. Zero energy puts the pet to sleep until energy is full. Empty hunger accelerates happiness and hunger decay. Low happiness restricts actions to increasing happiness only. Zero health ends the game.");
     }
+
+    public void showSleepTutorial(ActionEvent actionEvent) {
+        PlayButtonSound();
+        showTutorialDialog("You can tell your pet to begin to sleep if energy is too low");
+    }
 }

@@ -420,8 +420,8 @@ public class GameController {
             }
             if (pet.getDefaultItem12()==2) {
                 VitalStats stats = pet.getStats();
-                stats.increaseHunger(30); // Increase hunger by 20
-                stats.increaseHappiness(5); // Increase happiness by 10
+                stats.increaseHunger(30); // Increase hunger by 30
+                stats.increaseHappiness(5); // Increase happiness by 5
                 pet.getInventory().decreaseItem2();
                 System.out.println(pet.getName() + " has been fed Item 2! Hunger and happiness increased.");
             }
@@ -477,8 +477,8 @@ public class GameController {
         }
         if (pet.getDefaultItem34()==4) {
             VitalStats stats = pet.getStats();
-            stats.increaseHunger(60); // Increase hunger by 60
-            stats.increaseHappiness(15); // Decrease happiness by 15
+            stats.increaseEnergy(60); // Increase hunger by 60
+            stats.increaseHealth(15); // Increase happiness by 15
             pet.getInventory().decreaseItem4();
             System.out.println(pet.getName() + " has been fed Item 4! Hunger and happiness increased.");
         }
