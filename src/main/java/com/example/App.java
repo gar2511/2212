@@ -102,7 +102,7 @@ public class App extends Application {
             );
 
             // Configure the primary stage/window
-            stage.setTitle("NEOPETS 2.0");  // Set window title
+            stage.setTitle("PET HAVEN");  // Set window title
             stage.setScene(scene);          // Set the main scene
             stage.show();                   // Display the window
 
