@@ -22,22 +22,42 @@ public class InventoryController {
      */
     public Label pointsLabel;
     @FXML
-    private ImageView item1Image, item2Image, item3Image, item4Image;
+    ImageView item1Image;
+    @FXML
+    ImageView item2Image;
+    @FXML
+    ImageView item3Image;
+    @FXML
+    ImageView item4Image;
 
     @FXML
-    private Label item1Quantity, item2Quantity, item3Quantity, item4Quantity;
+    Label item1Quantity;
+    @FXML
+    Label item2Quantity;
+    @FXML
+    Label item3Quantity;
+    @FXML
+    Label item4Quantity;
 
     @FXML
-    private Button defaultItem1, defaultItem2, defaultItem3, defaultItem4;
+    Button defaultItem1;
+    @FXML
+    Button defaultItem2;
+    @FXML
+    Button defaultItem3;
+    @FXML
+    Button defaultItem4;
 
     @FXML
-    private Label selectedItem12Label, selectedItem34Label;
+    Label selectedItem12Label;
+    @FXML
+    Label selectedItem34Label;
 
     /**
      * Sets the default item 1 and updates the UI to reflect the selection.
      */
     @FXML
-    private void selectDefaultItem1() {
+    void selectDefaultItem1() {
         setSelected(defaultItem1, selectedItem12Label, "Item 1");
         GameState.getCurrentState().getPet().setDefaultItem12(1);
     }
@@ -73,7 +93,7 @@ public class InventoryController {
      * Purchases item 1 if the user has enough points.
      */
     @FXML
-    private void buyItem1() {
+    void buyItem1() {
         buyItem(10, 1); // Item 1 costs 10 points
     }
 
@@ -162,7 +182,7 @@ public class InventoryController {
     /**
      * Updates the displayed quantities of all items in the inventory.
      */
-    private void updateItemQuantities() {
+    void updateItemQuantities() {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
         item1Quantity.setText(Integer.toString(pet.getInventory().getItem1()));
@@ -230,7 +250,7 @@ public class InventoryController {
      * Navigates back to the game screen.
      */
     @FXML
-    private void goBack() {
+    void goBack() {
         PlayButtonSound();
         SceneController.getInstance().switchToGame();
     }
