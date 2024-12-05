@@ -1,13 +1,13 @@
 package com.example.components;
 
-import javafx.animation.ScaleTransition;
-import javafx.animation.SequentialTransition;
 import javafx.scene.control.Button;
 import javafx.scene.effect.ColorAdjust;
+import javafx.util.Duration;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.util.Duration;
 import javafx.animation.Interpolator;
 
 /**

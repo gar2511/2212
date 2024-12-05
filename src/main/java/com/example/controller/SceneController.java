@@ -18,7 +18,7 @@ public class SceneController {
     private static SceneController instance;
 
     // Reference to the current active scene
-    private Scene currentScene;
+    Scene currentScene;
 
     /**
      * Private constructor to prevent direct instantiation.
@@ -38,6 +38,9 @@ public class SceneController {
             instance = new SceneController();
         }
         return instance;
+    }
+
+    public static void setInstance(SceneController mockSceneController) {
     }
 
     /**
@@ -118,7 +121,7 @@ public class SceneController {
      *
      * @return The current active {@link Scene}, or {@code null} if no active window exists.
      */
-    private Scene getCurrentScene() {
+    Scene getCurrentScene() {
         if (currentScene == null) {
             // Find the first showing window in the application
             Window window = Stage.getWindows().stream()
@@ -139,7 +142,7 @@ public class SceneController {
      *
      * @param fxml The name of the FXML file to load (relative to the "fxml/" directory).
      */
-    private void loadFXML(String fxml) {
+    void loadFXML(String fxml) {
         try {
             // Load the FXML file from the "fxml/" directory
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/" + fxml));

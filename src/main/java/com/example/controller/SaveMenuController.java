@@ -30,17 +30,17 @@ import static com.example.App.PlayButtonSound;
  */
 public class SaveMenuController {
     @FXML
-    private ListView<String> saveSlotList;
+    ListView<String> saveSlotList;
 
     @FXML
-    private VBox newSaveDialogue;
+    VBox newSaveDialogue;
 
     @FXML
-    private TextField petNameField;
+    TextField petNameField;
     @FXML
-    private ComboBox<String> petTypeComboBox; // ComboBox for pet type
+    ComboBox<String> petTypeComboBox; // ComboBox for pet type
 
-    private int selectedSlotIndex = -1;
+    int selectedSlotIndex = -1;
 
     /**
      * Initializes the save menu interface.
@@ -185,7 +185,7 @@ public class SaveMenuController {
      * Displays the dialogue for creating or editing a save.
      * Allows the user to input a pet name and confirm the action.
      */
-    private void showNewSaveDialogue() {
+    void showNewSaveDialogue() {
         PlayButtonSound();
         String petName = "PET " + (selectedSlotIndex + 1);
         saveSlotList.setDisable(true);
@@ -241,7 +241,7 @@ public class SaveMenuController {
      * Hides the dialogue and restores the save slot list.
      */
     @FXML
-    private void cancelNewSave() {
+    void cancelNewSave() {
         PlayButtonSound();
         hideNewSaveDialogue();
     }
