@@ -31,14 +31,14 @@ public class MainMenuController {
     private CustomButton exitButton;
 
     @FXML
-    private StackPane exitDialog;
+    StackPane exitDialog;
 
     /**
      * Handles the "Load Game" button action.
      * Plays a button sound and switches to the save menu scene.
      */
     @FXML
-    private void startGame() {
+    void startGame() {
         PlayButtonSound();
         SceneController.getInstance().switchToSaveMenu();
     }
@@ -48,7 +48,7 @@ public class MainMenuController {
      * Plays a button sound and switches to the settings menu scene.
      */
     @FXML
-    private void openSettings() {
+    void openSettings() {
         PlayButtonSound();
         SceneController.getInstance().switchToSettings();
     }
@@ -58,7 +58,7 @@ public class MainMenuController {
      * Plays a button sound and switches to the tutorial scene.
      */
     @FXML
-    private void openTutorial() {
+    void openTutorial() {
         PlayButtonSound();
         SceneController.getInstance().switchToTutorial();
     }
@@ -68,7 +68,7 @@ public class MainMenuController {
      * Plays a button sound and displays the exit confirmation dialog.
      */
     @FXML
-    private void exitGame() {
+    void exitGame() {
         PlayButtonSound();
         exitDialog.setVisible(true);
     }
@@ -78,7 +78,7 @@ public class MainMenuController {
      * Stops all audio players and closes the application.
      */
     @FXML
-    private void confirmExit() {
+    void confirmExit() {
         PlayButtonSound();
 
         // Stop and close audio resources
@@ -96,7 +96,7 @@ public class MainMenuController {
      * Plays a button sound and hides the exit confirmation dialog.
      */
     @FXML
-    private void cancelExit() {
+    void cancelExit() {
         PlayButtonSound();
         exitDialog.setVisible(false);
     }

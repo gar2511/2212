@@ -151,6 +151,10 @@ public class Pet {
     public LocalTime getEndTime() {
         return endTime;
     }
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
 
 }
 

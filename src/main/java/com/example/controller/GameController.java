@@ -56,13 +56,13 @@ public class GameController {
     public CustomButton saveButton;
     public CustomButton sleepButton;
     @FXML
-    private StatBar energyBar;
+    StatBar energyBar;
     @FXML
-    private StatBar healthBar;
+    StatBar healthBar;
     @FXML
-    private StatBar hungerBar;
+    StatBar hungerBar;
     @FXML
-    private StatBar happinessBar;
+    StatBar happinessBar;
     @FXML
     private ImageView moleSprite;
     private Timeline timeTracker; // Timeline to track playtime and active timeframe
@@ -74,7 +74,7 @@ public class GameController {
     private Button feedButton, playButton, giftButton, exerciseButton, vetButton, inventoryButton;
 
     @FXML
-    private Label gameOverLabel; // For the "Game Over" message
+    Label gameOverLabel; // For the "Game Over" message
     private ScoreKeeper scoreKeeper; // Scorekeeper instance
     @FXML
     private Label scoreLabel; // Label to display the score
@@ -195,7 +195,7 @@ public class GameController {
      * Updates the playtime label and handles logic for time spent and time limits.
      * If the time limit is reached, the game is saved and the user is sent back to the main menu.
      */
-    private void startTimeTracker() {
+    void startTimeTracker() {
         System.out.println("startTimeTracker called.");
 
         // Stop and nullify any existing time tracker
@@ -402,7 +402,7 @@ public class GameController {
      * Decreases the corresponding item count in the pet's inventory.
      */
     @FXML
-    private void feedPet() {
+    void feedPet() {
         PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
@@ -435,7 +435,7 @@ public class GameController {
      * Plays with the pet, increasing happiness but decreasing energy and hunger.
      */
     @FXML
-    private void playPet() {
+    void playPet() {
         PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
@@ -555,7 +555,7 @@ public class GameController {
      * Saves the current game state to a file.
      */
     @FXML
-    private void saveGame() {
+    void saveGame() {
         PlayButtonSound();
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
@@ -578,7 +578,7 @@ public class GameController {
      *
      * @param index The index of the stat to handle (0 = Hunger, 1 = Happiness, 2 = Energy, 3 = Health).
      */
-    private void handleCriticalState(int index) {
+    void handleCriticalState(int index) {
         GameState gameState = GameState.getCurrentState();
         Pet pet = gameState.getPet();
 
@@ -708,7 +708,7 @@ public class GameController {
     /**
      * Handles the game over state, stopping the game and displaying the game over message.
      */
-    private void handleGameOver() {
+    void handleGameOver() {
         System.out.println("Health has reached 0. Game over.");
         stopStatsDecay();
         disableAllButtons();
@@ -987,7 +987,7 @@ public class GameController {
     /**
      * Handles actions when the current time is outside the allowed active timeframe.
      */
-    private void handleOutsideActiveTime() {
+    void handleOutsideActiveTime() {
         Platform.runLater(() -> {
             // Pause all game activities
             togglePlayPause(); // This pauses the game

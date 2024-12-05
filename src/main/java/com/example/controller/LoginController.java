@@ -33,35 +33,35 @@ import static com.example.App.PlayButtonSound;
 public class LoginController {
 
     @FXML
-    private PasswordField pinField;
+    PasswordField pinField;
 
     @FXML
-    private PasswordField confirmPinField;
+    PasswordField confirmPinField;
 
     @FXML
-    private StackPane pinErrorIcon;
+    StackPane pinErrorIcon;
 
     @FXML
-    private StackPane confirmPinErrorIcon;
+    StackPane confirmPinErrorIcon;
 
     @FXML
-    private Label titleLabel;
+    Label titleLabel;
 
     @FXML
     private Circle dot1, dot2, dot3, dot4, dot5, dot6;
 
     @FXML
-    private HBox pinDotsContainer;
+    HBox pinDotsContainer;
 
-    private Circle[] dots;
-    private StringBuilder currentPin = new StringBuilder();
+    Circle[] dots;
+    StringBuilder currentPin = new StringBuilder();
 
-    private FileHandler fileHandler;
-    private UserPreferences userPrefs;
+    FileHandler fileHandler;
+    UserPreferences userPrefs;
     private Timeline fadeTimeline;
-    private boolean isCreationMode = true;
-    private String firstPin = null;
-    private boolean isShaking = false;
+    boolean isCreationMode = true;
+    String firstPin = null;
+    boolean isShaking = false;
 
     /**
      * Initializes the controller after the FXML file is loaded.
@@ -121,7 +121,7 @@ public class LoginController {
      * Handles PIN authentication.
      * If the entered PIN does not match the stored PIN, shakes the input field to indicate an error.
      */
-    private void handleAuthentication() {
+    void handleAuthentication() {
         if (!currentPin.toString().equals(userPrefs.getParentPassword())) {
             shakeDotsContainer();
             return;
@@ -132,7 +132,7 @@ public class LoginController {
     /**
      * Handles PIN creation, including confirming the PIN and saving it to preferences.
      */
-    private void handleCreate() {
+    void handleCreate() {
         if (firstPin == null) {
             firstPin = currentPin.toString();
             titleLabel.setText("Confirm PIN");
@@ -202,7 +202,7 @@ public class LoginController {
     /**
      * Updates the PIN dot indicators based on the length of the entered PIN.
      */
-    private void updatePinDots() {
+    void updatePinDots() {
         for (int i = 0; i < dots.length; i++) {
             if (i < currentPin.length()) {
                 dots[i].setFill(Color.WHITE);
@@ -268,7 +268,7 @@ public class LoginController {
      *
      * @param event The KeyEvent triggered by the user.
      */
-    private void handleKeyPress(KeyEvent event) {
+    void handleKeyPress(KeyEvent event) {
         if (isShaking) return;
 
         String key = event.getText();

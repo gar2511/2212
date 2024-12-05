@@ -36,9 +36,9 @@ public class ParentMenuController {
     public TextField endTimeTextField;
     public TextField startTimeTextField;
     @FXML
-    private ToggleButton parentModeToggle;
+    ToggleButton parentModeToggle;
     @FXML
-    private ComboBox<String> selectSaveDropdown;
+    ComboBox<String> selectSaveDropdown;
     @FXML
     private VBox timeLimitSection;
     @FXML
@@ -48,7 +48,7 @@ public class ParentMenuController {
     @FXML
     private HBox viewStatsSection;
     @FXML
-    private Button revivePetButton;
+    Button revivePetButton;
     @FXML
     private HBox inventorySection;
     @FXML
@@ -58,10 +58,10 @@ public class ParentMenuController {
 
     @FXML
     private Label saveScoreLabel;
-    private FileHandler fileHandler;
-    private GameState currentGameState;
+    FileHandler fileHandler;
+    GameState currentGameState;
     private boolean isParentModeEnabled = false;
-    private UserPreferences userPrefs;
+    UserPreferences userPrefs;
 
     @FXML
     private Spinner<Integer> timeLimitSpinner;
@@ -76,7 +76,7 @@ public class ParentMenuController {
     private Separator inventoryDivider;
     
     @FXML
-    private Label petStatusLabel;
+    Label petStatusLabel;
 
     @FXML
     private CustomButton removeProfileButton;
@@ -230,7 +230,7 @@ public class ParentMenuController {
      */
 
     @FXML
-    private void handleToggleParentMode() {
+    void handleToggleParentMode() {
         PlayButtonSound();
         isParentModeEnabled = parentModeToggle.isSelected();
         
@@ -337,13 +337,19 @@ public class ParentMenuController {
         }
     }
     @FXML
-    private Spinner<Integer> item1Spinner, item2Spinner, item3Spinner, item4Spinner;
+    Spinner<Integer> item1Spinner;
+    @FXML
+    Spinner<Integer> item2Spinner;
+    @FXML
+    Spinner<Integer> item3Spinner;
+    @FXML
+    Spinner<Integer> item4Spinner;
 
     /**
      * Updates the quantity of Item 1 in the inventory.
      */
     @FXML
-    private void updateItem1() {
+    void updateItem1() {
         if (currentGameState != null) {
             currentGameState.getPet().getInventory().setItem1(item1Spinner.getValue());
             saveCurrentGameState();
@@ -353,7 +359,7 @@ public class ParentMenuController {
      * Updates the quantity of Item 2 in the inventory.
      */
     @FXML
-    private void updateItem2() {
+    void updateItem2() {
         if (currentGameState != null) {
             currentGameState.getPet().getInventory().setItem2(item2Spinner.getValue());
             saveCurrentGameState();
@@ -363,7 +369,7 @@ public class ParentMenuController {
      * Updates the quantity of Item 3 in the inventory.
      */
     @FXML
-    private void updateItem3() {
+    void updateItem3() {
         if (currentGameState != null) {
             currentGameState.getPet().getInventory().setItem3(item3Spinner.getValue());
             saveCurrentGameState();
@@ -373,7 +379,7 @@ public class ParentMenuController {
      * Updates the quantity of Item 4 in the inventory.
      */
     @FXML
-    private void updateItem4() {
+    void updateItem4() {
         if (currentGameState != null) {
             currentGameState.getPet().getInventory().setItem4(item4Spinner.getValue());
             saveCurrentGameState();
