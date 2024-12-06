@@ -17,17 +17,28 @@ import javafx.geometry.Pos;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
 import static com.example.App.PlayButtonSound;
 
+/**
+ * Controller for the Parent Menu interface.
+ * Manages parental controls, save game options, and pet revival functionality.
+ */
 public class ParentMenuController {
 
     public Label petScoreLabel;
+    public TextField endTimeField;
+    public TextField startTimeField;
+    public CustomButton setAllowedTimeButton;
+    public TextField endTimeTextField;
+    public TextField startTimeTextField;
     @FXML
-    private ToggleButton parentModeToggle;
+    ToggleButton parentModeToggle;
     @FXML
-    private ComboBox<String> selectSaveDropdown;
+    ComboBox<String> selectSaveDropdown;
     @FXML
     private VBox timeLimitSection;
     @FXML
@@ -37,7 +48,7 @@ public class ParentMenuController {
     @FXML
     private HBox viewStatsSection;
     @FXML
-    private Button revivePetButton;
+    Button revivePetButton;
     @FXML
     private HBox inventorySection;
     @FXML
@@ -47,10 +58,10 @@ public class ParentMenuController {
 
     @FXML
     private Label saveScoreLabel;
-    private FileHandler fileHandler;
-    private GameState currentGameState;
+    FileHandler fileHandler;
+    GameState currentGameState;
     private boolean isParentModeEnabled = false;
-    private UserPreferences userPrefs;
+    UserPreferences userPrefs;
 
     @FXML
     private Spinner<Integer> timeLimitSpinner;
@@ -65,11 +76,14 @@ public class ParentMenuController {
     private Separator inventoryDivider;
     
     @FXML
-    private Label petStatusLabel;
+    Label petStatusLabel;
 
     @FXML
     private CustomButton removeProfileButton;
-
+    /**
+     * Initializes the Parent Menu interface.
+     * Loads user preferences, sets up dropdown options, and configures visibility based on parent mode.
+     */
     @FXML
     public void initialize() {
         fileHandler = new FileHandler();
@@ -84,7 +98,7 @@ public class ParentMenuController {
             selectSaveDropdown.setVisible(isParentModeEnabled);
             selectSaveDropdown.setManaged(isParentModeEnabled);
         } catch (IOException e) {
-            System.err.println("failed to load preferences: " + e.getMessage());
+            System.err.println("Failed to load preferences: " + e.getMessage());
             userPrefs = new UserPreferences();
         }
 
@@ -161,6 +175,10 @@ public class ParentMenuController {
         item3Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
         item4Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
     }
+
+    /**
+     * Loads the selected save file and updates the UI components accordingly.
+     */
     private void loadSelectedSave() {
         String selectedPetName = selectSaveDropdown.getValue();
         if (selectedPetName != null && !selectedPetName.equals("Select a save file...")) {
@@ -176,7 +194,7 @@ public class ParentMenuController {
                             if (petFullName.equals(selectedPetName)) {
                                 currentGameState = state;
                                 Pet pet = currentGameState.getPet();
-                                
+
                                 // Update UI components with the pet's current state
                                 petScoreLabel.setText("Score: " + pet.getScore());
                                 petScoreLabel.setVisible(true);
@@ -204,8 +222,15 @@ public class ParentMenuController {
     }
 
 
+
+
+    /**
+     * Toggles the parental controls mode.
+     * Saves the updated state and adjusts the UI accordingly.
+     */
+
     @FXML
-    private void handleToggleParentMode() {
+    void handleToggleParentMode() {
         PlayButtonSound();
         isParentModeEnabled = parentModeToggle.isSelected();
         
@@ -220,7 +245,11 @@ public class ParentMenuController {
         // update UI visibility
         updateVisibility(isParentModeEnabled);
     }
-
+    /**
+     * Updates the visibility of UI sections based on the parent mode status.
+     *
+     * @param enabled True if parent mode is enabled, false otherwise.
+     */
     private void updateVisibility(boolean enabled) {
         selectSaveDropdown.setVisible(enabled);
         selectSaveDropdown.setManaged(enabled);
@@ -245,7 +274,10 @@ public class ParentMenuController {
         inventoryDivider.setVisible(false);
         inventoryDivider.setManaged(false);
     }
-
+    /**
+     * Handles the toggling of the time limit feature.
+     * Enables or disables the spinner and update button based on the toggle state.
+     */
     @FXML
     private void handleTimeLimitToggle() {
         PlayButtonSound();
@@ -254,12 +286,15 @@ public class ParentMenuController {
         timeLimitSpinner.setOpacity(isTimeLimitEnabled ? 1.0 : 0.5);
         updateTimeLimitButton.setDisable(!isTimeLimitEnabled);
         updateTimeLimitButton.setOpacity(isTimeLimitEnabled ? 1.0 : 0.5);
-        
+
         if (isTimeLimitEnabled && currentGameState != null) {
             timeLimitSpinner.getValueFactory().setValue((int) currentGameState.getPet().getTimeLimit());
         }
     }
-
+    /**
+     * Updates the time limit for the selected save slot.
+     * Saves the updated time limit to the save file.
+     */
     @FXML
     private void handleUpdateTimeLimit() {
         PlayButtonSound();
@@ -277,13 +312,20 @@ public class ParentMenuController {
         }
     }
 
-
+    /**
+     * Navigates back to the settings screen.
+     */
     @FXML
     private void handleGoBack() {
         PlayButtonSound();
         SceneController.getInstance().switchToSettings();
     }
-
+    /**
+     * Revives the pet associated with the current game state.
+     * Restores all pet stats and updates the save file.
+     *
+     * @param actionEvent The action event triggered by the revive button.
+     */
     @FXML
     public void revivePet(ActionEvent actionEvent) {
         PlayButtonSound();
@@ -295,40 +337,57 @@ public class ParentMenuController {
         }
     }
     @FXML
-    private Spinner<Integer> item1Spinner, item2Spinner, item3Spinner, item4Spinner;
-
+    Spinner<Integer> item1Spinner;
     @FXML
-    private void updateItem1() {
+    Spinner<Integer> item2Spinner;
+    @FXML
+    Spinner<Integer> item3Spinner;
+    @FXML
+    Spinner<Integer> item4Spinner;
+
+    /**
+     * Updates the quantity of Item 1 in the inventory.
+     */
+    @FXML
+    void updateItem1() {
         if (currentGameState != null) {
             currentGameState.getPet().getInventory().setItem1(item1Spinner.getValue());
             saveCurrentGameState();
         }
     }
-
+    /**
+     * Updates the quantity of Item 2 in the inventory.
+     */
     @FXML
-    private void updateItem2() {
+    void updateItem2() {
         if (currentGameState != null) {
             currentGameState.getPet().getInventory().setItem2(item2Spinner.getValue());
             saveCurrentGameState();
         }
     }
-
+    /**
+     * Updates the quantity of Item 3 in the inventory.
+     */
     @FXML
-    private void updateItem3() {
+    void updateItem3() {
         if (currentGameState != null) {
             currentGameState.getPet().getInventory().setItem3(item3Spinner.getValue());
             saveCurrentGameState();
         }
     }
-
+    /**
+     * Updates the quantity of Item 4 in the inventory.
+     */
     @FXML
-    private void updateItem4() {
+    void updateItem4() {
         if (currentGameState != null) {
             currentGameState.getPet().getInventory().setItem4(item4Spinner.getValue());
             saveCurrentGameState();
         }
     }
-
+    /**
+     * Saves the current game state to the corresponding save file.
+     */
     private void saveCurrentGameState() {
         try {
             if (currentGameState != null) {
@@ -341,7 +400,10 @@ public class ParentMenuController {
             System.out.println("Failed to save game state: " + e.getMessage());
         }
     }
-
+    /**
+     * Handles the removal of the parent profile.
+     * Shows a confirmation dialog and deletes the profile if confirmed.
+     */
     @FXML
     private void handleRemoveProfile() {
         // create custom dialog
@@ -399,5 +461,64 @@ public class ParentMenuController {
         cancelButton.setOnAction(e -> {
             root.getChildren().remove(dialogOverlay);
         });
+    }
+
+
+    public void saveTime(ActionEvent actionEvent) {
+    }
+
+    public void handleSetAllowedTime(ActionEvent actionEvent) {
+        PlayButtonSound();
+
+        if (currentGameState != null) {
+            String startTimeInput = startTimeTextField.getText().trim();
+            String endTimeInput = endTimeTextField.getText().trim();
+
+            try {
+                // Normalize the input to HH:mm format if necessary
+                LocalTime startTime = parseTime(startTimeInput);
+                LocalTime endTime = parseTime(endTimeInput);
+
+                // Save the allowed times to the pet object
+                Pet pet = currentGameState.getPet();
+                pet.saveStartTime(startTime);
+                pet.saveEndTime(endTime);
+
+                // Save the updated game state to file
+                saveCurrentGameState();
+
+                // Update UI or log success
+                System.out.println("Allowed playtime updated: " + startTime + " to " + endTime);
+            } catch (IllegalArgumentException | DateTimeParseException e) {
+                // Handle invalid time input or timeframe
+                System.err.println("Invalid time or timeframe: " + e.getMessage());
+
+                // Show an alert to the user
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Time");
+                alert.setHeaderText("Invalid Time or Timeframe");
+                alert.setContentText("Ensure the times are valid and use the format HH:mm (e.g., 00:00).");
+                alert.showAndWait();
+            }
+        } else {
+            System.err.println("No game state found to update allowed times.");
+        }
+    }
+
+    /**
+     * Parses a time string into LocalTime, allowing flexible input like "0:00".
+     *
+     * @param timeInput The time string to parse.
+     * @return The parsed LocalTime.
+     * @throws DateTimeParseException If the input is invalid.
+     */
+    private LocalTime parseTime(String timeInput) {
+        // Normalize single-digit hour inputs to HH:mm
+        if (!timeInput.matches("\\d{2}:\\d{2}")) {
+            if (timeInput.matches("\\d{1}:\\d{2}")) {
+                timeInput = "0" + timeInput; // Add leading zero for single-digit hour
+            }
+        }
+        return LocalTime.parse(timeInput); // Parse as LocalTime
     }
 }

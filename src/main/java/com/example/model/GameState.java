@@ -1,5 +1,7 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -8,7 +10,9 @@ import java.time.LocalDateTime;
  * Implements the Singleton pattern to ensure a single current game state is maintained throughout the application.
  * The game state includes the player's pet, vital statistics, and the timestamp of the last save.
  */
+@JsonIgnoreProperties(ignoreUnknown = true) // Ignore unrecognized fields like "volume"
 public class GameState {
+    private boolean parentControlsEnabled;
     // Static reference to the current game state (Singleton pattern)
     private static GameState currentState;
 
@@ -20,6 +24,8 @@ public class GameState {
 
     // The pet's current vital statistics
     private VitalStats stats;
+
+    // Indicates whether parental controls are active
     private boolean controlParent;
 
     private LocalDateTime sessionStartTime; // When the session started
@@ -35,7 +41,14 @@ public class GameState {
         this.savedAt = LocalDateTime.now();
     }
 
+    // Getters and Setters
+    public boolean isParentControlsEnabled() {
+        return parentControlsEnabled;
+    }
 
+    public void setParentControlsEnabled(boolean parentControlsEnabled) {
+        this.parentControlsEnabled = parentControlsEnabled;
+    }
 
     /**
      * Retrieves the current game state.
@@ -113,6 +126,21 @@ public class GameState {
     public void setStats(VitalStats stats) {
         this.stats = stats;
     }
-    public void setControlParent(boolean controlParent) { this.controlParent= controlParent; }
-    public boolean getControlParent(){ return controlParent; }
+    /**
+     * Sets whether parental controls are active.
+     *
+     * @param controlParent {@code true} to enable parental controls, {@code false} to disable them.
+     */
+    public void setControlParent(boolean controlParent) {
+        this.controlParent= controlParent;
+    }
+    /**
+     * Checks whether parental controls are currently active.
+     *
+     * @return {@code true} if parental controls are enabled, {@code false} otherwise.
+     */
+    public boolean getControlParent(){
+        return controlParent;
+    }
+
 }

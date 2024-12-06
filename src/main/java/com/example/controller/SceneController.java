@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
 import java.io.IOException;
 
 /**
@@ -15,8 +16,9 @@ import java.io.IOException;
 public class SceneController {
     // Single instance of the controller (Singleton pattern)
     private static SceneController instance;
+
     // Reference to the current active scene
-    private Scene currentScene;
+    Scene currentScene;
 
     /**
      * Private constructor to prevent direct instantiation.
@@ -36,6 +38,9 @@ public class SceneController {
             instance = new SceneController();
         }
         return instance;
+    }
+
+    public static void setInstance(SceneController mockSceneController) {
     }
 
     /**
@@ -69,15 +74,46 @@ public class SceneController {
     public void switchToSettings() {
         loadFXML("settings.fxml");
     }
-    public void switchToTutorial() {loadFXML("tutorial_game_menu.fxml");}
-    public void switchToTutorialInventory() {loadFXML("tutorial_inventory_menu.fxml");}
 
+    /**
+     * Switches to the tutorial game menu scene.
+     * Uses "tutorial_game_menu.fxml" as the scene definition.
+     */
+    public void switchToTutorial() {
+        loadFXML("tutorial_game_menu.fxml");
+    }
+
+    /**
+     * Switches to the tutorial inventory menu scene.
+     * Uses "tutorial_inventory_menu.fxml" as the scene definition.
+     */
+    public void switchToTutorialInventory() {
+        loadFXML("tutorial_inventory_menu.fxml");
+    }
+
+    /**
+     * Switches to the inventory scene.
+     * Uses "inventory_menu.fxml" as the scene definition.
+     */
     public void switchToInventory() {
         loadFXML("inventory_menu.fxml");
     }
-    public void switchToLoginParent() {loadFXML("login_menu.fxml");}
 
-    public void switchToParentMenu() {loadFXML("parent_menu.fxml");}
+    /**
+     * Switches to the login menu for parent controls.
+     * Uses "login_menu.fxml" as the scene definition.
+     */
+    public void switchToLoginParent() {
+        loadFXML("login_menu.fxml");
+    }
+
+    /**
+     * Switches to the parent menu scene.
+     * Uses "parent_menu.fxml" as the scene definition.
+     */
+    public void switchToParentMenu() {
+        loadFXML("parent_menu.fxml");
+    }
 
     /**
      * Retrieves the current active scene.
@@ -85,7 +121,7 @@ public class SceneController {
      *
      * @return The current active {@link Scene}, or {@code null} if no active window exists.
      */
-    private Scene getCurrentScene() {
+    Scene getCurrentScene() {
         if (currentScene == null) {
             // Find the first showing window in the application
             Window window = Stage.getWindows().stream()
@@ -102,11 +138,11 @@ public class SceneController {
 
     /**
      * Loads a new scene from the specified FXML file and switches to it.
-     * Also updates the current scene's root and applies new stylesheets.
+     * Updates the current scene's root and applies new stylesheets.
      *
      * @param fxml The name of the FXML file to load (relative to the "fxml/" directory).
      */
-    private void loadFXML(String fxml) {
+    void loadFXML(String fxml) {
         try {
             // Load the FXML file from the "fxml/" directory
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/" + fxml));
@@ -128,6 +164,4 @@ public class SceneController {
             e.printStackTrace();
         }
     }
-
-
 }

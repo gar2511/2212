@@ -1,5 +1,8 @@
 .settings-background {
-    -fx-background-color: #38250e;
+    -fx-background-image: url("../images/menu/BackGround-settings.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
 }
 
 .settings-title-label {
@@ -11,11 +14,11 @@
 }
 
 .settings-container-background {
-    -fx-background-color: rgba(245, 230, 211, 0.5);
+    -fx-background-color: rgba(245, 230, 211, 0.7);
     -fx-background-radius: 25;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
     -fx-max-width: 400;
-    -fx-min-height: 400;
+    -fx-min-height: 300;
 }
 
 .settings-container {

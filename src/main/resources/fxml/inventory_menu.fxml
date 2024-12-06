@@ -34,33 +34,33 @@
         <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="0" styleClass="inventory-item">
             <ImageView fx:id="item1Image" fitWidth="120" fitHeight="120" preserveRatio="true"
                        styleClass="item-image" />
-            <Label text="Item 1" styleClass="item-title" />
+            <Label text="Cake" styleClass="item-title" />
             <Label fx:id="item1Quantity" text="99" styleClass="item-quantity" />
-            <CustomButton fx:id="buyItem1Button" text="Buy Item 1 (10 pts)" styleClass="buy-button" onAction="#buyItem1" />
+            <CustomButton fx:id="buyItem1Button" text="Buy Cake (10 pts)" styleClass="buy-button" onAction="#buyItem1" />
         </VBox>
         <!-- Item 2 -->
         <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="1" styleClass="inventory-item">
             <ImageView fx:id="item2Image" fitWidth="120" fitHeight="120" preserveRatio="true"
                        styleClass="item-image" />
-            <Label text="Item 2" styleClass="item-title" />
+            <Label text="Apple" styleClass="item-title" />
             <Label fx:id="item2Quantity" text="99" styleClass="item-quantity" />
-            <CustomButton fx:id="buyItem2Button" text="Buy Item 2 (15 pts)" styleClass="buy-button" onAction="#buyItem2" />
+            <CustomButton fx:id="buyItem2Button" text="Buy Apple (15 pts)" styleClass="buy-button" onAction="#buyItem2" />
         </VBox>
         <!-- Item 3 -->
         <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="2" styleClass="inventory-item">
             <ImageView fx:id="item3Image" fitWidth="120" fitHeight="120" preserveRatio="true"
                        styleClass="item-image" />
-            <Label text="Item 3" styleClass="item-title" />
+            <Label text="Ball" styleClass="item-title" />
             <Label fx:id="item3Quantity" text="99" styleClass="item-quantity" />
-            <CustomButton fx:id="buyItem3Button" text="Buy Item 3 (20 pts)" styleClass="buy-button" onAction="#buyItem3" />
+            <CustomButton fx:id="buyItem3Button" text="Buy Ball (20 pts)" styleClass="buy-button" onAction="#buyItem3" />
         </VBox>
         <!-- Item 4 -->
         <VBox alignment="CENTER" spacing="10" GridPane.columnIndex="3" styleClass="inventory-item">
             <ImageView fx:id="item4Image" fitWidth="120" fitHeight="120" preserveRatio="true"
                        styleClass="item-image" />
-            <Label text="Item 4" styleClass="item-title" />
+            <Label text="Plushy" styleClass="item-title" />
             <Label fx:id="item4Quantity" text="99" styleClass="item-quantity" />
-            <CustomButton fx:id="buyItem4Button" text="Buy Item 4 (25 pts)" styleClass="buy-button" onAction="#buyItem4" />
+            <CustomButton fx:id="buyItem4Button" text="Buy Plushy (25 pts)" styleClass="buy-button" onAction="#buyItem4" />
         </VBox>
     </GridPane>
 
@@ -68,20 +68,20 @@
     <HBox spacing="50" alignment="CENTER" styleClass="selection-section">
         <!-- Group 1 & 2 -->
         <VBox spacing="10" alignment="CENTER">
-            <Label text="Item Group 1 &amp; 2" styleClass="selection-group-title" />
+            <Label text="Select between Cake &amp; Apple as default food" styleClass="selection-group-title" />
             <HBox spacing="20" alignment="CENTER">
-                <CustomButton fx:id="defaultItem1" text="Item 1" styleClass="toggle-button" onAction="#selectDefaultItem1" />
-                <CustomButton fx:id="defaultItem2" text="Item 2" styleClass="toggle-button" onAction="#selectDefaultItem2" />
+                <CustomButton fx:id="defaultItem1" text="Cake" styleClass="toggle-button" onAction="#selectDefaultItem1" />
+                <CustomButton fx:id="defaultItem2" text="Apple" styleClass="toggle-button" onAction="#selectDefaultItem2" />
             </HBox>
             <Label fx:id="selectedItem12Label" text="Currently Selected: None" styleClass="selected-item-label" />
         </VBox>
 
         <!-- Group 3 & 4 -->
         <VBox spacing="10" alignment="CENTER">
-            <Label text="Item Group 3 &amp; 4" styleClass="selection-group-title" />
+            <Label text="Select between Ball &amp; Plushy as the default gift" styleClass="selection-group-title" />
             <HBox spacing="20" alignment="CENTER">
-                <CustomButton fx:id="defaultItem3" text="Item 3" styleClass="toggle-button" onAction="#selectDefaultItem3" />
-                <CustomButton fx:id="defaultItem4" text="Item 4" styleClass="toggle-button" onAction="#selectDefaultItem4" />
+                <CustomButton fx:id="defaultItem3" text="Ball" styleClass="toggle-button" onAction="#selectDefaultItem3" />
+                <CustomButton fx:id="defaultItem4" text="Plushy" styleClass="toggle-button" onAction="#selectDefaultItem4" />
             </HBox>
             <Label fx:id="selectedItem34Label" text="Currently Selected: None" styleClass="selected-item-label" />
         </VBox>

@@ -12,24 +12,35 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-// Utility class for managing game save files and persistence
+/**
+ * Utility class for managing game save files and user preferences.
+ * Handles JSON serialization and deserialization for game state and preferences.
+ */
 public class FileHandler {
+
     // Directory where all save files will be stored
     private static final String SAVES_DIR = "saves";
-    
+
+    // File name for user preferences
+    private static final String PREFS_FILE = "preferences.json";
+
     // ObjectMapper instance for JSON serialization/deserialization
     private final ObjectMapper objectMapper;
 
-    // Constructor initializes JSON mapper and ensures save directory exists
+    /**
+     * Constructs a new {@code FileHandler} and ensures the saves directory exists.
+     * Registers the {@link JavaTimeModule} to handle {@link java.time.LocalDateTime} serialization.
+     */
     public FileHandler() {
         objectMapper = new ObjectMapper();
-        // Register JavaTimeModule to handle LocalDateTime serialization
         objectMapper.registerModule(new JavaTimeModule());
         createSavesDirectory();
     }
 
-    // Creates the saves directory if it doesn't exist
-    // Called during initialization to ensure proper file structure
+    /**
+     * Creates the saves directory if it does not already exist.
+     * Ensures the file structure required for saving and loading files is present.
+     */
     private void createSavesDirectory() {
         File savesDir = new File(SAVES_DIR);
         if (!savesDir.exists()) {
@@ -42,34 +53,46 @@ public class FileHandler {
         }
     }
 
-    // Saves a game state to a JSON file
-    // @param saveName The name of the save file (without extension)
-    // @param state The GameState object to save
-    // @throws IOException if the save operation fails
+    /**
+     * Saves a game state to a JSON file in the saves directory.
+     *
+     * @param saveName The name of the save file (without extension).
+     * @param state    The {@link GameState} object to save.
+     * @throws IOException if the save operation fails.
+     */
     public void saveGame(String saveName, GameState state) throws IOException {
         Path savePath = Paths.get(SAVES_DIR, saveName + ".json");
         objectMapper.writeValue(savePath.toFile(), state);
     }
 
-    // Loads a game state from a JSON file
-    // @param saveName The name of the save file (without extension)
-    // @return The loaded GameState object
-    // @throws IOException if the load operation fails
+    /**
+     * Loads a game state from a JSON file in the saves directory.
+     *
+     * @param saveName The name of the save file (without extension).
+     * @return The loaded {@link GameState} object.
+     * @throws IOException if the load operation fails.
+     */
     public GameState loadGame(String saveName) throws IOException {
         Path savePath = Paths.get(SAVES_DIR, saveName + ".json");
         return objectMapper.readValue(savePath.toFile(), GameState.class);
     }
 
-    // Deletes a save file if it exists
-    // @param saveName The name of the save file (without extension)
-    // @throws IOException if the delete operation fails
+    /**
+     * Deletes a save file from the saves directory if it exists.
+     *
+     * @param saveName The name of the save file (without extension).
+     * @throws IOException if the delete operation fails.
+     */
     public void deleteSave(String saveName) throws IOException {
         Path savePath = Paths.get(SAVES_DIR, saveName + ".json");
         Files.deleteIfExists(savePath);
     }
 
-    // Gets an array of all save files in the saves directory
-    // @return Array of File objects representing save files, or null if directory is empty
+    /**
+     * Retrieves an array of all save files in the saves directory.
+     *
+     * @return An array of {@link File} objects representing save files, or {@code null} if the directory is empty.
+     */
     public File[] getSaveFiles() {
         File savesDir = new File(SAVES_DIR);
         File[] files = savesDir.listFiles((dir, name) -> name.endsWith(".json"));
@@ -77,29 +100,35 @@ public class FileHandler {
         return files;
     }
 
-    private static final String PREFS_FILE = "preferences.json";
-
+    /**
+     * Saves user preferences to a JSON file.
+     *
+     * @param preferences The {@link UserPreferences} object to save.
+     * @throws IOException if the save operation fails.
+     */
     public void savePreferences(UserPreferences preferences) throws IOException {
-        File savesDir = new File("saves");
-        if (!savesDir.exists()) {
-            savesDir.mkdirs();
-        }
-        objectMapper.writeValue(new File("saves/preferences.json"), preferences);
+        File preferencesFile = new File(SAVES_DIR, PREFS_FILE);
+        objectMapper.writeValue(preferencesFile, preferences);
     }
 
+    /**
+     * Loads user preferences from a JSON file.
+     * If the file does not exist or is corrupted, default preferences are returned.
+     *
+     * @return The loaded {@link UserPreferences} object, or default preferences if the file is missing or corrupted.
+     * @throws IOException if an error occurs during loading.
+     */
     public UserPreferences loadPreferences() throws IOException {
-        File preferencesFile = new File("saves/preferences.json");
+        File preferencesFile = new File(SAVES_DIR, PREFS_FILE);
         if (!preferencesFile.exists()) {
-            // return default preferences if file doesn't exist
-            return new UserPreferences();
+            return new UserPreferences(); // Return default preferences if file does not exist
         }
 
         try {
             return objectMapper.readValue(preferencesFile, UserPreferences.class);
         } catch (IOException e) {
-            System.err.println("error loading preferences: " + e.getMessage());
-            // if file is corrupted, delete it and return default preferences
-            preferencesFile.delete();
+            System.err.println("Error loading preferences: " + e.getMessage());
+            preferencesFile.delete(); // Delete corrupted file
             return new UserPreferences();
         }
     }

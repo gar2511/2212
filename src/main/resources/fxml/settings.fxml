@@ -51,7 +51,7 @@
                 
                 <!-- Version Info -->
                 <VBox spacing="5" styleClass="version-info">
-                    <Label text="NEOPETS Version 2.0" styleClass="version-label"/>
+                    <Label text="PET HAVEN Version 2.0" styleClass="version-label"/>
                     <Label text="© 2024 Team17" styleClass="copyright-label"/>
                 </VBox>
             </VBox>

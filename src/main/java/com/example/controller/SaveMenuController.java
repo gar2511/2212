@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.application.Platform;
 import java.io.IOException;
 import java.io.File;
+import java.time.LocalTime;
 import java.util.Arrays;
 
 import com.example.model.GameState;
@@ -29,17 +30,17 @@ import static com.example.App.PlayButtonSound;
  */
 public class SaveMenuController {
     @FXML
-    private ListView<String> saveSlotList;
+    ListView<String> saveSlotList;
 
     @FXML
-    private VBox newSaveDialogue;
+    VBox newSaveDialogue;
 
     @FXML
-    private TextField petNameField;
+    TextField petNameField;
     @FXML
-    private ComboBox<String> petTypeComboBox; // ComboBox for pet type
+    ComboBox<String> petTypeComboBox; // ComboBox for pet type
 
-    private int selectedSlotIndex = -1;
+    int selectedSlotIndex = -1;
 
     /**
      * Initializes the save menu interface.
@@ -184,7 +185,7 @@ public class SaveMenuController {
      * Displays the dialogue for creating or editing a save.
      * Allows the user to input a pet name and confirm the action.
      */
-    private void showNewSaveDialogue() {
+    void showNewSaveDialogue() {
         PlayButtonSound();
         String petName = "PET " + (selectedSlotIndex + 1);
         saveSlotList.setDisable(true);
@@ -240,7 +241,7 @@ public class SaveMenuController {
      * Hides the dialogue and restores the save slot list.
      */
     @FXML
-    private void cancelNewSave() {
+    void cancelNewSave() {
         PlayButtonSound();
         hideNewSaveDialogue();
     }
@@ -265,26 +266,87 @@ public class SaveMenuController {
 
     /**
      * Handles the play button action for a save slot.
-     * Switches to the game scene with the selected save.
+     * Checks if the current time is within allowed playtime or both fields are null,
+     * Then switches to the game scene.
      *
      * @param saveName The name of the save to load and play.
      */
     private void handlePlay(String saveName) {
-        int index = saveSlotList.getItems().indexOf(saveName); // This will grab either save slot 0,1,2,3
-        System.out.println(index);
+        int index = saveSlotList.getItems().indexOf(saveName);
         try {
             System.out.println("Playing: " + saveName);
-            // Load the game state from the file
             FileHandler fileHandler = new FileHandler();
             GameState loadedState = fileHandler.loadGame("slot" + index);
-            GameState.loadState(loadedState); // Set the loaded state as the current state
+            Pet pet = loadedState.getPet();
 
-            // Transition to the game scene
-            SceneController.getInstance().switchToGame();
+            // Retrieve start and end times from the Pet object
+            LocalTime startTime = pet.getStartTime(); // Assumes getter for LocalTime
+            LocalTime endTime = pet.getEndTime();     // Assumes getter for LocalTime
+
+            // Validate the current time
+            if (isAllowedToPlay(startTime, endTime)) {
+                GameState.loadState(loadedState); // Set the loaded state as the current state
+                SceneController.getInstance().switchToGame();
+            } else {
+                showErrorDialog("Playtime Restricted",
+                        "You can only play between " +
+                                (startTime != null ? startTime.toString() : "any time") +
+                                " and " + (endTime != null ? endTime.toString() : "any time") + ".");
+            }
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: Show error dialog to user
+            handleSaveError("load game", e);
         }
+    }
+    /**
+     * Checks whether the current time is within the allowed playtime range.
+     *
+     * @param startTimeStr The start time as a string (null means no restriction).
+     * @param endTimeStr   The end time as a string (null means no restriction).
+     * @return true if the current time is within the range or no restrictions are set.
+     */
+    /**
+     * Checks whether the current time is within the allowed playtime range.
+     *
+     * @param startTime The start time as a LocalTime (null means no restriction).
+     * @param endTime   The end time as a LocalTime (null means no restriction).
+     * @return true if the current time is within the range or no restrictions are set.
+     */
+    private boolean isAllowedToPlay(LocalTime startTime, LocalTime endTime) {
+        LocalTime now = LocalTime.now();
+
+        if (startTime == null && endTime == null) {
+            return true; // No restrictions
+        }
+        if (startTime != null && endTime != null) {
+            if (startTime.isBefore(endTime)) {
+                return !now.isBefore(startTime) && !now.isAfter(endTime);
+            } else {
+                // Handles overnight ranges (e.g., 22:00 to 06:00)
+                return !now.isBefore(startTime) || !now.isAfter(endTime);
+            }
+        }
+        if (startTime != null) {
+            return !now.isBefore(startTime);
+        }
+        if (endTime != null) {
+            return !now.isAfter(endTime);
+        }
+        return false;
+    }
+
+    /**
+     * Displays an error dialog with the provided title and message.
+     *
+     * @param title   The title of the dialog.
+     * @param message The message of the dialog.
+     */
+    private void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
@@ -328,6 +390,12 @@ public class SaveMenuController {
         }
     }
 
+    /**
+     * Handles errors encountered during save operations.
+     * Displays an alert dialog to notify the user.
+     * @param operation The type of operation that failed.
+     * @param e The exception that occurred.
+     */
     private void handleSaveError(String operation, Exception e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Save Error");
